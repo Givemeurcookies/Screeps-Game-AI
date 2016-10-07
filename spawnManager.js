@@ -164,7 +164,19 @@ var spawnManager = {
         console.log("generate body is called");
         console.log(JSON.stringify(types));
         if(Object.prototype.toString.call(types) == '[object Array]'){
+            // Type is array, we can assume something like [MOVE, ATTACK, TOUGH]
             console.log("Got array and cost of"+cost);
+
+            // All bodyparts are:
+            // [MOVE, WORK, CARRY, TOUGH, ATTACK, RANGED_ATTACK, HEAL, RANGED_HEAL, CLAIM]
+            // Everything but MOVE and CARRY add fatigue, we also need to figure out
+            // the most optimal body compared to cost, the TOUGH bodypart should act
+            // as being something to add cheap hitpoints
+            
+            // We should also check for compatible bodyparts, i.e some bodyparts such as RANGED_ATTACK
+            // and attack can perform an action every tick, we want to optimize for this so
+            // a creep can attack both ranged and close at the same tick or heal close and attack ranged etc.
+
         } else {
             console.log(Object.prototype.toString.call(types));
         }
