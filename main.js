@@ -6,26 +6,10 @@ var mod    = require('spawnManager'),
 
 //console.log("Event manager: "+JSON.stringify(event));
 
-var once = true;
-var ssh = true;
-var endlessLoop = false;
-/*
-if (creep.memory.task.code == 0){
-    doTask(creep, "harvest");
-} else if (creep.memory.task.code == 1) {
-    doTask(creep, "transfer");
-} else if (creep.memory.task.code == 2) {
-    doTask(creep, "build");
-} else if (creep.memory.task.code == 3) {
-    doTask(creep, "repair");
-} else if (creep.memory.task.code == 4) {
-    doTask(creep, "upgrade");
-} else if (creep.memory.task.code == 5) {
-    doTask(creep, "attack");
-}
+var once = true,
+    ssh = true,
+    endlessLoop = false;
 
-
-*/
 const HARVEST_TASK  = 0,
       TRANSFER_TASK = 1,
       BUILD_TASK    = 2,
@@ -35,17 +19,21 @@ const HARVEST_TASK  = 0,
       MOVETO        = 6,
       EXPAND        = 7;
 
+// Testing event class
 global.dispatchEvent = function(eventName){
     event.dispatch(eventName);
 }
-
 global.sayHi = function(){
     event.dispatch('sayHi', "and hello again");
 }
+// End of test functions
 
+// Main loop
 module.exports.loop = function () {
+    // Add events
     event.add("HI", function(){ console.log("Hi")});
-    //console.log(Game.time);
+
+    // Loop over all rooms to check for hostiles and check if towers can attack any hostiles
     for(var roomid in Game.rooms){
         var room = Game.rooms[roomid];
         var hostileCreeps = room.find(FIND_HOSTILE_CREEPS);
@@ -63,9 +51,13 @@ module.exports.loop = function () {
     }
 
     // Creep action manager
+    // Loops over all creeps in the game to execute actions
     for(var name in Game.creeps){
+        // If the endless loop is turned to true, we kill this loop
         if(endlessLoop) return;
         var creep = Game.creeps[name], roomController = creep.room.controller;
+
+        // For fun, we made a small chance for the creeps to talk
         if(chanceTime(2)) creep.say("Halleluja!", true);
         else if(chanceTime(1)) creep.say("Hail Stan!", true);
         else if(chanceTime(1)) creep.say("Never.", true);
@@ -77,6 +69,9 @@ module.exports.loop = function () {
                     ticksToDowngrade : 4001
             };
         }
+        // If the room controller is below 4000 (really low) ticks we want all creeps to focus on
+        // upgrading the controller, this should not usually happen and if it has, there is problably
+        // an error in the code preventing the creeps from upgrading
         if(roomController.my && (roomController.ticksToDowngrade <= 4000)) {
             if(!ssh) creep.say("Controller");
             if(creep.carry.energy <= 30) {
@@ -95,65 +90,32 @@ module.exports.loop = function () {
             }
 
         } else {
-            // If creeps have no task or nextTask
+            // If creeps have no task memory
+            // this happens if the task memory is reset using a command
             if (Object.keys(creep.memory.task).length === 0) {
                 console.log(creep.name+": Empty task obj");
                 findTask(creep);
+                return;
             }
+            // If creeps have no task or task callback
             if(creep.memory.task.code == -1 && creep.memory.task.callback == null) {
                 // If creeps have no task or callback
-                // But they have sufficient energy
                 findTask(creep);
-                //if((creep.carry.energy/creep.carryCapacity) >= 0.66) {
-                //    if(!ssh) creep.say("Full");
-
-                    //var constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
-
-                    // If there's a construction site
-                    //if(constructionsite) {
-                        //console.log(creep.name+" moving to construct");
-                    //    if(creep.build(constructionsite) == ERR_NOT_IN_RANGE) {
-                    //        creep.moveTo(constructionsite);
-                    //    }
-                    /*} else {
-                        // Otherwise fill resource storage
-                        var targets = creep.room.find(FIND_STRUCTURES, {
-                            filter: (structure) => {
-                                return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
-                                structure.energy < structure.energyCapacity;
-                            }
-                        });
-                        if (targets.length > 0){
-                            creep.memory.taskTarget = targets[0];
-                            creep.memory.task = "Move to transfer resources at"+targets[0].pos.x +","+targets[0].pos.y;
-                            if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                                console.log("Moving");
-                                creep.moveTo(targets[0]);
-                            } else {
-                                creep.say("Error Transfer");
-                                console.log(creep.name)
-                            }
-                        } else {
-                            // If nothing else, expand base
-                            //console.log("All resource storages are full, plan base extension");
-                            expandBase(creep);
-                        }
-
-                    }*/
-
-
-                // Harvest
 
             } else if (creep.memory.task.callback != null && creep.memory.task.code == -1){
                 console.log("Callback called");
+                // Try to call the callback
+                // todo: check if callback is callable
                 creep.memory.task.callback();
 
             } else if (creep.memory.task.code != -1){
-                // Got a task to do
-                // console.log(creep.name+": got a task to do");
+                // If this is executed, the creep has a task to do
+                // todo: check if doTask returns properly
                 doTask(creep, creep.memory.task.code);
 
             } else {
+                // This should not be executed, but if it is
+                // creep says "nothing"
                 creep.say("Nothing");
             }
         }
@@ -409,6 +371,7 @@ function setTask(creep, task, params){
         for(var keyid in keyPoints){
             // Can't get the pos of null
             if(creep.room.controller.my) {}
+            
             keyPaths.push(creep.room.findPath(closestSpawn.pos, keyPoints[keyid].pos, {
                 ignoreCreeps : true,
                 swampCost    : 1
