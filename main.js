@@ -334,7 +334,7 @@ function setTask(creep, task, params){
             creep.memory.task.code   = REPAIR_TASK;
             doTask(creep, REPAIR_TASK);
         } else {
-            console.log(creep.name+)
+            console.log(creep.name+" no repairsite, returning -1");
             return -1;
         }
         break;
@@ -371,7 +371,7 @@ function setTask(creep, task, params){
         for(var keyid in keyPoints){
             // Can't get the pos of null
             if(creep.room.controller.my) {}
-            
+
             keyPaths.push(creep.room.findPath(closestSpawn.pos, keyPoints[keyid].pos, {
                 ignoreCreeps : true,
                 swampCost    : 1
