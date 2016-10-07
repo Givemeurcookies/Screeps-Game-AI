@@ -161,7 +161,7 @@ function findTask(creep){
                     if(setTask(creep, REPAIR_TASK) == -1){
                         console.log(creep.name+" trying to expand");
                         // If we can't build anything, we'll try to expand the base
-                        if(setTask(creep, EXPAND) == -1) {
+                        if(setTask(creep, EXPAND) == 0) {
                             // Try to build again
                             //console.log(creep.name+" trying to build again");
                             if (setTask(creep, BUILD_TASK) == -1) {
@@ -176,7 +176,9 @@ function findTask(creep){
                                 // OK BUILD_TASKING
                             }
                         } else {
-                            // OK EXPANDING
+                            if(setTask(creep, UPGRADE_TASK == -1)) {
+
+                            }
                         }
                     } else {
                         // OK BUILD_TASKING (NO EXPAND)
@@ -393,7 +395,7 @@ function setTask(creep, task, params){
 
 
 
-        return -1;
+        return 0;
         break;
         case ATTACK_TASK:
         if (!params.targets) var targets = creep.room.find(FIND_HOSTILE_CREEPS);
