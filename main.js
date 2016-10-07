@@ -309,7 +309,7 @@ function setTask(creep, task, params){
         break;
         case REPAIR_TASK:
         var repairsite;
-        /*if(typeof params.target == 'undefined'){
+        if(typeof params.target == 'undefined'){
             repairsite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function(objects){
                     return objects.hits < objects.hitsMax/3 && objects.hits < 50000*creep.room.controller;
@@ -317,12 +317,7 @@ function setTask(creep, task, params){
             });
         } else {
             repairsite = params.target;
-        }*/
-        repairsite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: function(objects){
-                return objects.hits < objects.hitsMax/3 && objects.hits < 50000*creep.room.controller;
-            }
-        });
+        }
         console.log("Trying to set repair task");
         if(repairsite) {
             console.log(creep.name + ": found repair site, going to repair");
