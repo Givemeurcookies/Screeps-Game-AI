@@ -1022,13 +1022,11 @@ function findHarvestTarget(creep){
             highestAvailable.value = sourceAccessibility.available;
         }
     }
-    console.log("Trying to find highest available harvest source");
     highestAvailable.source = sources[highestAvailable.id];
     if(highestAvailable.id == null) {
-            console.log("Highest available is null"+JSON.stringify(highestAvailable));
+            console.log("Highest available is null");
             return false;
     }
-    console.log(creep.name+": "+JSON.stringify(highestAvailable));
     //console.log("Highest available source at: "+highestAvailable.source.pos.x+"x, "+highestAvailable.source.pos.y+"y");
     return highestAvailable;
 }
