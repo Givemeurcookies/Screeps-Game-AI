@@ -644,7 +644,7 @@ function doTask(creep, task, params){
             if(!ssh) creep.say("Carrying");
             console.log(JSON.stringify(targetGameobj));
             if(creep.pos.inRangeTo(targetGameobj, 5)){
-                console.log(creep.name+" almost in range, so we're carrying");
+                console.log(creep.name+" almost in range, so we're carryin g");
                 creep.moveTo(targetGameobj);
             } else {
                 console.log(creep.name+" do task, MOVETO");
