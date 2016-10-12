@@ -645,7 +645,9 @@ function doTask(creep, task, params){
             console.log(JSON.stringify(targetGameobj));
             if(creep.pos.inRangeTo(targetGameobj, 5)){
                 console.log(creep.name+" almost in range, so we're carrying");
-                creep.moveTo(targetGameobj);
+                creep.moveTo(targetGameobj, {
+                    reusePath : 1
+                });
             } else {
                 console.log(creep.name+" do task, MOVETO");
                 doTask(creep, MOVETO);
@@ -698,7 +700,7 @@ function doTask(creep, task, params){
             if(harvestAttempt == ERR_NOT_IN_RANGE) {
                 if(creep.pos.inRangeTo(targetGameobj, 5)){
                     creep.moveTo(targetGameobj, {
-                        reusePath : 0
+                        reusePath : 1
                     });
                 } else {
                     doTask(creep, MOVETO);
