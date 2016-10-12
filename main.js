@@ -73,7 +73,7 @@ module.exports.loop = function () {
         // upgrading the controller, this should not usually happen and if it has, there is problably
         // an error in the code preventing the creeps from upgrading
         if(roomController.my && (roomController.ticksToDowngrade <= 4000)) {
-            if(!ssh) creep.say("Controller");
+            creep.say("Controller");
             if(creep.carry.energy <= 30) {
                 if (once) console.log("Controller: "+findHarvestTarget(creep));
                 once = false;
@@ -93,6 +93,7 @@ module.exports.loop = function () {
             // If creeps have no task memory
             // this happens if the task memory is reset using a command
             if (Object.keys(creep.memory.task).length === 0) {
+                creep.say("Reset memory (?)");
                 console.log(creep.name+": Empty task obj");
                 findTask(creep);
                 return;
@@ -106,11 +107,13 @@ module.exports.loop = function () {
                 console.log("Callback called");
                 // Try to call the callback
                 // todo: check if callback is callable
+                creep.say("Using callback");
                 creep.memory.task.callback();
 
             } else if (creep.memory.task.code != -1){
                 // If this is executed, the creep has a task to do
                 // todo: check if doTask returns properly
+                creep.say("Doing task");
                 doTask(creep, creep.memory.task.code);
 
             } else {
@@ -150,7 +153,6 @@ function findTask(creep){
     // If the creep got sufficient energy (above 70% of energy capacity)
     if((creep.carry.energy/creep.carryCapacity) >= 0.40 && creep.memory.soldier == false) {
         // Try to transfer the energy to energy storage
-        //console.log(creep.name+" got enough energy");
         //try{
             //console.log(creep.name+" trying to transfer");
             if (setTask(creep, TRANSFER_TASK) == -1 || chanceTime(22)){
@@ -224,9 +226,10 @@ function findTask(creep){
         // Try to harvest
         //console.log(creep.name+": Trying to harvest");
         if(setTask(creep, HARVEST_TASK) == -1) {
-            // If we can't harvest, we can assume all sources are empty
+            // If we can't harvest, we can assume all sources are empty or are busy
             //scout(creep);
             console.log(creep.name+": Returned error when trying to harvest");
+            //
         }
     }
 }
