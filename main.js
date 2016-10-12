@@ -7,7 +7,7 @@ var mod    = require('spawnManager'),
 //console.log("Event manager: "+JSON.stringify(event));
 
 var once = true,
-    ssh = true,
+    ssh = false,
     endlessLoop = false;
 
 const HARVEST_TASK  = 0,
@@ -94,6 +94,7 @@ module.exports.loop = function () {
             // this happens if the task memory is reset using a command
             if (Object.keys(creep.memory.task).length === 0) {
                 console.log(creep.name+": Empty task obj");
+                if(!ssh) creep.say("Reset?");
                 findTask(creep);
                 return;
             }
@@ -106,11 +107,13 @@ module.exports.loop = function () {
                 console.log("Callback called");
                 // Try to call the callback
                 // todo: check if callback is callable
+                creep.say("Got task");
                 creep.memory.task.callback();
 
             } else if (creep.memory.task.code != -1){
                 // If this is executed, the creep has a task to do
                 // todo: check if doTask returns properly
+                if(!ssh) creep.say("Dotask");
                 doTask(creep, creep.memory.task.code);
 
             } else {
