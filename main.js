@@ -643,10 +643,12 @@ function doTask(creep, task, params){
         if (carryResult == ERR_NOT_IN_RANGE) {
             if(!ssh) creep.say("Carrying");
             if(creep.pos.inRangeTo(targetGameobj, 5)){
+                console.log(creep.name+" almost in range, so we're carrying");
                 creep.moveTo(targetGameobj, {
                     reusePath : 0
                 });
             } else {
+                console.log(creep.name+" do task, MOVETO");
                 doTask(creep, MOVETO);
             }
         } else if(carryResult == 0){
