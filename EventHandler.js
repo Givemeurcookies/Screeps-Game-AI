@@ -22,10 +22,14 @@ var eventHandler = {
 };
 
 eventHandler.add('spottedHostiles', function(room){
-    room.memory.alertness = 1;
+    console.log("Spotted hostiles, alertness at 3");
+    room.memory.alertness = 3;
+    room.memory.alertTimer = Game.time;
 });
 
 eventHandler.add('hostilesGone', function(room){
-    room.memory.alertness = 0;
+    console.log("Hostiles have been gone for some time, alertness decreased");
+    if(room.memory.alertness < 0) room.memory.alertness -= 1;
+    room.memory.alertTime = Game.time;
 });
 module.exports = eventHandler;

@@ -38,7 +38,7 @@ module.exports.loop = function () {
         var room = Game.rooms[roomid];
         var hostileCreeps = room.find(FIND_HOSTILE_CREEPS);
         if(hostileCreeps.length != 0) event.dispatch("spottedHostiles", Game.rooms[roomid]);
-        else if(room.memory.alertness != 0){
+        else if(room.memory.alertness != 0 && (Game.time - room.memory.alertTimer) > 200){
             event.dispatch('hostilesGone', Game.rooms[roomid]);
         }
         var towers = room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
@@ -325,7 +325,7 @@ function setTask(creep, task, params){
         } else {
             repairsite = params.target;
         }
-        console.log("Trying to set repair task");
+        console.log(creep.name+" trying to set repair task");
         if(repairsite) {
             console.log(creep.name + ": found repair site, going to repair");
             creep.memory.task.target = {
