@@ -162,11 +162,11 @@ function findTask(creep){
                 if(setTask(creep, BUILD_TASK) == -1 || chanceTime(22)){
                     //console.log(creep.name+" trying to repair");
                     if(setTask(creep, REPAIR_TASK) == -1){
-                        //console.log(creep.name+" trying to expand");
+                        console.log(creep.name+" trying to expand");
                         // If we can't build anything, we'll try to expand the base
                         if(setTask(creep, EXPAND) == 0) {
                             // Try to build again
-                            //console.log(creep.name+" trying to build again");
+                            console.log(creep.name+" trying to build again");
                             if (setTask(creep, BUILD_TASK) == -1) {
                                 // If we get an error during building even after running
                                 // the expand function, we'll report an error here
