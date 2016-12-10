@@ -180,7 +180,7 @@ function findTask(creep){
                             }
                         } else {
                             console.log(creep.name+" unable to expand");
-                            if(setTask(creep, UPGRADE_TASK == -1)) {
+                            if(setTask(creep, UPGRADE_TASK) == -1) {
 
                             }
                         }
