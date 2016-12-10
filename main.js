@@ -430,7 +430,7 @@ function setTask(creep, task, params){
         break;
 
         default:
-        console.log(creep.name+": type error: "+task);
+        console.log(creep.name+" - type error (setTask): "+task);
     }
 }
 /*Creep.prototype.doTask = function(task, params){
@@ -830,7 +830,7 @@ function doTask(creep, task, params){
 
         break;
         default:
-        console.log(creep.name+" type error:"+task);
+        console.log(creep.name+" - type error (doTask):"+task);
         creep.say("Type");
         break;
     }
