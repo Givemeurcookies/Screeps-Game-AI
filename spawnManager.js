@@ -138,7 +138,7 @@ var spawnManager = {
             task      = params.task || {},
             isSoldier = params.isSoldier || false;
 
-        if(spawn.memory.creepHired == undefined) {
+        if(typeof spawn.memory.creepHired == 'undefined') {
             spawn.memory.creepHired = {
                 'creepBody' : creepBody,
                 'task'      : task,
