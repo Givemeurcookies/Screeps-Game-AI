@@ -51,6 +51,9 @@ module.exports.loop = function () {
         if (hostileCreeps.length != 0)
             towers.forEach(tower => tower.attack(tower.pos.findClosestByRange(hostileCreeps)));
     }
+    for (var creepid in Memory.enemycreeps){
+
+    }
     // Spawn manager
     for(var spawn in Game.spawns){
         mod.run(Game.spawns[spawn]);
@@ -99,7 +102,7 @@ module.exports.loop = function () {
             // If creeps have no task memory
             // this happens if the task memory is reset using a command
             if (Object.keys(creep.memory.task).length === 0) {
-                console.log(creep.name+": Empty task obj");
+                if (debug.creeps) console.log(creep.name+": Empty task obj");
                 if(!ssh) creep.say("Reset?");
                 findTask(creep);
                 return;
@@ -652,10 +655,9 @@ function doTask(creep, task, params){
             if(!ssh) creep.say("Carrying");
             console.log(JSON.stringify(targetGameobj));
             if(creep.pos.inRangeTo(targetGameobj, 5)){
-                console.log(creep.name+" almost in range, so we're carrying");
-                console.log(creep.moveTo(targetGameobj, {reusePath:0}));
+                console.log(creep.name+" is close to target, so reducing path cache");
+                creep.moveTo(targetGameobj, {reusePath:1});
             } else {
-                console.log(creep.name+" do task, MOVETO");
                 doTask(creep, MOVETO);
             }
         } else if(carryResult == 0){
