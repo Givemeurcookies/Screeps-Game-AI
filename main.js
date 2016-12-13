@@ -63,7 +63,7 @@ module.exports.loop = function () {
         console.log("Enemy exit:"+enemypos.findClosestByRange(FIND_EXIT));
         for(var i in Game.spawns){
           mod.hireCreep(Game.spawns[i], {
-              soldier: true,
+              isSoldier: true,
               task   : {
                   msg  : "Scouting new room",
                   code : MOVETO,
