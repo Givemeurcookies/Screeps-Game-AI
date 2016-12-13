@@ -61,7 +61,7 @@ module.exports.loop = function () {
         // Haunt down the creep if it's draining resources
         var enemypos = new RoomPosition(enemycreep.pos.x, enemycreep.pos.y, enemycreep.pos.roomName);
         console.log("Enemy exit:"+enemypos.findClosestByRange(FIND_EXIT));
-        /*mod.hireCreep(creep.room.find(FIND_MY_SPAWNS)[0], {
+        mod.hireCreep(Game.spawns[0], {
             soldier: true,
             task   : {
                 msg  : "Scouting new room",
@@ -69,7 +69,7 @@ module.exports.loop = function () {
                 target : enemypos.findClosestByRange(FIND_EXIT)
             },
             creepBody : [TOUGH, MOVE, ATTACK, MOVE]
-        });*/
+        });
       }
     }
     // Spawn manager
