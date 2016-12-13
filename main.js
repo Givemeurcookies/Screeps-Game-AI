@@ -52,7 +52,8 @@ module.exports.loop = function () {
             towers.forEach(tower => tower.attack(tower.pos.findClosestByRange(hostileCreeps)));
     }
     for (var creepid in Memory.enemycreeps){
-      console.log("Trying to get enemy creep reference: "+Game.getObjectById(Memory.enemycreeps[creepid].id)); 
+      console.log("Trying to get id of creep: "+Memory.enemycreeps[creepid].id);
+      console.log("Trying to get enemy creep reference using id: "+Game.getObjectById(Memory.enemycreeps[creepid].id));
     }
     // Spawn manager
     for(var spawn in Game.spawns){
