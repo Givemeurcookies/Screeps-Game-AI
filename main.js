@@ -8,7 +8,13 @@ var mod    = require('spawnManager'),
 
 var once = true,
     ssh = false,
-    endlessLoop = false;
+    endlessLoop = false,
+    debug = {
+      creeps   : false,
+      events   : false,
+      soldiers : false,
+      spawning : false
+    };
 
 const HARVEST_TASK  = 0,
       TRANSFER_TASK = 1,

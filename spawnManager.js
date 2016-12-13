@@ -88,6 +88,8 @@ var spawnManager = {
             } else if(hostileCreeps.length != 0){
                 // Hostiles spotted
                 console.log("Spawn: Hostiles spotted");
+                console.log(JSON.stringify(hostileCreeps));
+                Memory.enemycreeps = hostileCreeps;
                 if (spawn.room.energyAvailable >= this.calculateBodyCost(soldierBodies[2])) {
                     spawnAttempt = spawn.createCreep(soldierBodies[2], null, {task:{}, soldier:true, birthroom : spawn.roomName, squad : false});
                     console.log("Trying to spawn soldier:"+spawnAttempt);
@@ -172,7 +174,7 @@ var spawnManager = {
             // Everything but MOVE and CARRY add fatigue, we also need to figure out
             // the most optimal body compared to cost, the TOUGH bodypart should act
             // as being something to add cheap hitpoints
-            
+
             // We should also check for compatible bodyparts, i.e some bodyparts such as RANGED_ATTACK
             // and attack can perform an action every tick, we want to optimize for this so
             // a creep can attack both ranged and close at the same tick or heal close and attack ranged etc.
