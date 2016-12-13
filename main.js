@@ -60,7 +60,7 @@ module.exports.loop = function () {
 
         // Haunt down the creep if it's draining resources
         var enemypos = new RoomPosition(enemycreep.pos.x, enemycreep.pos.y, enemycreep.pos.roomName);
-        console.log(enemypos);
+        console.log(enemypos.findClosestByRange(FIND_EXIT));
       }
     }
     // Spawn manager
