@@ -59,7 +59,7 @@ module.exports.loop = function () {
         // Check if creep is dead
 
         // Haunt down the creep if it's draining resources
-        var enemypos = new RoomPosition(enemycreep.pos);
+        var enemypos = new RoomPosition(enemycreep.pos.x, enemycreep.pos.y, enemycreep.pos.roomName);
         console.log(enemypos);
       }
     }
