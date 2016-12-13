@@ -54,7 +54,7 @@ module.exports.loop = function () {
     for (var creepid in Memory.enemycreeps){
       console.log("Trying to get id of creep: "+Memory.enemycreeps[creepid].id);
       console.log("Trying to get enemy creep reference using id: "+Game.getObjectById(Memory.enemycreeps[creepid].id));
-      if(Game.getObjectById(Memory.enemycreeps[creepid].id == null)){
+      if(Game.getObjectById(Memory.enemycreeps[creepid].id) == null){
         var enemycreep = Memory.enemycreeps[creepid];
         // Check if creep is dead
 
