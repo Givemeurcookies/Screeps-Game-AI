@@ -137,7 +137,10 @@ var spawnManager = {
         var creepBody = params.creepBody || [WORK, CARRY, MOVE],
             task      = params.task || {},
             isSoldier = params.isSoldier || false;
-        console.log("Trying to spawn hired creep at: "+spawn);
+        if(spawn == undefined) {
+          console.log("Spawn is undefined, cannot hire creep");
+          return false;
+        }
         if(spawn.memory.creepHired == undefined) {
             spawn.memory.creepHired = {
                 'creepBody' : creepBody,
