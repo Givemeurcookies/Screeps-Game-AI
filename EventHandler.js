@@ -30,6 +30,6 @@ eventHandler.add('spottedHostiles', function(room){
 eventHandler.add('hostilesGone', function(room){
     console.log("Hostiles have been gone for some time, alertness decreased");
     if(room.memory.alertness < 0) room.memory.alertness -= 1;
-    room.memory.alertTime = Game.time;
+    room.memory.alertTimer = Game.time;
 });
 module.exports = eventHandler;
