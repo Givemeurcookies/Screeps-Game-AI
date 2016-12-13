@@ -61,7 +61,7 @@ module.exports.loop = function () {
         // Haunt down the creep if it's draining resources
         var enemypos = new RoomPosition(enemycreep.pos.x, enemycreep.pos.y, enemycreep.pos.roomName);
         console.log("Enemy exit:"+enemypos.findClosestByRange(FIND_EXIT));
-        for(var i in Game.spawns){
+        /*for(var i in Game.spawns){
           mod.hireCreep(Game.spawns[i], {
               isSoldier: true,
               task   : {
@@ -71,7 +71,7 @@ module.exports.loop = function () {
               },
               creepBody : [TOUGH, MOVE, ATTACK, MOVE]
           });
-        }
+        }*/
 
       }
     }
