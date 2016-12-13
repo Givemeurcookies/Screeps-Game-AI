@@ -66,7 +66,7 @@ module.exports.loop = function () {
             task   : {
                 msg  : "Scouting new room",
                 code : MOVETO,
-                target : enemypos.findClosestByRange(FIND_EXIT))
+                target : enemypos.findClosestByRange(FIND_EXIT)
             },
             creepBody : [TOUGH, MOVE, ATTACK, MOVE]
         });
