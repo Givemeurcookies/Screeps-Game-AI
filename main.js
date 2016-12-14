@@ -25,6 +25,9 @@ const HARVEST_TASK  = 0,
       MOVETO        = 6,
       EXPAND        = 7;
 
+const NO_SOURCES_IN_ROOM   = -10,
+      NO_SOURCES_AVAILABLE = -11;
+
 // Testing event class
 global.dispatchEvent = function(eventName){
     event.dispatch(eventName);
@@ -257,10 +260,12 @@ function findTask(creep){
         // Assume we got too low energy
         // Try to harvest
         //console.log(creep.name+": Trying to harvest");
-        if(setTask(creep, HARVEST_TASK) == -1) {
-            // If we can't harvest, we can assume all sources are empty
-            //scout(creep);
-            console.log(creep.name+": Returned error when trying to harvest");
+        let setHarvest = setTask(creep, HARVEST_TASK);
+        switch (setHarvest){
+          case NO_SOURCES_IN_ROOM:
+          console.log(creep.name+" no sources in this room, so why trying to harvest?"); break;
+          case NO_SOURCES_AVAILABLE:
+          console.log(creep.name+" unable to harvest, no sources available"); break;
         }
     }
 }
@@ -312,7 +317,12 @@ function setTask(creep, task, params){
         break;
         case HARVEST_TASK:
         var harvestTarget = findHarvestTarget(creep);
-        if (!harvestTarget) return -1;
+        switch (harvestTarget) {
+          case NO_SOURCES_IN_ROOM:
+          case NO_SOURCES_AVAILABLE:
+          return harvestTarget;
+          break;
+        }
         try {
             creep.memory.task.target = {
                 id  : harvestTarget.source.id,
@@ -387,7 +397,10 @@ function setTask(creep, task, params){
         doTask(creep, UPGRADE_TASK);
         break;
         case EXPAND:
-        if (!once) return -1;
+        if (!once) {
+          console.log("Already expanded this tick...");
+          return -1
+        };
         once = false;
         if(debug.creeps) console.log(creep.name+": Trying to expand...");
         var closestSpawn   = creep.pos.findClosestByRange(FIND_MY_SPAWNS),
@@ -465,197 +478,6 @@ function setTask(creep, task, params){
         console.log(creep.name+" - type error (setTask): "+task);
     }
 }
-/*Creep.prototype.doTask = function(task, params){
-    var targetGameobj = Game.getObjectById(this.memory.task.target.id);
-    switch(task){
-        case TRANSFER_TASK:
-        if (this.carry == 0) {
-            console.log(this.name+": Out of resources, finding new task");
-            this.findTask();
-        }
-
-        var carryResult = creep.transfer(targetGameobj, RESOURCE_ENERGY);
-
-        if (carryResult == ERR_NOT_IN_RANGE) {
-            if(!ssh) this.say("Carrying");
-            if(this.pos.inRangeTo(targetGameobj, 5)){
-                this.moveTo(targetGameobj, {
-                    reusePath : 0
-                });
-            } else {
-                this.doTask(MOVETO);
-            }
-        } else if(carryResult == 0){
-            if(!ssh) this.say("Transfer");
-
-            if (creep.carry == 0) {
-                console.log(creep.name+": Out of resources, finding new task");
-                this.findTask(creep);
-            } else if (targetGameobj.energy == targetGameobj.energyCapacity)
-                if(setTask(creep, TRANSFER_TASK) == -1) this.findTask();
-
-            return true;
-        } else {
-
-            if(carryResult == -7){
-                console.log("Invalid source:"+ (JSON.stringify(targetGameobj)));
-                console.log("Source id:"+creep.memory.task.target.id);
-            } else if(carryResult == -6){
-                // Creep doesn't have enough energy
-                this.findTask();
-            } else if (carryResult == -8){
-                // Energy source is full
-                // Give all creeps who's trying to transfer energy to this source a new task
-                // this also includes the current creep
-                var creepsWithSameTask = getCreepsWithTask(1, creep.memory.task.target);
-                for (var id in creepsWithSameTask){
-                    var thiscreep = creepsWithSameTask[id];
-                    if(setTask(thiscreep, TRANSFER_TASK) == -1){
-                        findTask(creepsWithSameTask[id]);
-                    }
-                }
-
-            } else {
-                console.log(""+creep.name+" got unhandled error when trying to transfer:"+carryResult);
-            }
-        }
-        break;
-        case HARVEST_TASK:
-        // Check if energy capacity is full first
-
-        if (_.sum(creep.carry) == creep.carryCapacity) {
-            console.log(creep.name+" done with harvesting, finding new task");
-            findTask(creep);
-            return "done";
-        } else {
-
-            var harvestAttempt = creep.harvest(targetGameobj);
-            if(harvestAttempt == ERR_NOT_IN_RANGE) {
-                if(creep.pos.inRangeTo(targetGameobj, 5)){
-                    creep.moveTo(targetGameobj, {
-                        reusePath : 0
-                    });
-                } else {
-                    this.doTask(MOVETO);
-                }
-                return true;
-            } else if(harvestAttempt == ERR_INVALID_TARGET) {
-                creep.say("-7");
-                console.log(creep.name+" invalid source when trying to harvest, harvestResult output:\n"+JSON.stringify(creep.memory.target));
-                return false;
-            } else if(harvestAttempt == ERR_BUSY) {
-                // Assume creep is still spawning
-                //console.log(creep.name+" is still spawning, can't harvest");
-                return true;
-            } else if(harvestAttempt == ERR_NOT_ENOUGH_RESOURCES){
-
-                findTask(creep);
-            } else {
-                if(harvestAttempt == 0) {
-                    creep.say(Math.floor(_.sum(creep.carry)/creep.carryCapacity*100)+"%");
-                    return true;
-                }
-                console.log(creep+" got unhandled error right after giving new task of harvesting:"+harvestAttempt);
-            }
-        }
-        break;
-        case BUILD_TASK:
-        if (creep.carry == 0) {
-            console.log(creep.name+": Out of resources, finding new task");
-            findTask(creep);
-        }
-
-        var buildAttempt = creep.build(targetGameobj);
-        /*switch(buildAttempt){
-            case ERR_NOT_IN_RANGE: creep.moveTo(targetGameobj); break;
-            case ERR_NOT_ENOUGH_RESOURCES:
-            case ERR_INVALID_TARGET:
-            break;
-            case ERR_RCL_NOT_ENOUGH:
-            break;
-            case OK: return true; break;
-            default: console.log()
-        }*//*
-        if(buildAttempt == ERR_NOT_IN_RANGE) {
-            if (!ssh) creep.say("Build");
-            doTask(creep, MOVETO);
-        } else if (buildAttempt == ERR_NOT_ENOUGH_RESOURCES || buildAttempt == ERR_INVALID_TARGET){
-            if(buildAttempt)
-            findTask(creep);
-        } else if(buildAttempt == ERR_RCL_NOT_ENOUGH){
-            // Building is blocked or is impossible to build
-            setTask(creep, UPGRADE_TASK);
-        } else if(buildAttempt == OK){
-            console.log(creep.name+": BUILDING OK");
-            return true;
-        } else {
-            console.log(creep.name+": got error when building "+buildAttempt);
-            return false;
-        }
-        break;
-        case UPGRADE_TASK:
-        if (creep.carry == 0) findTask(creep);
-
-        var upgradeAttempt = creep.upgradeController(targetGameobj);
-        if(upgradeAttempt == ERR_NOT_IN_RANGE) {
-            doTask(creep, MOVETO);
-        } else if (upgradeAttempt == ERR_NOT_ENOUGH_RESOURCES){
-            // Creep is out of resources
-            findTask(creep);
-        } else {
-            //console.log(creep.name+": possible error"+upgradeAttempt);
-            return true;
-        }
-        break;
-        case REPAIR_TASK:
-        if (creep.carry == 0) findTask();
-
-        var repairAttempt = creep.repair(targetGameobj);
-            if(repairAttempt == ERR_NOT_IN_RANGE) {
-                doTask(creep, MOVETO);
-            } else if (repairAttempt == ERR_NOT_ENOUGH_RESOURCES){
-                findTask(creep);
-            } else if (repairAttempt == 0){
-                if (!ssh) creep.say("Repair");
-                if (targetGameobj.hits == targetGameobj.hitsMax) findTask(creep);
-            } else if (repairAttempt == -7){
-                console.log(creep.name+" invalid source");
-                findTask(creep);
-            } else {
-                if (!ssh) creep.say("Error");
-                console.log(creep.name+" got error when repairing, "+repairAttempt);
-                return true;
-            }
-        break;
-        case ATTACK_TASK:
-        var attackAttempt = creep.attack(targetGameobj);
-        if(attackAttempt == ERR_NOT_IN_RANGE){
-            doTask(creep, MOVETO);
-        } else {
-            console.log(creep.name+" attacking returned code:"+attackAttempt);
-            if(attackAttempt == -7) {
-                // Creep is dead or target is invalid
-                findTask(creep);
-            }
-
-        }
-        break;
-        case MOVETO:
-        console.log(creep.name+" (MOVETO): "+JSON.stringify(creep.memory.task.target));
-        if(creep.memory.soldier) ScoutMove(creep, task, params);
-        else {
-            var moveAttempt = creep.moveTo(targetGameobj);
-            if(moveAttempt != 0){
-                console.log("Got error when trying to move"+moveAttempt);
-            }
-        }
-
-        break;
-        default:
-        console.log(creep.name+" type error:"+task);
-        break;
-    }
-}*/
 function doTask(creep, task, params){
     var targetGameobj = Game.getObjectById(creep.memory.task.target.id);
     if((creep.carry.energy/creep.carryCapacity) != 1) {
@@ -675,9 +497,8 @@ function doTask(creep, task, params){
 
         if (carryResult == ERR_NOT_IN_RANGE) {
             if(!ssh) creep.say("Carrying");
-            console.log(JSON.stringify(targetGameobj));
             if(creep.pos.inRangeTo(targetGameobj, 5)){
-                console.log(creep.name+" is close to target, so reducing path cache");
+                if(debug.creeps) console.log(creep.name+" is close to target, so reducing path cache");
                 creep.moveTo(targetGameobj, {reusePath:1});
             } else {
                 doTask(creep, MOVETO);
@@ -719,7 +540,6 @@ function doTask(creep, task, params){
         break;
         case HARVEST_TASK:
         // Check if energy capacity is full first
-
         if (_.sum(creep.carry) == creep.carryCapacity) {
             // console.log(creep.name+" done with harvesting, finding new task");
             findTask(creep);
@@ -757,36 +577,24 @@ function doTask(creep, task, params){
         }
         break;
         case BUILD_TASK:
+
         if (creep.carry == 0) {
-            console.log(creep.name+": Out of resources, finding new task");
+            console.log(creep.name+": Out of resources, can't build, finding new task");
             findTask(creep);
         }
 
         var buildAttempt = creep.build(targetGameobj);
-        /*switch(buildAttempt){
+
+        switch(buildAttempt){
             case ERR_NOT_IN_RANGE: creep.moveTo(targetGameobj); break;
             case ERR_NOT_ENOUGH_RESOURCES:
             case ERR_INVALID_TARGET:
+              findTask(creep);
             break;
             case ERR_RCL_NOT_ENOUGH:
+              setTask(creep, UPGRADE_TASK);
             break;
-            case OK: return true; break;
-            default: console.log()
-        }*/
-        if(buildAttempt == ERR_NOT_IN_RANGE) {
-            if (!ssh) creep.say("Build");
-            doTask(creep, MOVETO);
-        } else if (buildAttempt == ERR_NOT_ENOUGH_RESOURCES || buildAttempt == ERR_INVALID_TARGET){
-            if(buildAttempt == ERR_INVALID_TARGET) {
-                console.log(creep.name+"Build attempt, invalid target");
-                findTask(creep);
-            }
-            else findTask(creep);
-        } else if(buildAttempt == ERR_RCL_NOT_ENOUGH){
-            // Building is blocked or is impossible to build
-            setTask(creep, UPGRADE_TASK);
-        } else if(buildAttempt == OK){
-            console.log(creep.name+": BUILDING OK");
+            case OK:
             if(targetGameobj.progress+(creep.getActiveBodyparts(WORK)*5) >= targetGameobj.progressTotal) {
                 console.log(creep.name+" CONSTRUCTION SITE IS DONE");
                 creep.memory.task.target = {
@@ -796,12 +604,11 @@ function doTask(creep, task, params){
                 creep.memory.task.msg    = "Move to repair at "+targetGameobj.pos.x+","+targetGameobj.pos.y;
                 creep.memory.task.code   = REPAIR_TASK;
             }
-            return true;
-        } else {
-            console.log(creep.name+": got error when building "+buildAttempt);
-            return false;
+            return true; break;
+            default: console.log(creep.name+": got error when building "+buildAttempt); return false;
         }
         break;
+
         case UPGRADE_TASK:
         if (creep.carry == 0) findTask(creep);
 
@@ -1013,8 +820,7 @@ function findHarvestTarget(creep){
         }};
     }
     if(sources.length <= 0) {
-            console.log("Couldn't find any sources in this room");
-            return false;
+            return NO_SOURCES_IN_ROOM;
     }
     /*for (var sourceid in sources){
 
@@ -1046,7 +852,7 @@ function findHarvestTarget(creep){
         if (source.energy == 0) continue;
         //console.log(JSON.stringify(source.room.lookAtArea(source.pos.x - 1, source.pos.y - 1, source.pos.x + 1, source.pos.y + 1)));
         var sourceAccessibility = findAccessibleTiles(source.room, source.pos.x - 1, source.pos.y -1, source.pos.x + 1, source.pos.y + 1);
-        console.log(creep.name+": "+JSON.stringify(source.pos)+": "+JSON.stringify(sourceAccessibility));
+        //console.log(creep.name+": "+JSON.stringify(source.pos)+": "+JSON.stringify(sourceAccessibility));
         if (sourceAccessibility.available > highestAvailable.value){
             highestAvailable.id    = sourceid;
             highestAvailable.value = sourceAccessibility.available;
@@ -1054,8 +860,7 @@ function findHarvestTarget(creep){
     }
     highestAvailable.source = sources[highestAvailable.id];
     if(highestAvailable.id == null) {
-            console.log("Highest available is null");
-            return false;
+            return NO_SOURCES_AVAILABLE;
     }
     //console.log("Highest available source at: "+highestAvailable.source.pos.x+"x, "+highestAvailable.source.pos.y+"y");
     return highestAvailable;
