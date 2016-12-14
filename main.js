@@ -321,14 +321,14 @@ function setTask(creep, task, params){
             creep.memory.task.msg    = 'Move to harvest source at pos:'+harvestTarget.source.pos.x +","+harvestTarget.source.pos.y;
             creep.memory.task.code   = HARVEST_TASK;
         } catch(err) {
-            console.log(creep.name+": got error when trying to set harvest task:"+err+" output on next line \n"+JSON.stringify(harvestTarget));
+            if(debug.creeps) console.log(creep.name+": got error when trying to set harvest task:"+err+" output on next line \n"+JSON.stringify(harvestTarget));
         }
         doTask(creep, HARVEST_TASK);
         break;
         case BUILD_TASK:
         var constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
         if(constructionsite) {
-            console.log(creep.name+"Trying to build");
+            if(debug.creeps) console.log(creep.name+" trying to set build task");
             creep.memory.task.target = {
                 id  : constructionsite.id,
                 pos : constructionsite.pos
@@ -346,18 +346,19 @@ function setTask(creep, task, params){
         case REPAIR_TASK:
         var repairsite;
         if(typeof params.target == 'undefined'){
-            console.log("Undefined parameters, trying to figure out repairsite");
+            if(debug.creeps) console.log(creep.name+" Undefined parameters, trying to figure out repairsite target");
             repairsite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function(objects){
                     return objects.hits < objects.hitsMax/3 && objects.hits < 50000*creep.room.controller;
                 }
             });
         } else {
+            if(debug.creeps) console.log(creep.name+" setting repair target to defined params")
             repairsite = params.target;
         }
-        console.log(creep.name+" trying to set repair task");
+        if(debug.creeps) console.log(creep.name+" trying to set repair task");
         if(repairsite) {
-            console.log(creep.name + ": found repair site, going to repair");
+            if(debug.creeps) console.log(creep.name + ": found repair site, going to repair");
             creep.memory.task.target = {
                 id  : repairsite.id,
                 pos : repairsite.pos
@@ -366,7 +367,7 @@ function setTask(creep, task, params){
             creep.memory.task.code   = REPAIR_TASK;
             doTask(creep, REPAIR_TASK);
         } else {
-            console.log(creep.name+" no repairsite, returning -1");
+            if(debug.creeps) console.log(creep.name+" no repairsite, returning -1");
             return -1;
         }
         break;
@@ -381,14 +382,14 @@ function setTask(creep, task, params){
             creep.memory.task.msg  = 'Move to upgrade controller';
             creep.memory.task.code = UPGRADE_TASK;
         } catch(err) {
-            console.log(creep.name+": got error when trying to set harvest task:"+err);
+            if(debug.creeps) console.log(creep.name+": got error when trying to set harvest task:"+err);
         }
         doTask(creep, UPGRADE_TASK);
         break;
         case EXPAND:
         if (!once) return -1;
         once = false;
-        console.log("Trying to expand...");
+        if(debug.creeps) console.log(creep.name+": Trying to expand...");
         var closestSpawn   = creep.pos.findClosestByRange(FIND_MY_SPAWNS),
             sources        = creep.room.find(FIND_SOURCES),
             roomController = [creep.room.controller],
@@ -419,7 +420,7 @@ function setTask(creep, task, params){
             honeycombPos.x += 5;
             honeycombPos.y -= 5;
         createHoneycomb(creep, honeycombPos);
-        console.log(creep.name+": Done pushing");
+        console.log(creep.name+": Done pushing for honeycomb pattern");
         for (var keyid in keyPaths){
             var keyPath = keyPaths[keyid];
             console.log(creep.name+": "+JSON.stringify(keyPath));
