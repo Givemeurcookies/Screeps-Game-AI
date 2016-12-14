@@ -518,6 +518,7 @@ function doTask(creep, task, params){
             if(transferResult == -7){
                 console.log(creep.name+"Invalid source:"+ (JSON.stringify(targetGameobj)));
                 console.log(creep.name+"Source id:"+creep.memory.task.target.id);
+                findTask(creep);
             } else if(transferResult == -6){
                 // Creep doesn't have enough energy
                 findTask(creep);
