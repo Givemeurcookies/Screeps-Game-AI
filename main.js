@@ -493,9 +493,9 @@ function doTask(creep, task, params){
             findTask(creep);
         }
 
-        var carryResult = creep.transfer(targetGameobj, RESOURCE_ENERGY);
+        var transferResult = creep.transfer(targetGameobj, RESOURCE_ENERGY);
 
-        if (carryResult == ERR_NOT_IN_RANGE) {
+        if (transferResult == ERR_NOT_IN_RANGE) {
             if(!ssh) creep.say("Carrying");
             if(creep.pos.inRangeTo(targetGameobj, 5)){
                 if(debug.creeps) console.log(creep.name+" is close to target, so reducing path cache");
@@ -503,7 +503,7 @@ function doTask(creep, task, params){
             } else {
                 doTask(creep, MOVETO);
             }
-        } else if(carryResult == 0){
+        } else if(transferResult == 0){
             if(!ssh) creep.say("Transfer");
 
             if (creep.carry == 0) {
@@ -515,13 +515,13 @@ function doTask(creep, task, params){
             return true;
         } else {
 
-            if(carryResult == -7){
+            if(transferResult == -7){
                 console.log(creep.name+"Invalid source:"+ (JSON.stringify(targetGameobj)));
                 console.log(creep.name+"Source id:"+creep.memory.task.target.id);
-            } else if(carryResult == -6){
+            } else if(transferResult == -6){
                 // Creep doesn't have enough energy
                 findTask(creep);
-            } else if (carryResult == -8){
+            } else if (transferResult == -8){
                 // Energy source is full
                 // Give all creeps who's trying to transfer energy to this source a new task
                 // this also includes the current creep
@@ -534,7 +534,7 @@ function doTask(creep, task, params){
                 }
 
             } else {
-                console.log(""+creep.name+" got unhandled error when trying to transfer:"+carryResult);
+                console.log(""+creep.name+" got unhandled error when trying to transfer:"+transferResult);
             }
         }
         break;
