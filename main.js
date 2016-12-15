@@ -638,6 +638,7 @@ function doTask(creep, task, params){
             case OK:
             if(targetGameobj.progress+(creep.getActiveBodyparts(WORK)*5) >= targetGameobj.progressTotal) {
                 console.log(creep.name+" CONSTRUCTION SITE IS DONE");
+                creep.memory.task.code = -1;
                 if(targetGameobj.structureType == STRUCTURE_RAMPART || targetGameobj.structureType == STRUCTURE_WALL){
                     console.log("STRUCTURE IS RAMPART OR WALL, REPAIRING");
                     creep.memory.task.target = {
@@ -857,7 +858,7 @@ function findHarvestTarget(creep){
         source : null
     };
     var nextToSource = _.filter(sources, function(source){
-        return creep.pos.isNearTo(source) && source.energy != 0;
+        return creep.pos.isNearTo(source) && (source.energy != 0 || source.tickToRegeneration <= 30);
     });
     if(nextToSource.length != 0){
         return {source : {
