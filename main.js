@@ -550,7 +550,7 @@ function doTask(creep, task, params){
                 console.log(creep.name+": Out of resources, finding new task");
                 findTask(creep);
             } else if (targetGameobj.energy == targetGameobj.energyCapacity)
-                if(setTask(creep, TRANSFER_TASK) == -1) findTask();
+                if(setTask(creep, TRANSFER_TASK) == -1) findTask(creep);
 
             return true;
         } else {
