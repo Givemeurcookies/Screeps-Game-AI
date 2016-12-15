@@ -684,10 +684,8 @@ function doTask(creep, task, params){
                 findTask(creep);
             } else if (repairAttempt == OK){
                 if (!ssh) creep.say("Repair");
-                if (targetGameobj.hits == targetGameobj.hitsMax) {
-                    console.log("Repairing is done, finding new task");
-                    console.log(JSON.stringify(targetGameobj));
-
+                if (targetGameobj.hits == targetGameobj.hitsMax && targetGameobj.hitsMax != 1) {
+                    findTask(creep);
                 }
             } else if (repairAttempt == -7){
                 console.log(creep.name+" invalid source when trying to repair"+targetGameobj);
