@@ -90,7 +90,7 @@ var spawnManager = {
                 console.log("Spawn: Hostiles spotted");
                 console.log(JSON.stringify(hostileCreeps));
                 Memory.enemycreeps = hostileCreeps;
-                if (spawn.room.energyAvailable >= this.calculateBodyCost(soldierBodies[2])) {
+                if (spawn.room.energyAvailable >= this.calculateBodyCost(soldierBodies[2]) && CreepsInRoom < 14) {
                     spawnAttempt = spawn.createCreep(soldierBodies[2], null, {task:{}, soldier:true, birthroom : spawn.roomName, squad : false});
                     console.log("Trying to spawn soldier:"+spawnAttempt);
                 } else {
