@@ -368,7 +368,7 @@ function setTask(creep, task, params){
             }
         });
         if(!constructionsite || chanceTime(10)) constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
-        else
+
 
         if(constructionsite) {
             if(debug.creeps) console.log(creep.name+" trying to set build task");
