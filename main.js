@@ -26,7 +26,8 @@ const HARVEST_TASK  = 0,
       UPGRADE_TASK  = 4,
       ATTACK_TASK   = 5,
       MOVETO        = 6,
-      EXPAND        = 7;
+      EXPAND        = 7,
+      PICKUP_TASK   = 8;
 
 const NO_SOURCES_IN_ROOM   = -10,
       NO_SOURCES_AVAILABLE = -11;
@@ -262,11 +263,16 @@ function findTask(creep){
     } else {
         // Assume we got too low energy
         if(_.sum(creep.carry) == creep.carryCapacity){
+            // In case if got storage with other resources than energy
             setTask(creep, TRANSFER_TASK);
             return;
         }
 
         // Try to harvest
+        var target = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+        if(target) {
+            setTask(creep, PICKUP_TASK, {'target' : target});
+        }
         //console.log(creep.name+": Trying to harvest");
         let setHarvest = setTask(creep, HARVEST_TASK);
         switch (setHarvest){
@@ -386,10 +392,6 @@ function setTask(creep, task, params){
             };
             creep.memory.task.msg    = "Move to build at "+constructionsite.pos.x+","+constructionsite.pos.y;
             creep.memory.task.code   = BUILD_TASK;
-            creep.memory.task.callback = function(creep){
-                console.log("Called a callback after build task");
-                setTask(creep, REPAIR_TASK);
-            };
             doTask(creep, BUILD_TASK);
         } else {
             return -1;
@@ -437,6 +439,23 @@ function setTask(creep, task, params){
             if(debug.creeps) console.log(creep.name+": got error when trying to set harvest task:"+err);
         }
         doTask(creep, UPGRADE_TASK);
+        break;
+        case PICKUP_TASK:
+        var pickuplocation = params.target;
+        if(!params) pickuplocation = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+
+        if(pickuplocation) {
+            creep.memory.task = {
+                code   : PICKUP_TASK,
+                msg    : 'Move to pick up resources at '+pickuplocation.pos.x+', '+pickuplocation.pos.y,
+                target : {
+                        id : pickuplocation.id,
+                        pos : pickuplocation.pos
+                }
+            };
+        }
+
+        doTask(creep, PICKUP_TASK);
         break;
         case EXPAND:
         if (!once) {
@@ -747,6 +766,24 @@ function doTask(creep, task, params){
         default:
         console.log(creep.name+" - type error (doTask):"+task);
         creep.say("Type");
+        break;
+        case PICKUP_TASK:
+        if(targetGameobj != null) {
+            creep.memory.task.target.pos = targetGameobj.pos;
+            creep.memory.task.msg  = "Moving to pickup "+targetGameobj.pos.x+"x, "+targetGameobj.pos.y+"y";
+        } else console.log(creep.name+" Uhh, error when trying to do pickup task");
+        var pickupAttempt = creep.pickup(targetGameobj);
+
+        if(attackAttempt == ERR_NOT_IN_RANGE){
+            doTask(creep, MOVETO);
+        } else {
+            console.log(creep.name+" picking up returned code:"+attackAttempt);
+            if(attackAttempt == -7) {
+                // Creep is dead or target is invalid
+                findTask(creep);
+            }
+
+        }
         break;
     }
 
