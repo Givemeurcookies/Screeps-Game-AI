@@ -639,7 +639,7 @@ function doTask(creep, task, params){
               setTask(creep, UPGRADE_TASK);
             break;
             case OK:
-            if(creep.pos.findInRange(FIND_SOURCES, 1) != null){
+            if(creep.pos.findInRange(FIND_SOURCES, 1).length > 0){
                 console.log(creep.name+": In range to source, moving out of the way");
                 doTask(creep, MOVETO);
             }
@@ -694,7 +694,7 @@ function doTask(creep, task, params){
 
                 findTask(creep);
             } else if (repairAttempt == OK){
-                if(creep.pos.findInRange(FIND_SOURCES, 1) != null){
+                if(creep.pos.findInRange(FIND_SOURCES, 1).length > 0){
                     console.log(creep.name+": In range to source, moving out of the way");
                     doTask(creep, MOVETO);
                 }
