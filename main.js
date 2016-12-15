@@ -745,6 +745,8 @@ function ScoutMove(creep, task, params){
 
         returnedArea.forEach(structure => creep.attack(structure.structure));
         //console.log(creep.attack());
+    } else if (moveAttempt == 0 && creep.pos == Targetpos){
+        console.log("Target pos and creep pos is the same");
     }
     console.log("Is going to move to..."+moveAttempt);
     if (creep.pos.isNearTo(targetGameobj)) {
