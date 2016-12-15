@@ -379,6 +379,7 @@ function setTask(creep, task, params){
             creep.memory.task.msg    = "Move to build at "+constructionsite.pos.x+","+constructionsite.pos.y;
             creep.memory.task.code   = BUILD_TASK;
             creep.memory.task.callback = function(creep){
+                console.log("Called a callback after build task");
                 setTask(creep, REPAIR_TASK);
             };
             doTask(creep, BUILD_TASK);
