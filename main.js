@@ -532,7 +532,7 @@ function doTask(creep, task, params){
             if(!ssh) creep.say("Carrying");
             if(creep.pos.inRangeTo(targetGameobj, 5)){
                 if(debug.creeps) console.log(creep.name+" is close to target, so reducing path cache");
-                creep.moveTo(targetGameobj, {reusePath:1});
+                doTask(creep, MOVETO, {reusePath:1});
             } else {
                 doTask(creep, MOVETO);
             }
@@ -697,7 +697,7 @@ function doTask(creep, task, params){
         //console.log(creep.name+": (MOVETO) "+JSON.stringify(creep.memory.task.target));
         if(creep.memory.soldier) ScoutMove(creep, task, params);
         else {
-            var moveAttempt = creep.moveTo(targetGameobj);
+            var moveAttempt = creep.moveTo(targetGameobj, params);
             if(moveAttempt != 0 && moveAttempt != -11){
                 console.log(creep.name+": Got error when trying to move"+moveAttempt);
             }
