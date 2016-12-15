@@ -391,7 +391,7 @@ function setTask(creep, task, params){
         var repairsite;
         if(typeof params.target == 'undefined'){
             if(debug.creeps.repair) console.log(creep.name+" undefined parameters, trying to figure out repairsite target");
-            repairsite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            repairsite = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
                 filter: function(objects){
                     return objects.hits < objects.hitsMax/3 && objects.hits < 50000*creep.room.controller;
                 }
@@ -674,9 +674,12 @@ function doTask(creep, task, params){
         if (targetGameobj == null) {
             console.log("Target is null, finding new target based on position");
             targetGameobj = new RoomPosition(creep.memory.task.target.pos.x, creep.memory.task.target.pos.y, creep.memory.task.target.pos.roomName).lookFor(LOOK_STRUCTURES)[0];
+            creep.memory.task.target = {
+                id  : targetGameobj.id,
+                pos : targetGameobj.pos
+            };
         }
         var repairAttempt = creep.repair(targetGameobj);
-        console.log("Trying to repair..."+repairAttempt);
             if(repairAttempt == ERR_NOT_IN_RANGE) {
                 doTask(creep, MOVETO);
             } else if (repairAttempt == ERR_NOT_ENOUGH_RESOURCES){
