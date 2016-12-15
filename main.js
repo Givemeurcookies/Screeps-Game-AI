@@ -350,7 +350,7 @@ function setTask(creep, task, params){
           return harvestTarget;
           break;
         }
-        if(creepsWithTask(HARVEST_TASK, harvestTarget).length > 4) return NO_SOURCES_AVAILABLE;
+        if(getCreepsWithTask(HARVEST_TASK, harvestTarget).length > 4) return NO_SOURCES_AVAILABLE;
         try {
             creep.memory.task.target = {
                 id  : harvestTarget.source.id,
