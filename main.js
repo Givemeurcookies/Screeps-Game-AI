@@ -439,7 +439,7 @@ function setTask(creep, task, params){
         if(debug.creeps) console.log(creep.name+": Trying to expand...");
         var closestSpawn   = creep.pos.findClosestByRange(FIND_MY_SPAWNS),
             sources        = creep.room.find(FIND_SOURCES),
-            storage        = room.find(FIND_MY_STRUCTURES, {filter:function(structure){
+            storage        = creep.room.find(FIND_MY_STRUCTURES, {filter:function(structure){
                 return structure.structureType == 'STRUCTURE_STORAGE' || structure.structureType == 'STRUCTURE_CONTAINER'
             }}),
             roomController = [creep.room.controller],
