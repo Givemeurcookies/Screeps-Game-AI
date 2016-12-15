@@ -733,7 +733,7 @@ function ScoutMove(creep, task, params){
             }
         }
     }
-    var Targetpos = new RoomPosition(creep.memory.task.target.x, creep.memory.task.target.y, creep.memory.task.target.roomName);
+    var Targetpos = new RoomPosition(creep.memory.task.target.pos.x, creep.memory.task.target.pos.y, creep.memory.task.target.pos.roomName);
     var moveAttempt = creep.moveTo(Targetpos, {
         reusePath : 100
     });
