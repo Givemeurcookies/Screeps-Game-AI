@@ -233,8 +233,8 @@ function findTask(creep){
 
     } else if(creep.memory.soldier){
 
-        var hostileCreeps     = creep.room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return creep.owner != 'Pettingson'}}),
-            hostileStructures = creep.room.find(FIND_HOSTILE_STRUCTURES, {filter: function(creep) {return creep.owner != 'Pettingson'}});
+        var hostileCreeps     = creep.room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return creep.owner.username != 'Pettingson'}}),
+            hostileStructures = creep.room.find(FIND_HOSTILE_STRUCTURES, {filter: function(creep) {return creep.owner.username != 'Pettingson'}});
         if(hostileCreeps.length != 0) {
             setTask(creep, ATTACK_TASK, {});
         } else if(hostileStructures.length != 0){
@@ -367,7 +367,7 @@ function setTask(creep, task, params){
                 return (structure.structureType == STRUCTURE_TOWER)
             }
         });
-        if(!constructionsite) constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+        if(!constructionsite || chanceTime(10)) constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
         else
 
         if(constructionsite) {
@@ -480,7 +480,7 @@ function setTask(creep, task, params){
         return 1;
         break;
         case ATTACK_TASK:
-        if (!params.targets) var targets = creep.room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return creep.owner != 'Pettingson'}});
+        if (!params.targets) var targets = creep.room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return creep.owner.username != 'Pettingson'}});
         if(targets.length != 0){
             var closestTarget = creep.pos.findClosestByPath(targets);
             console.log(creep.name+" attacking:"+closestTarget);

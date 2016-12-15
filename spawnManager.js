@@ -39,7 +39,7 @@ var spawnManager = {
 
         }
         // Do now spawn if we got enough creeps or currently sa
-        var hostileCreeps = spawn.room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return creep.owner != 'Pettingson'}});
+        var hostileCreeps = spawn.room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return creep.owner.username != 'Pettingson'}});
         if(!spawn.spawning && spawn.owner) {
             if(CreepsInRoom < creepLimits.normal.max && hostileCreeps.length == 0 || CreepsInRoom == 0){
                 var spawnAttempt;
