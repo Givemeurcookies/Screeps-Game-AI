@@ -716,7 +716,12 @@ function doTask(creep, task, params){
             }
         break;
         case ATTACK_TASK:
+        creep.memory.task.target =  {
+            pos : targetGameobj.pos
+        };
+        creep.memory.task.msg  = "Moving to attack "+targetGameobj.pos.x+"x, "+targetGameobj.pos.y+"y";
         var attackAttempt = creep.attack(targetGameobj);
+
         if(attackAttempt == ERR_NOT_IN_RANGE){
             doTask(creep, MOVETO);
         } else {
