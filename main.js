@@ -790,13 +790,13 @@ function doTask(creep, task, params){
 }
 
 function ScoutMove(creep, task, params){
-    var targetGameobj = Game.getObjectById(creep.memory.task.target.id);
+    var roomCache = creep.room;
+    var targetGameobj = Game.getObjectById(creep.memory.task.target.id),
+        hostileCreeps = roomCache.find(FIND_HOSTILE_CREEPS);
     if (typeof Memory.rooms[creep.room.name] == "undefined"){
-        var roomCache = creep.room;
         // Find neccessary information
         var sources  = roomCache.find(FIND_SOURCES),
             minerals = roomCache.find(FIND_MINERALS),
-            hostileCreeps = roomCache.find(FIND_HOSTILE_CREEPS),
             hostileStructures = roomCache.find(FIND_HOSTILE_STRUCTURES);
         // Prepare information about room
         if(hostileCreeps.length && hostileStructures.length){
@@ -841,7 +841,7 @@ function ScoutMove(creep, task, params){
     }
     var Targetpos = new RoomPosition(creep.memory.task.target.pos.x, creep.memory.task.target.pos.y, creep.memory.task.target.pos.roomName);
     var moveAttempt = creep.moveTo(Targetpos, {
-        reusePath : 100
+        reusePath : 5
     });
     if(moveAttempt == -2) {
         // Can't find path to
