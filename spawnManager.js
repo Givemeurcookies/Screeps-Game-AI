@@ -30,7 +30,7 @@ var spawnManager = {
     **/
     run : function(spawn){
         var creepBodies   = [[WORK, MOVE, WORK, MOVE, WORK, MOVE, WORK, MOVE, WORK, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE],[WORK, CARRY, WORK, CARRY, WORK, CARRY, MOVE, MOVE, MOVE],[WORK, MOVE, WORK, MOVE, CARRY, CARRY],[WORK, CARRY, MOVE, MOVE],[WORK,CARRY,MOVE]];
-        var soldierBodies = [[TOUGH, MOVE, TOUGH, MOVE, TOUGH, MOVE, TOUGH, MOVE, TOUGH, MOVE, MOVE, TOUGH, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK],[TOUGH, MOVE, MOVE, MOVE, ATTACK, ATTACK],[ATTACK, MOVE, ATTACK, MOVE], [TOUGH, MOVE, ATTACK, MOVE]];
+        var soldierBodies = [[TOUGH, MOVE, TOUGH, MOVE, TOUGH, MOVE, TOUGH, MOVE, TOUGH, MOVE, MOVE, TOUGH, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK],[TOUGH, MOVE, TOUGH, MOVE, ATTACK, MOVE, ATTACK, MOVE],[ATTACK, MOVE, ATTACK, MOVE], [TOUGH, MOVE, ATTACK, MOVE]];
         var CreepsInRoom  = spawn.room.find(FIND_MY_CREEPS).length;
         if (spawn.room.memory.roomsaround == undefined){
             //console.log("roomsaround is undefined...");
@@ -91,7 +91,7 @@ var spawnManager = {
                 console.log(JSON.stringify(hostileCreeps));
                 Memory.enemycreeps = hostileCreeps;
                 if (CreepsInRoom < 14) {
-                    var body = this.highestSpawnableBody(soldierBodies, spawn.room.energyCapacityAvailable/2);
+                    var body = this.highestSpawnableBody(soldierBodies, spawn.room.energyCapacityAvailable);
                     if(body){
                         spawnAttempt = spawn.createCreep(body.body, null, {task:{}, soldier:true, birthroom : spawn.roomName, squad : false});
                         console.log("Trying to spawn soldier:"+spawnAttempt);
