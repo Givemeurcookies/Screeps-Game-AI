@@ -10,7 +10,7 @@ var once = true,
     ssh = false,
     endlessLoop = false,
     debug = {
-      creeps   : false,
+      creeps   : true,
       action   : {
           repair : true
       },
@@ -745,10 +745,10 @@ function ScoutMove(creep, task, params){
 
         returnedArea.forEach(structure => creep.attack(structure.structure));
         //console.log(creep.attack());
-    } else if (moveAttempt == 0 && creep.pos == Targetpos){
+    } else if (moveAttempt == OK && creep.pos == Targetpos){
         console.log("Target pos and creep pos is the same");
     }
-    console.log("Is going to move to..."+moveAttempt);
+    console.log(creep.name+"Is going to move to..."+moveAttempt);
     if (creep.pos.isNearTo(targetGameobj)) {
         creep.pos.findClosestByRange(FIND_MY_SPAWNS).recycleCreep(creep);
     }
