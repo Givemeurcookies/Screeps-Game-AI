@@ -327,7 +327,7 @@ function setTask(creep, task, params){
                     _.sum(structure.store) < structure.storeCapacity
                 }
             });
-            if (targets.length > 0){
+            if (targets.length > 0 || chancetime(75)){
                 var target = creep.pos.findClosestByRange(targets);
                 creep.memory.task.target = {
                     id  : target.id,
@@ -687,7 +687,7 @@ function doTask(creep, task, params){
                 if (targetGameobj.hits == targetGameobj.hitsMax) {
                     console.log("Repairing is done, finding new task");
                     console.log(JSON.stringify(targetGameobj));
-                    
+
                 }
             } else if (repairAttempt == -7){
                 console.log(creep.name+" invalid source when trying to repair"+targetGameobj);
