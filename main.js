@@ -760,7 +760,7 @@ function doTask(creep, task, params){
 
             console.log("Detected more than 1 within circle of attack, attack result:"+rangedAttackAttempt);
         } else if (hostilesInRange.length == 1){
-            console.log("Trying to attack creep from afar"+creep.rangedAttack(hostilesInRange[0]);
+            console.log("Trying to attack creep from afar"+creep.rangedAttack(hostilesInRange[0]));
         }
         if(attackAttempt == ERR_NOT_IN_RANGE){
             doTask(creep, MOVETO);
