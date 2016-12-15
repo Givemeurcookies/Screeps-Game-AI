@@ -688,7 +688,7 @@ function doTask(creep, task, params){
                 findTask(creep);
             } else if (repairAttempt == OK){
                 if(creep.pos.findInRange(FIND_SOURCES, 1) != null){
-                    console.log("In range to source, moving out of the way");
+                    console.log(creep.name+": In range to source, moving out of the way");
                     doTask(creep, MOVETO);
                 }
                 if (!ssh) creep.say("Repair");
