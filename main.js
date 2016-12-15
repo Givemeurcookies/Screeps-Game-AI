@@ -687,7 +687,7 @@ function doTask(creep, task, params){
 
                 findTask(creep);
             } else if (repairAttempt == OK){
-                if(creep.pos.findInRange(FIND_SOURCES, 1){
+                if(creep.pos.findInRange(FIND_SOURCES, 1) == null){
                     doTask(creep, MOVETO);
                 }
                 if (!ssh) creep.say("Repair");
