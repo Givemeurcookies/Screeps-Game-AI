@@ -598,13 +598,17 @@ function doTask(creep, task, params){
             case OK:
             if(targetGameobj.progress+(creep.getActiveBodyparts(WORK)*5) >= targetGameobj.progressTotal) {
                 console.log(creep.name+" CONSTRUCTION SITE IS DONE");
-                creep.memory.task.target = {
-                    id  : targetGameobj.id,
-                    pos : targetGameobj.pos
-                };
-                creep.memory.task.msg    = "Move to repair at "+targetGameobj.pos.x+","+targetGameobj.pos.y;
-                creep.memory.task.code   = REPAIR_TASK;
+                if(targetGameobj.structureType == STRUCTURE_RAMPART || targetGameobj.structureType == STRUCTURE_WALL){
+                    console.log("STRUCTURE IS RAMPART OR WALL, REPAIRING");
+                    creep.memory.task.target = {
+                        id  : targetGameobj.id,
+                        pos : targetGameobj.pos
+                    };
+                    creep.memory.task.msg    = "Move to repair at "+targetGameobj.pos.x+","+targetGameobj.pos.y;
+                    creep.memory.task.code   = REPAIR_TASK;
+                }
             }
+            findTask(creep);
             return true; break;
             default: console.log(creep.name+": got error when building "+buildAttempt); return false;
         }
