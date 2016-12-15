@@ -261,6 +261,7 @@ function findTask(creep){
         }
     } else {
         // Assume we got too low energy
+        console.log(creep.name+" not enough energy to do normal tasks");
         // Try to harvest
         //console.log(creep.name+": Trying to harvest");
         let setHarvest = setTask(creep, HARVEST_TASK);
