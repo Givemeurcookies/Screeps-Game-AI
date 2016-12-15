@@ -362,7 +362,13 @@ function setTask(creep, task, params){
         doTask(creep, HARVEST_TASK);
         break;
         case BUILD_TASK:
-        var constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+        var constructionsite = creep.room.find(FIND_CONSTRUCTION_SITES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_TOWER)
+            }
+        });
+        if(!constructionsite) constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+
         if(constructionsite) {
             if(debug.creeps) console.log(creep.name+" trying to set build task");
             creep.memory.task.target = {
