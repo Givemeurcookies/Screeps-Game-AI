@@ -49,7 +49,8 @@ module.exports.loop = function () {
     // Loop over all rooms to check for hostiles and check if towers can attack any hostiles
     for(var roomid in Game.rooms){
         var room = Game.rooms[roomid];
-        var hostileCreeps = room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return (creep.owner.username != 'Pettingson' && creep.owner.username != 'Invader')}});
+        //  && creep.owner.username != 'Invader'
+        var hostileCreeps = room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return (creep.owner.username != 'Pettingson')}});
         if(hostileCreeps.length != 0) event.dispatch("spottedHostiles", Game.rooms[roomid]);
         else if(room.memory.alertness != 0 && (Game.time - room.memory.alertTimer) > 200){
             event.dispatch('hostilesGone', Game.rooms[roomid]);
