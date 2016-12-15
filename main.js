@@ -667,14 +667,20 @@ function doTask(creep, task, params){
         }
         break;
         case REPAIR_TASK:
-        if (creep.carry == 0) findTask(creep);
+        if (creep.carry == 0) {
+                console.log("Creep is out of resources, finding new task");
+                findTask(creep);
+        }
         if (targetGameobj == null) {
+            console.log("Target is null, finding new target based on position");
             targetGameobj = new RoomPosition(creep.memory.task.target.pos.x, creep.memory.task.target.pos.y, creep.memory.task.target.pos.roomName).lookFor(LOOK_STRUCTURES)[0];
         }
         var repairAttempt = creep.repair(targetGameobj);
+        console.log("Trying to repair..."+repairAttempt);
             if(repairAttempt == ERR_NOT_IN_RANGE) {
                 doTask(creep, MOVETO);
             } else if (repairAttempt == ERR_NOT_ENOUGH_RESOURCES){
+
                 findTask(creep);
             } else if (repairAttempt == 0){
                 if (!ssh) creep.say("Repair");
