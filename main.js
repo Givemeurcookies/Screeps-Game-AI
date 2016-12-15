@@ -391,7 +391,7 @@ function setTask(creep, task, params){
         var repairsite;
         if(typeof params.target == 'undefined'){
             if(debug.creeps.repair) console.log(creep.name+" undefined parameters, trying to figure out repairsite target");
-            repairsite = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+            repairsite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function(objects){
                     return objects.hits < objects.hitsMax/3 && objects.hits < 50000*creep.room.controller;
                 }
