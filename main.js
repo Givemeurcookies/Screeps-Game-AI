@@ -196,7 +196,7 @@ function findTask(creep){
                 //console.log(creep.name+" trying to build");
                 // If no energy transfer is available, we'll try to build something
                 if(setTask(creep, BUILD_TASK) == -1 || chanceTime(22)){
-                    //console.log(creep.name+" trying to repair");
+                    console.log(creep.name+" trying to repair");
                     if(setTask(creep, REPAIR_TASK) == -1){
                         console.log(creep.name+" trying to expand");
                         // If we can't build anything, we'll try to expand the base
@@ -390,7 +390,7 @@ function setTask(creep, task, params){
         case REPAIR_TASK:
         var repairsite;
         if(typeof params.target == 'undefined'){
-            if(debug.creeps.repair) console.log(creep.name+" undefined parameters, trying to figure out repairsite target");
+            if(debug.action.repair) console.log(creep.name+" undefined parameters, trying to figure out repairsite target");
             repairsite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function(objects){
                     return objects.hits < objects.hitsMax/3 && objects.hits < 50000*creep.room.controller;
