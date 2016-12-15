@@ -774,11 +774,11 @@ function doTask(creep, task, params){
         } else console.log(creep.name+" Uhh, error when trying to do pickup task");
         var pickupAttempt = creep.pickup(targetGameobj);
 
-        if(attackAttempt == ERR_NOT_IN_RANGE){
+        if(pickupAttempt == ERR_NOT_IN_RANGE){
             doTask(creep, MOVETO);
         } else {
-            console.log(creep.name+" picking up returned code:"+attackAttempt);
-            if(attackAttempt == -7) {
+            console.log(creep.name+" picking up returned code:"+pickupAttempt);
+            if(pickupAttempt == -7) {
                 // Creep is dead or target is invalid
                 findTask(creep);
             }
