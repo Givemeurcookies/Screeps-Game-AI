@@ -263,7 +263,7 @@ function findTask(creep){
         // Assume we got too low energy
         console.log(creep.name+" not enough energy to do normal tasks");
         if(_.sum(creep.carry) == creep.carryCapacity){
-            setTask(creep, TRANSFER_TASK);    
+            setTask(creep, TRANSFER_TASK);
             return;
         }
 
@@ -321,7 +321,24 @@ function setTask(creep, task, params){
             creep.memory.task.code = 1;
             doTask(creep, TRANSFER_TASK);
         } else {
-            return -1;
+            targets = creep.room.find(FIND_MY_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER) &&
+                    _.sum(structure.store) < structure.storeCapacity
+                }
+            });
+            if (targets.length > 0){
+                var target = creep.pos.findClosestByRange(targets);
+                creep.memory.task.target = {
+                    id  : target.id,
+                    pos : target.pos
+                };
+                creep.memory.task.msg = "Move to transfer resources at"+target.pos.x +","+target.pos.y;
+                creep.memory.task.code = 1;
+                doTask(creep, TRANSFER_TASK);
+            } else {
+                return -1;
+            }
         }
         break;
         case HARVEST_TASK:
