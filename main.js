@@ -637,6 +637,10 @@ function doTask(creep, task, params){
               setTask(creep, UPGRADE_TASK);
             break;
             case OK:
+            if(creep.pos.findInRange(FIND_SOURCES, 1) != null){
+                console.log(creep.name+": In range to source, moving out of the way");
+                doTask(creep, MOVETO);
+            }
             if(targetGameobj.progress+(creep.getActiveBodyparts(WORK)*5) >= targetGameobj.progressTotal) {
                 console.log(creep.name+" CONSTRUCTION SITE IS DONE");
                 if(targetGameobj.structureType == STRUCTURE_RAMPART || targetGameobj.structureType == STRUCTURE_WALL){
