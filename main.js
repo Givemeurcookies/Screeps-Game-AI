@@ -10,9 +10,9 @@ var once = true,
     ssh = false,
     endlessLoop = false,
     debug = {
-      creeps   : true,
+      creeps   : false,
       action   : {
-          repair : true
+          repair : false
       },
       events   : false,
       soldiers : false,
@@ -197,10 +197,10 @@ function findTask(creep){
                 // If no energy transfer is available, we'll try to build something
                 if(setTask(creep, BUILD_TASK) == -1 || chanceTime(22)){
                     console.log(creep.name+" trying to repair");
-                    if(setTask(creep, REPAIR_TASK) == -1){
+                    if(setTask(creep, REPAIR_TASK) == -1 || chanceTime(22)){
                         console.log(creep.name+" trying to expand");
                         // If we can't build anything, we'll try to expand the base
-                        if(setTask(creep, EXPAND) == 1) {
+                        if(setTask(creep, EXPAND) == 1 || chanceTime(50)) {
                             // Try to build again
                             console.log(creep.name+" trying to build again");
                             if (setTask(creep, BUILD_TASK) == -1) {
@@ -273,7 +273,9 @@ function findTask(creep){
           case NO_SOURCES_IN_ROOM:
           console.log(creep.name+" no sources in this room, so why trying to harvest?"); break;
           case NO_SOURCES_AVAILABLE:
-          console.log(creep.name+" unable to harvest, no sources available"); break;
+          console.log(creep.name+" unable to harvest, no sources available");
+
+          break;
         }
     }
 }
@@ -747,8 +749,7 @@ function doTask(creep, task, params){
 
 function ScoutMove(creep, task, params){
     var targetGameobj = Game.getObjectById(creep.memory.task.target.id);
-    if (typeof Memory.roomsMeta == "undefined") Memory.roomsMeta = {};
-    if (typeof Memory.roomsMeta[creep.room.name] == "undefined"){
+    if (typeof Memory.rooms[creep.room.name] == "undefined"){
         var roomCache = creep.room;
         // Find neccessary information
         var sources  = roomCache.find(FIND_SOURCES),
@@ -781,7 +782,7 @@ function ScoutMove(creep, task, params){
         Memory.roomsMeta[creep.room.name] = {
             // Use to check if room is outdated
             tick        :    Game.time,
-            sources     :    roomCache.find(FIND_SOURCES),
+            sources     :    roomCache.find(FIND_SOURCES).pos,
             hostile : hostileInformation,
             controller : {
                 level        : roomCache.controller.level,
