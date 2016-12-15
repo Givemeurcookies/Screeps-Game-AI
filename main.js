@@ -682,9 +682,12 @@ function doTask(creep, task, params){
             } else if (repairAttempt == ERR_NOT_ENOUGH_RESOURCES){
 
                 findTask(creep);
-            } else if (repairAttempt == 0){
+            } else if (repairAttempt == OK){
                 if (!ssh) creep.say("Repair");
-                if (targetGameobj.hits == targetGameobj.hitsMax) findTask(creep);
+                if (targetGameobj.hits == targetGameobj.hitsMax) {
+                    console.log("Repairing is done, finding new task");
+                    findTask(creep);
+                }
             } else if (repairAttempt == -7){
                 console.log(creep.name+" invalid source when trying to repair"+targetGameobj);
                 findTask(creep);
