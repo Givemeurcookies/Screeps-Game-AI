@@ -611,7 +611,6 @@ function doTask(creep, task, params){
                     creep.memory.task.code   = REPAIR_TASK;
                 }
             }
-            findTask(creep);
             return true; break;
             default: console.log(creep.name+": got error when building "+buildAttempt); return false;
         }
