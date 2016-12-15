@@ -55,15 +55,15 @@ module.exports.loop = function () {
             towers.forEach(tower => tower.attack(tower.pos.findClosestByRange(hostileCreeps)));
     }
     for (var creepid in Memory.enemycreeps){
-      console.log("Trying to get id of creep: "+Memory.enemycreeps[creepid].id);
-      console.log("Trying to get enemy creep reference using id: "+Game.getObjectById(Memory.enemycreeps[creepid].id));
+      /*console.log("Trying to get id of creep: "+Memory.enemycreeps[creepid].id);
+      console.log("Trying to get enemy creep reference using id: "+Game.getObjectById(Memory.enemycreeps[creepid].id));*/
       if(Game.getObjectById(Memory.enemycreeps[creepid].id) == null){
         var enemycreep = Memory.enemycreeps[creepid];
         // Check if creep is dead
 
         // Haunt down the creep if it's draining resources
         var enemypos = new RoomPosition(enemycreep.pos.x, enemycreep.pos.y, enemycreep.pos.roomName);
-        console.log("Enemy exit:"+enemypos.findClosestByRange(FIND_EXIT));
+        /*console.log("Enemy exit:"+enemypos.findClosestByRange(FIND_EXIT));*/
         /*for(var i in Game.spawns){
           mod.hireCreep(Game.spawns[i], {
               isSoldier: true,
