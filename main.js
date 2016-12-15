@@ -200,9 +200,9 @@ function findTask(creep){
             if (setTask(creep, TRANSFER_TASK) == -1 || chanceTime(22)){
                 //console.log(creep.name+" trying to build");
                 // If no energy transfer is available, we'll try to build something
-                if(setTask(creep, BUILD_TASK) == -1 || chanceTime(22)){
-                    console.log(creep.name+" trying to repair");
-                    if(setTask(creep, REPAIR_TASK) == -1 || chanceTime(22)){
+                if(setTask(creep, REPAIR_TASK) == -1 || chanceTime(22)){
+                    console.log(creep.name+" trying to build");
+                    if(setTask(creep, BUILD_TASK) == -1 || chanceTime(22)){
                         console.log(creep.name+" trying to expand");
                         // If we can't build anything, we'll try to expand the base
                         if(setTask(creep, EXPAND) == 1 || chanceTime(50)) {
