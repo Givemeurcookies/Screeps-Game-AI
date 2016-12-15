@@ -350,6 +350,7 @@ function setTask(creep, task, params){
           return harvestTarget;
           break;
         }
+        if(creepsWithTask(HARVEST_TASK, harvestTarget).length > 4) return NO_SOURCES_AVAILABLE;
         try {
             creep.memory.task.target = {
                 id  : harvestTarget.source.id,
@@ -858,7 +859,7 @@ function getCreepsWithTask(taskcode, target){
     for(var name in Game.creeps){
         var creep = Game.creeps[name];
         if(creep.memory.task.target == null) continue;
-        if(_.isEqual(target.pos, creep.memory.task.target.pos)){
+        if(_.isEqual(target.pos, creep.memory.task.target.pos) && taskcode == creep.memory.task.code){
             creepsWithTask.push(creep);
         }
     }
