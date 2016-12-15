@@ -411,7 +411,7 @@ function setTask(creep, task, params){
             creep.memory.task.code   = REPAIR_TASK;
             doTask(creep, REPAIR_TASK);
         } else {
-            if(debug.action.repair) console.log(creep.name+" got error when trying to repair "+repairsite);
+            if(debug.action.repair) console.log(creep.name+" got error when trying to set repair "+repairsite);
             return -1;
         }
         break;
