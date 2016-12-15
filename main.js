@@ -532,7 +532,7 @@ function doTask(creep, task, params){
             if(!ssh) creep.say("Carrying");
             if(creep.pos.inRangeTo(targetGameobj, 5)){
                 if(debug.creeps) console.log(creep.name+" is close to target, so reducing path cache");
-                doTask(creep, MOVETO, {reusePath:1});
+                doTask(creep, MOVETO, {reusePath:2});
             } else {
                 doTask(creep, MOVETO);
             }
