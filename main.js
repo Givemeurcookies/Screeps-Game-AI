@@ -327,7 +327,8 @@ function setTask(creep, task, params){
                     _.sum(structure.store) < structure.storeCapacity
                 }
             });
-            if (targets.length > 0 || chancetime(75)){
+            if (targets.length > 0){
+                if(chanceTime(75)) return -1;
                 var target = creep.pos.findClosestByRange(targets);
                 creep.memory.task.target = {
                     id  : target.id,
