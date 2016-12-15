@@ -669,7 +669,9 @@ function doTask(creep, task, params){
         break;
         case REPAIR_TASK:
         if (creep.carry == 0) findTask(creep);
-
+        if (targetGameobj == null) {
+            targetGameobj = new RoomPosition(creep.memory.target.pos.x, creep.memory.target.pos.y, creep.memory.target.pos.roomName).lookFor(LOOK_STRUCTURES)[0];
+        }
         var repairAttempt = creep.repair(targetGameobj);
             if(repairAttempt == ERR_NOT_IN_RANGE) {
                 doTask(creep, MOVETO);
