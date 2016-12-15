@@ -11,6 +11,9 @@ var once = true,
     endlessLoop = false,
     debug = {
       creeps   : false,
+      action   : {
+          repair : true
+      },
       events   : false,
       soldiers : false,
       spawning : false
@@ -356,19 +359,19 @@ function setTask(creep, task, params){
         case REPAIR_TASK:
         var repairsite;
         if(typeof params.target == 'undefined'){
-            if(debug.creeps) console.log(creep.name+" Undefined parameters, trying to figure out repairsite target");
+            if(debug.creeps.repair) console.log(creep.name+" undefined parameters, trying to figure out repairsite target");
             repairsite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function(objects){
                     return objects.hits < objects.hitsMax/3 && objects.hits < 50000*creep.room.controller;
                 }
             });
         } else {
-            if(debug.creeps) console.log(creep.name+" setting repair target to defined params")
+            if(debug.action.repair) console.log(creep.name+" setting repair target to defined params")
             repairsite = params.target;
         }
-        if(debug.creeps) console.log(creep.name+" trying to set repair task");
+        if(debug.action.repair) console.log(creep.name+" trying to set repair task");
         if(repairsite) {
-            if(debug.creeps) console.log(creep.name + ": found repair site, going to repair");
+            if(debug.action.repair) console.log(creep.name + ": found repair site, going to repair");
             creep.memory.task.target = {
                 id  : repairsite.id,
                 pos : repairsite.pos
@@ -377,7 +380,7 @@ function setTask(creep, task, params){
             creep.memory.task.code   = REPAIR_TASK;
             doTask(creep, REPAIR_TASK);
         } else {
-            if(debug.creeps) console.log(creep.name+" no repairsite, returning -1");
+            if(debug.action.repair) console.log(creep.name+" no repairsite, returning -1");
             return -1;
         }
         break;
