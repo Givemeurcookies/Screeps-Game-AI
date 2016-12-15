@@ -687,6 +687,9 @@ function doTask(creep, task, params){
 
                 findTask(creep);
             } else if (repairAttempt == OK){
+                if(creep.pos.findInRange(FIND_SOURCES, 1){
+                    doTask(creep, MOVETO);
+                }
                 if (!ssh) creep.say("Repair");
                 if (targetGameobj.hits == targetGameobj.hitsMax && targetGameobj.hitsMax != 1) {
                     findTask(creep);
