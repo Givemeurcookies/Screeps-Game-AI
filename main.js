@@ -55,8 +55,12 @@ module.exports.loop = function () {
             event.dispatch('hostilesGone', Game.rooms[roomid]);
         }
         var towers = room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+        var damagedCreeps = room.find(FIND_MY_CREEPS, {filter: function(creep){return (creep.hits/creep.hitsMax != 1)}});
         if (hostileCreeps.length != 0)
             towers.forEach(tower => tower.attack(tower.pos.findClosestByRange(hostileCreeps)));
+        else if(damagedCreeps.length > 0)
+            towers.forEach(tower => tower.heal(damagedCreeps[0]));
+
     }
     for (var creepid in Memory.enemycreeps){
       /*console.log("Trying to get id of creep: "+Memory.enemycreeps[creepid].id);
@@ -797,6 +801,8 @@ function doTask(creep, task, params){
 
         if(pickupAttempt == ERR_NOT_IN_RANGE){
             doTask(creep, MOVETO);
+        } else if(pickupAttempt == ERR_FULL){
+            findTask(creep);
         } else {
             console.log(creep.name+" picking up returned code:"+pickupAttempt);
             if(pickupAttempt == -7) {
