@@ -741,7 +741,7 @@ function doTask(creep, task, params){
         } else findTask(creep);
         var attackAttempt = creep.attack(targetGameobj);
         var hostilesInRange = creep.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
-        rangedAttackAttempt;
+        var rangedAttackAttempt;
         if(hostilesInRange.length > 1) {
             var hostilesRange = {
                 one   : 0,
