@@ -740,7 +740,28 @@ function doTask(creep, task, params){
             creep.memory.task.msg  = "Moving to attack "+targetGameobj.pos.x+"x, "+targetGameobj.pos.y+"y";
         } else findTask(creep);
         var attackAttempt = creep.attack(targetGameobj);
+        var hostilesInRange = creep.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
+        rangedAttackAttempt;
+        if(hostilesInRange.length > 1) {
+            var hostilesRange = {
+                one   : 0,
+                two   : 0,
+                three : 0
+            };
+            hostilesInRange.forEach(function(creepFoe){
+                if(creep.pos.inRangeTo(creepFoe, 2)) hostilesRange.two++;
+                if(creep.pos.inRangeTo(creepFoe, 1)) hostilesRange.one++;
+            });
+            hostilesRange.three  = hostilesInRange-hostilesRange.two-hostilesRange.one;
+            hostilesRange.two   -= hostilesRange.one;
+            if(hostilesRange.one > 0 || hostilesRange.two >= 3 || (hostilesRange.two == 2 && hostilesRange.three >= 2)){
+                rangedAttackAttempt = creep.rangedMassAttack(hostilesInRange);
+            } else rangedAttackAttempt = creep.rangedAttack(hostilesInRange[0]);
 
+            console.log("Detected more than 1 within circle of attack, attack result:"+rangedAttackAttempt);
+        } else if (hostilesInRange.length == 1){
+            console.log("Trying to attack creep from afar"+creep.rangedAttack(hostilesInRange[0]);
+        }
         if(attackAttempt == ERR_NOT_IN_RANGE){
             doTask(creep, MOVETO);
         } else {
