@@ -611,11 +611,23 @@ function doTask(creep, task, params){
         }
         break;
         case HARVEST_TASK:
+        var transferTarget = [];
+        if(isCreepNextToSource(creep)){
+            var closeCreeps = creep.pos.findInRange(FIND_MY_CREEPS, 1);
+            if(closeCreeps.length > 0) {
+                closeCreeps.forEach(function(closecreep){
+                    if(!isCreepNextToSource(closecreep) && _.sum(closecreep.carry) != closecreep.carryCapacity) transferTarget.push(closecreep);
+                });
+            }
+        }
+        if(transferTarget.length > 0) {
+            creep.transfer(transferTarget[0]);
+        }
         // Check if energy capacity is full first
         if (_.sum(creep.carry) == creep.carryCapacity) {
             // console.log(creep.name+" done with harvesting, finding new task");
             findTask(creep);
-            return "done";
+            return 'done';
         } else {
 
             var harvestAttempt = creep.harvest(targetGameobj);
@@ -816,7 +828,9 @@ function doTask(creep, task, params){
     }
 
 }
-
+function isCreepNextToSource(creep){
+    if(creep.pos.findInRange(FIND_SOURCES, 1).length > 0) return true; else return false;
+}
 function ScoutMove(creep, task, params){
     var roomCache = creep.room;
     var targetGameobj = Game.getObjectById(creep.memory.task.target.id),
