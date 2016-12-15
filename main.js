@@ -349,7 +349,8 @@ function setTask(creep, task, params){
           return harvestTarget;
           break;
         }
-        console.log(JSON.stringify(getCreepsWithTask(HARVEST_TASK, harvestTarget)));
+        console.log("Harvsest target:"+JSON.stringify(harvestTarget));
+        console.log("Get creeps with task: "+JSON.stringify(getCreepsWithTask(HARVEST_TASK, harvestTarget)));
         if(getCreepsWithTask(HARVEST_TASK, harvestTarget).length >= 3) {
             console.log(creep.name+": Too many creeps with this task (harvest)");
             return NO_SOURCES_AVAILABLE;
