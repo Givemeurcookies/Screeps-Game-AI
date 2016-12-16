@@ -643,6 +643,11 @@ function doTask(creep, task, params){
                 closeCreeps.forEach(function(closecreep){
                     if(!isCreepNextToSource(closecreep) && _.sum(closecreep.carry) != closecreep.carryCapacity) transferTarget.push(closecreep);
                 });
+            } else {
+                var isNextToLink = creep.pos.findInRange(FIND_MY_STRUCTURES, 1, {filter: (structure) => {return structure.structureType == STRUCTURE_LINK}});
+                if(isNextToLink.length > 0){
+                    transferTarget.push(isNextToLink[0]);
+                }
             }
         }
         if(transferTarget.length > 0) {
