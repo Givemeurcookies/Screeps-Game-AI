@@ -578,7 +578,7 @@ function findTask(creep){
                 return -1;
             }
             break;
-            case WITHDRAW:
+            case WITHDRAW_TASK:
             creep.memory.task.target = {
                 id  : params.target.id,
                 pos : params.target.pos
