@@ -480,8 +480,9 @@ function setTask(creep, task, params){
 
         if(roomController != undefined) {
             keyPoints = sources.concat(roomController);
-            if (storage){
+            if (storage != undefined){
                 keyPoints = keyPoints.concat(storage);
+                console.log("Concat storage with roads")
             }
         } else {
             keyPoints = sources;
