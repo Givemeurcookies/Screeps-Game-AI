@@ -638,6 +638,7 @@ function doTask(creep, task, params){
         case HARVEST_TASK:
         var transferTarget = [];
         if(isCreepNextToSource(creep)){
+            console.log(creep.name+"Creep is next to source");
             var closeCreeps = creep.pos.findInRange(FIND_MY_CREEPS, 1);
             if(closeCreeps.length > 0) {
                 closeCreeps.forEach(function(closecreep){
