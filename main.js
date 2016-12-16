@@ -287,7 +287,7 @@ function findTask(creep){
         // Try to harvest
         var target            = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY),
             hostileCreeps     = creep.room.find(FIND_HOSTILE_CREEPS,
-                {filter: function(creep) {return creep.owner.username != 'Pettingson'}).length;
+                {filter: function(creep) {return creep.owner.username != 'Pettingson'}}).length;
 
         if(target && hostileCreeps == 0 && !chanceTime(33)) {
             setTask(creep, PICKUP_TASK, {'target' : target});
