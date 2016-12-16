@@ -39,6 +39,9 @@ global.dispatchEvent = function(eventName){
 global.sayHi = function(){
     event.dispatch('sayHi', "and hello again");
 }
+global.expandRoom = function(){
+    setTask(Game.creeps[0], EXPAND);
+}
 // End of test functions
 
 // Main loop
