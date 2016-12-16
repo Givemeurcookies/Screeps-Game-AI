@@ -303,7 +303,7 @@ function findTask(creep){
                             (structure.store[RESOURCE_ENERGY] > 0 || structure.energy > 0))
                         }
                     });
-                    if(resourceStorage) {
+                    if(resourceStorage.length < 0) {
                         setTask(creep, WITHDRAW_TASK, {'target':resourceStorage[0]});
                         return;
                     }
