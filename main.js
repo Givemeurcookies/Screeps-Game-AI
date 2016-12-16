@@ -797,6 +797,12 @@ function doTask(creep, task, params){
         //console.log(creep.name+": (MOVETO) "+JSON.stringify(creep.memory.task.target));
         if(creep.memory.soldier) ScoutMove(creep, task, params);
         else {
+
+            if((creep.carry.energy/creep.carryCapacity) >= 0.40){
+                var buildOnTheGo = creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 3);
+                if(buildOnTheGo.length > 0) creep.build(buildOnTheGo[0]);
+            }
+
             var moveAttempt = creep.moveTo(targetGameobj, params);
             if(moveAttempt != 0 && moveAttempt != -11){
                 console.log(creep.name+": Got error when trying to move"+moveAttempt);
