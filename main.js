@@ -633,9 +633,12 @@ function doTask(creep, task, params){
             var harvestAttempt = creep.harvest(targetGameobj);
             if(harvestAttempt == ERR_NOT_IN_RANGE) {
                 if(creep.pos.inRangeTo(targetGameobj, 5)){
-                    creep.moveTo(targetGameobj, {
+                    if(creep.moveTo(targetGameobj, {
                         reusePath : 1
-                    });
+                    }) == -2){
+                        setTask(creep, HARVETS_TASK);
+                    }
+
                 } else {
                     doTask(creep, MOVETO);
                 }
