@@ -315,12 +315,10 @@ function findTask(creep){
                 console.log(creep.name+" no sources in this room, so why trying to harvest?"); break;
                 case NO_SOURCES_AVAILABLE:
                 console.log(creep.name+" unable to harvest, no sources available");
-                var resourceDrops     = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+                var resourceDrops  = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
                 if(resourceDrops) {
                     setTask(creep, PICKUP_TASK, {'target' : resourceDrops});
                     return;
-                } else if(resourceStorages){
-
                 }
                 break;
             }
