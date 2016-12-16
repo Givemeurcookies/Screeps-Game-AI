@@ -639,7 +639,7 @@ function doTask(creep, task, params){
         var transferTarget = [];
         if(isCreepNextToSource(creep)){
             console.log(creep.name+"Creep is next to source");
-            var closeCreeps = creep.pos.findInRange(FIND_MY_CREEPS, 1);
+            var closeCreeps = creep.pos.findInRange(FIND_MY_CREEPS, 1, {filter: (closecreep)=> {return closecreep.name != creep}});
             if(closeCreeps.length > 0) {
                 console.log(creep.name+" is close to another creep "+closeCreeps[0].name);
                 closeCreeps.forEach(function(closecreep){
