@@ -636,7 +636,7 @@ function doTask(creep, task, params){
                     if(creep.moveTo(targetGameobj, {
                         reusePath : 1
                     }) == -2){
-                        setTask(creep, HARVETS_TASK);
+                        setTask(creep, HARVEST_TASK);
                     }
 
                 } else {
