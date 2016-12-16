@@ -1,36 +1,37 @@
 "use strict";
 var amountOfCreeps;
 var mod    = require('spawnManager'),
-    event  = require('EventHandler'),
-    commandline = require('CommandLine');
+event  = require('EventHandler'),
+commandline = require('CommandLine');
 
 //console.log("Event manager: "+JSON.stringify(event));
 
 var once = true,
-    ssh = false,
-    endlessLoop = false,
-    debug = {
-      creeps   : false,
-      action   : {
-          repair : false
-      },
-      events   : false,
-      soldiers : false,
-      spawning : false
-    };
+ssh = false,
+endlessLoop = false,
+debug = {
+    creeps   : false,
+    action   : {
+        repair : false
+    },
+    events   : false,
+    soldiers : false,
+    spawning : false
+};
 
 const HARVEST_TASK  = 0,
-      TRANSFER_TASK = 1,
-      BUILD_TASK    = 2,
-      REPAIR_TASK   = 3,
-      UPGRADE_TASK  = 4,
-      ATTACK_TASK   = 5,
-      MOVETO        = 6,
-      EXPAND        = 7,
-      PICKUP_TASK   = 8;
+TRANSFER_TASK = 1,
+BUILD_TASK    = 2,
+REPAIR_TASK   = 3,
+UPGRADE_TASK  = 4,
+ATTACK_TASK   = 5,
+MOVETO        = 6,
+EXPAND        = 7,
+PICKUP_TASK   = 8,
+WITHDRAW_TASK = 9;
 
 const NO_SOURCES_IN_ROOM   = -10,
-      NO_SOURCES_AVAILABLE = -11;
+NO_SOURCES_AVAILABLE = -11;
 
 // Testing event class
 global.dispatchEvent = function(eventName){
@@ -69,113 +70,113 @@ module.exports.loop = function () {
         var towers = room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         var damagedCreeps = room.find(FIND_MY_CREEPS, {filter: function(creep){return (creep.hits/creep.hitsMax != 1)}});
         if (hostileCreeps.length != 0)
-            towers.forEach(tower => tower.attack(tower.pos.findClosestByRange(hostileCreeps)));
+        towers.forEach(tower => tower.attack(tower.pos.findClosestByRange(hostileCreeps)));
         else if(damagedCreeps.length > 0)
-            towers.forEach(tower => tower.heal(damagedCreeps[0]));
+        towers.forEach(tower => tower.heal(damagedCreeps[0]));
 
     }
     for (var creepid in Memory.enemycreeps){
-      /*console.log("Trying to get id of creep: "+Memory.enemycreeps[creepid].id);
-      console.log("Trying to get enemy creep reference using id: "+Game.getObjectById(Memory.enemycreeps[creepid].id));*/
-      if(Game.getObjectById(Memory.enemycreeps[creepid].id) == null){
-        var enemycreep = Memory.enemycreeps[creepid];
-        // Check if creep is dead
+        /*console.log("Trying to get id of creep: "+Memory.enemycreeps[creepid].id);
+        console.log("Trying to get enemy creep reference using id: "+Game.getObjectById(Memory.enemycreeps[creepid].id));*/
+        if(Game.getObjectById(Memory.enemycreeps[creepid].id) == null){
+            var enemycreep = Memory.enemycreeps[creepid];
+            // Check if creep is dead
 
-        // Haunt down the creep if it's draining resources
-        var enemypos = new RoomPosition(enemycreep.pos.x, enemycreep.pos.y, enemycreep.pos.roomName);
-        /*console.log("Enemy exit:"+enemypos.findClosestByRange(FIND_EXIT));*/
-        /*for(var i in Game.spawns){
-          mod.hireCreep(Game.spawns[i], {
-              isSoldier: true,
-              task   : {
-                  msg  : "Scouting new room",
-                  code : MOVETO,
-                  target : enemypos.findClosestByRange(FIND_EXIT)
-              },
-              creepBody : [TOUGH, MOVE, ATTACK, MOVE]
-          });
-        }*/
+            // Haunt down the creep if it's draining resources
+            var enemypos = new RoomPosition(enemycreep.pos.x, enemycreep.pos.y, enemycreep.pos.roomName);
+            /*console.log("Enemy exit:"+enemypos.findClosestByRange(FIND_EXIT));*/
+            /*for(var i in Game.spawns){
+            mod.hireCreep(Game.spawns[i], {
+            isSoldier: true,
+            task   : {
+            msg  : "Scouting new room",
+            code : MOVETO,
+            target : enemypos.findClosestByRange(FIND_EXIT)
+        },
+        creepBody : [TOUGH, MOVE, ATTACK, MOVE]
+    });
+}*/
 
-      }
+}
+}
+// Spawn manager
+for(var spawn in Game.spawns){
+    mod.run(Game.spawns[spawn]);
+}
+
+// Creep action manager
+// Loops over all creeps in the game to execute actions
+for(var name in Game.creeps){
+    // If the endless loop is turned to true, we kill this loop
+    if(endlessLoop) return;
+    var creep = Game.creeps[name], roomController = creep.room.controller;
+
+    // For fun, we made a small chance for the creeps to talk
+    if(chanceTime(2)) creep.say("Halleluja!", true);
+    else if(chanceTime(1)) creep.say("Hail Stan!", true);
+    else if(chanceTime(1)) creep.say("Never.", true);
+
+    // RoomController is highest priority
+    if(roomController == undefined) {
+        roomController = {
+            my : false,
+            ticksToDowngrade : 4001
+        };
     }
-    // Spawn manager
-    for(var spawn in Game.spawns){
-        mod.run(Game.spawns[spawn]);
-    }
+    // If the room controller is below 4000 (really low) ticks we want all creeps to focus on
+    // upgrading the controller, this should not usually happen and if it has, there is problably
+    // an error in the code preventing the creeps from upgrading
+    if(roomController.my && (roomController.ticksToDowngrade <= 4000)) {
+        if(!ssh) creep.say("Controller");
+        if(creep.carry.energy <= 30) {
+            if (once) console.log("Controller: "+findHarvestTarget(creep));
+            once = false;
 
-    // Creep action manager
-    // Loops over all creeps in the game to execute actions
-    for(var name in Game.creeps){
-        // If the endless loop is turned to true, we kill this loop
-        if(endlessLoop) return;
-        var creep = Game.creeps[name], roomController = creep.room.controller;
-
-        // For fun, we made a small chance for the creeps to talk
-        if(chanceTime(2)) creep.say("Halleluja!", true);
-        else if(chanceTime(1)) creep.say("Hail Stan!", true);
-        else if(chanceTime(1)) creep.say("Never.", true);
-
-        // RoomController is highest priority
-        if(roomController == undefined) {
-            roomController = {
-                    my : false,
-                    ticksToDowngrade : 4001
-            };
+            var sources = creep.room.find(FIND_SOURCES);
+            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[0]);
+            }
         }
-        // If the room controller is below 4000 (really low) ticks we want all creeps to focus on
-        // upgrading the controller, this should not usually happen and if it has, there is problably
-        // an error in the code preventing the creeps from upgrading
-        if(roomController.my && (roomController.ticksToDowngrade <= 4000)) {
-            if(!ssh) creep.say("Controller");
-            if(creep.carry.energy <= 30) {
-                if (once) console.log("Controller: "+findHarvestTarget(creep));
-                once = false;
+        else {
+            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.controller);
+            }
+        }
 
-                var sources = creep.room.find(FIND_SOURCES);
-                if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sources[0]);
-                }
-            }
-            else {
-                if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.room.controller);
-                }
-            }
+    } else {
+        // If creeps have no task memory
+        // this happens if the task memory is reset using a command
+        if (Object.keys(creep.memory.task).length === 0) {
+            if (debug.creeps) console.log(creep.name+": Empty task obj");
+            if(!ssh) creep.say("Reset?");
+            findTask(creep);
+            return;
+        }
+        // If creeps have no task or task callback
+        if(creep.memory.task.code == -1 && creep.memory.task.callback == null) {
+            // If creeps have no task or callback
+            findTask(creep);
+
+        } else if (creep.memory.task.callback != null && creep.memory.task.code == -1){
+            console.log("Callback called");
+            // Try to call the callback
+            // todo: check if callback is callable
+            creep.say("Got task");
+            creep.memory.task.callback();
+
+        } else if (creep.memory.task.code != -1){
+            // If this is executed, the creep has a task to do
+            // todo: check if doTask returns properly
+            if(!ssh) creep.say("Dotask");
+            doTask(creep, creep.memory.task.code);
 
         } else {
-            // If creeps have no task memory
-            // this happens if the task memory is reset using a command
-            if (Object.keys(creep.memory.task).length === 0) {
-                if (debug.creeps) console.log(creep.name+": Empty task obj");
-                if(!ssh) creep.say("Reset?");
-                findTask(creep);
-                return;
-            }
-            // If creeps have no task or task callback
-            if(creep.memory.task.code == -1 && creep.memory.task.callback == null) {
-                // If creeps have no task or callback
-                findTask(creep);
-
-            } else if (creep.memory.task.callback != null && creep.memory.task.code == -1){
-                console.log("Callback called");
-                // Try to call the callback
-                // todo: check if callback is callable
-                creep.say("Got task");
-                creep.memory.task.callback();
-
-            } else if (creep.memory.task.code != -1){
-                // If this is executed, the creep has a task to do
-                // todo: check if doTask returns properly
-                if(!ssh) creep.say("Dotask");
-                doTask(creep, creep.memory.task.code);
-
-            } else {
-                // This should not be executed, but if it is
-                // creep says "nothing"
-                creep.say("Nothing");
-            }
+            // This should not be executed, but if it is
+            // creep says "nothing"
+            creep.say("Nothing");
         }
     }
+}
 }
 
 /*
@@ -208,42 +209,42 @@ function findTask(creep){
         // Try to transfer the energy to energy storage
         //console.log(creep.name+" got enough energy");
         //try{
-            //console.log(creep.name+" trying to transfer");
-            if (setTask(creep, TRANSFER_TASK) == -1 || chanceTime(22)){
-                //console.log(creep.name+" trying to build");
-                // If no energy transfer is available, we'll try to build something
-                if(setTask(creep, REPAIR_TASK) == -1 || chanceTime(45)){
-                    console.log(creep.name+" trying to build");
-                    if(setTask(creep, BUILD_TASK) == -1 || chanceTime(22)){
-                        console.log(creep.name+" trying to expand");
-                        // If we can't build anything, we'll try to expand the base
-                        if(setTask(creep, EXPAND) == 1 || chanceTime(50)) {
-                            // Try to build again
-                            console.log(creep.name+" trying to build again");
-                            if (setTask(creep, BUILD_TASK) == -1) {
-                                // If we get an error during building even after running
-                                // the expand function, we'll report an error here
-                                //console.log(creep.name+" trying to upgrade controller");
-                                if(setTask(creep, UPGRADE_TASK) == -1){
+        //console.log(creep.name+" trying to transfer");
+        if (setTask(creep, TRANSFER_TASK) == -1 || chanceTime(22)){
+            //console.log(creep.name+" trying to build");
+            // If no energy transfer is available, we'll try to build something
+            if(setTask(creep, REPAIR_TASK) == -1 || chanceTime(45)){
+                console.log(creep.name+" trying to build");
+                if(setTask(creep, BUILD_TASK) == -1 || chanceTime(22)){
+                    console.log(creep.name+" trying to expand");
+                    // If we can't build anything, we'll try to expand the base
+                    if(setTask(creep, EXPAND) == 1 || chanceTime(50)) {
+                        // Try to build again
+                        console.log(creep.name+" trying to build again");
+                        if (setTask(creep, BUILD_TASK) == -1) {
+                            // If we get an error during building even after running
+                            // the expand function, we'll report an error here
+                            //console.log(creep.name+" trying to upgrade controller");
+                            if(setTask(creep, UPGRADE_TASK) == -1){
 
-                                }
-
-                            } else {
-                                // OK BUILD_TASKING
                             }
+
                         } else {
-                            console.log(creep.name+" unable to expand");
-                            if(setTask(creep, UPGRADE_TASK) == -1) {
-
-                            }
+                            // OK BUILD_TASKING
                         }
                     } else {
-                        // OK BUILD_TASKING (NO EXPAND)
+                        console.log(creep.name+" unable to expand");
+                        if(setTask(creep, UPGRADE_TASK) == -1) {
+
+                        }
                     }
+                } else {
+                    // OK BUILD_TASKING (NO EXPAND)
                 }
-            } else {
-                // OK TRANSFER_TASK
             }
+        } else {
+            // OK TRANSFER_TASK
+        }
         //} catch(err) {
         //    console.log(err.lineNumber+" = "+creep.name+": Got error while trying to set a task: "+err.message);
         //}
@@ -251,7 +252,7 @@ function findTask(creep){
     } else if(creep.memory.soldier){
 
         var hostileCreeps     = creep.room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return creep.owner.username != 'Pettingson'}}),
-            hostileStructures = creep.room.find(FIND_HOSTILE_STRUCTURES, {filter: function(creep) {return creep.owner.username != 'Pettingson'}});
+        hostileStructures = creep.room.find(FIND_HOSTILE_STRUCTURES, {filter: function(creep) {return creep.owner.username != 'Pettingson'}});
         if(hostileCreeps.length != 0) {
             setTask(creep, ATTACK_TASK, {});
         } else if(hostileStructures.length != 0){
@@ -285,27 +286,46 @@ function findTask(creep){
         }
 
         // Try to harvest
-        var target            = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY),
-            hostileCreeps     = creep.room.find(FIND_HOSTILE_CREEPS,
-                {filter: function(creep) {return creep.owner.username != 'Pettingson'}}).length;
+        var hostileCreeps     = creep.room.find(FIND_HOSTILE_CREEPS,
+            {filter: function(creep) {return creep.owner.username != 'Pettingson'}}).length;
 
-        if(target && hostileCreeps == 0 && !chanceTime(33)) {
-            setTask(creep, PICKUP_TASK, {'target' : target});
-            return;
+            if(hostileCreeps == 0 && !chanceTime(33)){
+                var resourceDrops     = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+                if(resourceDrops) {
+                    setTask(creep, PICKUP_TASK, {'target' : target});
+                    return;
+                } else {
+                    console.log(creep.name+" gonna try to withdraw storage");
+                    var resourceStorage   = creep.pos.findInRange(FIND_MY_STRUCTURES, 9, {
+                        filter: (structure) => {
+                            return
+                            ((structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_LINK) &&
+                            (structure.store[RESOURCE_ENERGY] > 0 || structure.energy > 0))
+                        }
+                    });
+                    if(resourceStorage) {
+                        setTask(creep, WITHDRAW_TASK, {'target':resourceStorage[0]});
+                        return;
+                    }
+                }
+            }
+            let setHarvest = setTask(creep, HARVEST_TASK);
+            switch (setHarvest){
+                case NO_SOURCES_IN_ROOM:
+                console.log(creep.name+" no sources in this room, so why trying to harvest?"); break;
+                case NO_SOURCES_AVAILABLE:
+                console.log(creep.name+" unable to harvest, no sources available");
+                var resourceDrops     = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+                if(resourceDrops) {
+                    setTask(creep, PICKUP_TASK, {'target' : resourceDrops});
+                    return;
+                } else if(resourceStorages){
+
+                }
+                break;
+            }
         }
-        //console.log(creep.name+": Trying to harvest");
-        let setHarvest = setTask(creep, HARVEST_TASK);
-        switch (setHarvest){
-          case NO_SOURCES_IN_ROOM:
-          console.log(creep.name+" no sources in this room, so why trying to harvest?"); break;
-          case NO_SOURCES_AVAILABLE:
-          console.log(creep.name+" unable to harvest, no sources available");
-          if(target) {
-              setTask(creep, PICKUP_TASK, {'target' : target});
-              return;
-          }
-          break;
-        }
+
     }
 }
 function scout(creep){
@@ -375,10 +395,10 @@ function setTask(creep, task, params){
         case HARVEST_TASK:
         var harvestTarget = findHarvestTarget(creep);
         switch (harvestTarget) {
-          case NO_SOURCES_IN_ROOM:
-          case NO_SOURCES_AVAILABLE:
-          return harvestTarget;
-          break;
+            case NO_SOURCES_IN_ROOM:
+            case NO_SOURCES_AVAILABLE:
+            return harvestTarget;
+            break;
         }
         console.log("Harvsest target:"+JSON.stringify(harvestTarget));
         console.log("Get creeps with task: "+JSON.stringify(getCreepsWithTask(HARVEST_TASK, harvestTarget)));
@@ -472,8 +492,8 @@ function setTask(creep, task, params){
                 code   : PICKUP_TASK,
                 msg    : 'Move to pick up resources at '+pickuplocation.pos.x+', '+pickuplocation.pos.y,
                 target : {
-                        id : pickuplocation.id,
-                        pos : pickuplocation.pos
+                    id : pickuplocation.id,
+                    pos : pickuplocation.pos
                 }
             };
         }
@@ -482,19 +502,19 @@ function setTask(creep, task, params){
         break;
         case EXPAND:
         if (!once) {
-          console.log("Already expanded this tick...");
-          return -1
+            console.log("Already expanded this tick...");
+            return -1
         };
         once = false;
         if(debug.creeps) console.log(creep.name+": Trying to expand...");
         var closestSpawn   = creep.pos.findClosestByRange(FIND_MY_SPAWNS),
-            sources        = creep.room.find(FIND_SOURCES),
-            storage        = creep.room.find(FIND_MY_STRUCTURES, {filter:(structure) => {
-                return (structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER)
-            }}),
-            roomController = [creep.room.controller],
-            keyPaths       = [],
-            keyPoints      = [];
+        sources        = creep.room.find(FIND_SOURCES),
+        storage        = creep.room.find(FIND_MY_STRUCTURES, {filter:(structure) => {
+            return (structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER)
+        }}),
+        roomController = [creep.room.controller],
+        keyPaths       = [],
+        keyPoints      = [];
 
         if(roomController != undefined) {
             keyPoints = sources.concat(roomController);
@@ -527,8 +547,8 @@ function setTask(creep, task, params){
         // -4y
         // +4x
         var honeycombPos = closestSpawn.pos;
-            honeycombPos.x += 5;
-            honeycombPos.y -= 5;
+        honeycombPos.x += 5;
+        honeycombPos.y -= 5;
         createHoneycomb(creep, honeycombPos);
         console.log(creep.name+": Done pushing for honeycomb pattern");
         for (var keyid in keyPaths){
@@ -558,6 +578,15 @@ function setTask(creep, task, params){
         } else {
             return -1;
         }
+        break;
+        case WITHDRAW:
+        creep.memory.task.target = {
+            id  : params.target.id,
+            pos : params.target.pos
+        }
+        creep.memory.task.msg = "Moving to withdraw at "+params.target.pos.x+"x, "+params.target.pos.y+"y";
+        creep.memory.task.code = WITHDRAW_TASK;
+        doTask(creep, WITHDRAW_TASK)
         break;
         case MOVETO:
         console.log(creep.name+" params "+JSON.stringify(params));
@@ -606,7 +635,7 @@ function doTask(creep, task, params){
                 console.log(creep.name+": Out of resources, finding new task");
                 findTask(creep);
             } else if (targetGameobj.energy == targetGameobj.energyCapacity)
-                if(setTask(creep, TRANSFER_TASK) == -1) findTask(creep);
+            if(setTask(creep, TRANSFER_TASK) == -1) findTask(creep);
 
             return true;
         } else {
@@ -710,10 +739,10 @@ function doTask(creep, task, params){
             case ERR_NOT_IN_RANGE: creep.moveTo(targetGameobj); break;
             case ERR_NOT_ENOUGH_RESOURCES:
             case ERR_INVALID_TARGET:
-              findTask(creep);
+            findTask(creep);
             break;
             case ERR_RCL_NOT_ENOUGH:
-              setTask(creep, UPGRADE_TASK);
+            setTask(creep, UPGRADE_TASK);
             break;
             case OK:
             if(creep.pos.findInRange(FIND_SOURCES, 1).length > 0){
@@ -753,8 +782,8 @@ function doTask(creep, task, params){
         break;
         case REPAIR_TASK:
         if (creep.carry == 0) {
-                console.log("Creep is out of resources, finding new task");
-                findTask(creep);
+            console.log("Creep is out of resources, finding new task");
+            findTask(creep);
         }
         if (targetGameobj == null) {
             console.log("Target is null, finding new target based on position");
@@ -765,28 +794,28 @@ function doTask(creep, task, params){
             };
         }
         var repairAttempt = creep.repair(targetGameobj);
-            if(repairAttempt == ERR_NOT_IN_RANGE) {
-                doTask(creep, MOVETO);
-            } else if (repairAttempt == ERR_NOT_ENOUGH_RESOURCES){
+        if(repairAttempt == ERR_NOT_IN_RANGE) {
+            doTask(creep, MOVETO);
+        } else if (repairAttempt == ERR_NOT_ENOUGH_RESOURCES){
 
-                findTask(creep);
-            } else if (repairAttempt == OK){
-                if(creep.pos.findInRange(FIND_SOURCES, 1).length > 0){
-                    console.log(creep.name+": In range to source, moving out of the way");
-                    doTask(creep, MOVETO);
-                }
-                if (!ssh) creep.say("Repair");
-                if (targetGameobj.hits == targetGameobj.hitsMax && targetGameobj.hitsMax != 1) {
-                    findTask(creep);
-                }
-            } else if (repairAttempt == -7){
-                console.log(creep.name+" invalid source when trying to repair"+targetGameobj);
-                findTask(creep);
-            } else {
-                if (!ssh) creep.say("Error");
-                console.log(creep.name+" got error when repairing, "+repairAttempt);
-                return true;
+            findTask(creep);
+        } else if (repairAttempt == OK){
+            if(creep.pos.findInRange(FIND_SOURCES, 1).length > 0){
+                console.log(creep.name+": In range to source, moving out of the way");
+                doTask(creep, MOVETO);
             }
+            if (!ssh) creep.say("Repair");
+            if (targetGameobj.hits == targetGameobj.hitsMax && targetGameobj.hitsMax != 1) {
+                findTask(creep);
+            }
+        } else if (repairAttempt == -7){
+            console.log(creep.name+" invalid source when trying to repair"+targetGameobj);
+            findTask(creep);
+        } else {
+            if (!ssh) creep.say("Error");
+            console.log(creep.name+" got error when repairing, "+repairAttempt);
+            return true;
+        }
         break;
         case ATTACK_TASK:
         if(targetGameobj != null) {
@@ -852,7 +881,7 @@ function doTask(creep, task, params){
         if(targetGameobj != null) {
             creep.memory.task.target.pos = targetGameobj.pos;
             creep.memory.task.msg  = "Moving to pickup "+targetGameobj.pos.x+"x, "+targetGameobj.pos.y+"y";
-        } else console.log(creep.name+" Uhh, error when trying to do pickup task");
+        } else console.log(creep.name+" Uhh, error when trying to do pickup task, target is null");
         var pickupAttempt = creep.pickup(targetGameobj);
 
         if(pickupAttempt == ERR_NOT_IN_RANGE){
@@ -868,6 +897,27 @@ function doTask(creep, task, params){
 
         }
         break;
+        case WITHDRAW_TASK:
+        if(targetGameobj != null) {
+            creep.memory.task.target.pos = targetGameobj.pos;
+            creep.memory.task.msg  = "Moving to pickup "+targetGameobj.pos.x+"x, "+targetGameobj.pos.y+"y";
+        } else console.log(creep.name+" Uhh, error when trying to withdraw, target is null");
+
+        var withdrawAttempt = creep.withdraw(targetGameobj, RESOURCE_ENERGY);
+
+        if(withdrawAttempt == ERR_NOT_IN_RANGE){
+            doTask(creep, MOVETO);
+        } else if(withdrawAttempt == ERR_FULL){
+            findTask(creep);
+        } else {
+            console.log(creep.name+" withdrawing returned code:"+withdrawAttempt);
+            if(withdrawAttempt == -7) {
+                // If target is invalid
+                findTask(creep);
+            }
+
+        }
+        break;
     }
 
 }
@@ -877,21 +927,21 @@ function isCreepNextToSource(creep){
 function ScoutMove(creep, task, params){
     var roomCache = creep.room;
     var targetGameobj = Game.getObjectById(creep.memory.task.target.id),
-        hostileCreeps = roomCache.find(FIND_HOSTILE_CREEPS);
+    hostileCreeps = roomCache.find(FIND_HOSTILE_CREEPS);
     if (typeof Memory.rooms[creep.room.name] == "undefined"){
         // Find neccessary information
         var sources  = roomCache.find(FIND_SOURCES),
-            minerals = roomCache.find(FIND_MINERALS),
-            hostileStructures = roomCache.find(FIND_HOSTILE_STRUCTURES);
+        minerals = roomCache.find(FIND_MINERALS),
+        hostileStructures = roomCache.find(FIND_HOSTILE_STRUCTURES);
         // Prepare information about room
         if(hostileCreeps.length && hostileStructures.length){
             // We have spotted enemies in this room
             var hostileSoldiers = _.filter(hostileCreeps, function(hostileCreep){
-                    return hostileCreep.getActiveBodyparts(ATTACK) != 0;
-                }),
-                hostileTowers   = _.filter(hostileStructures, function(structure){
-                    return structure.structureType == STRUCTURE_TOWER;
-                });
+                return hostileCreep.getActiveBodyparts(ATTACK) != 0;
+            }),
+            hostileTowers   = _.filter(hostileStructures, function(structure){
+                return structure.structureType == STRUCTURE_TOWER;
+            });
             var hostileInformation = {
                 isHostile   : true,
                 defenseless : !(_.sum(hostileSoldiers) == 0 && _.sum(hostileTowers) == 0),
@@ -956,22 +1006,22 @@ function ScoutMove(creep, task, params){
         var returnedArea = creep.room.lookForAtArea(LOOK_STRUCTURES,
             creep.pos.y-1, creep.pos.x-1, creep.pos.y+1, creep.pos.x+1, true);
 
-        returnedArea.forEach(structure => creep.attack(structure.structure));
-        //console.log(creep.attack());
-    } else if (moveAttempt == OK && creep.pos == Targetpos){
-        console.log("Target pos and creep pos is the same");
+            returnedArea.forEach(structure => creep.attack(structure.structure));
+            //console.log(creep.attack());
+        } else if (moveAttempt == OK && creep.pos == Targetpos){
+            console.log("Target pos and creep pos is the same");
+
+        }
+        console.log(creep.name+"Is going to move to..."+moveAttempt);
+        if (creep.pos.isNearTo(targetGameobj)) {
+            creep.pos.findClosestByRange(FIND_MY_SPAWNS).recycleCreep(creep);
+        }
+    }
+
+    function weightRoom(){
 
     }
-    console.log(creep.name+"Is going to move to..."+moveAttempt);
-    if (creep.pos.isNearTo(targetGameobj)) {
-        creep.pos.findClosestByRange(FIND_MY_SPAWNS).recycleCreep(creep);
-    }
-}
-
-function weightRoom(){
-
-}
-/*
+    /*
 
     ##--##
     #----#
@@ -989,104 +1039,104 @@ function weightRoom(){
     #####----###########
     ##--##--##########
     #----##############
-*/
+    */
 
-// creep, pos
-function createHoneycomb(creep, pos){
-    var modifier = {x:0, y:0};
-    for (var i = 0, l = 12; i < l; i++){
-        if(i == 1) modifier.x = 1;
-        else if(i > 1 && i < 6) {
-            modifier.y = 1;
-            modifier.x = (i-3);
-        } else if(i > 5 && i < 10){
-            modifier.y = 2;
-            modifier.x = (i-7);
-        } else if (i > 9 && i < 13){
-            modifier.y = 3;
-            modifier.x = (i-10);
-        }
-        //console.log("Modifier:"+modifier.x+"x, "+modifier.y+"y");
-        creep.room.createConstructionSite(pos.x+modifier.x, pos.y+modifier.y, STRUCTURE_EXTENSION);
-    }
-}
-function getCreepsNearby(pos, range){
-
-}
-function getCreepsWithTask(taskcode, target){
-    var creepsWithTask = [];
-    for(var name in Game.creeps){
-        var creep = Game.creeps[name];
-        if(creep.memory.task.target == null) continue;
-        if(_.isEqual(target.pos, creep.memory.task.target.pos) && taskcode == creep.memory.task.code){
-            creepsWithTask.push(creep);
+    // creep, pos
+    function createHoneycomb(creep, pos){
+        var modifier = {x:0, y:0};
+        for (var i = 0, l = 12; i < l; i++){
+            if(i == 1) modifier.x = 1;
+            else if(i > 1 && i < 6) {
+                modifier.y = 1;
+                modifier.x = (i-3);
+            } else if(i > 5 && i < 10){
+                modifier.y = 2;
+                modifier.x = (i-7);
+            } else if (i > 9 && i < 13){
+                modifier.y = 3;
+                modifier.x = (i-10);
+            }
+            //console.log("Modifier:"+modifier.x+"x, "+modifier.y+"y");
+            creep.room.createConstructionSite(pos.x+modifier.x, pos.y+modifier.y, STRUCTURE_EXTENSION);
         }
     }
-    // Should probably check that returned array is valid
-    return creepsWithTask;
-}
+    function getCreepsNearby(pos, range){
 
-function findHarvestTarget(creep){
-    var sources = creep.room.find(FIND_SOURCES),
-    highestAvailable = {
-        id     : null,
-        value  : 0,
-        source : null
-    };
-    var nextToSource = _.filter(sources, function(source){
-        return creep.pos.isNearTo(source) && (source.energy != 0 || source.ticksToRegeneration <= 30);
-    });
-    if(nextToSource.length != 0){
-        return {source : {
-            id : nextToSource[0].id,
-            value : 0
-        }};
     }
-    if(sources.length <= 0) {
+    function getCreepsWithTask(taskcode, target){
+        var creepsWithTask = [];
+        for(var name in Game.creeps){
+            var creep = Game.creeps[name];
+            if(creep.memory.task.target == null) continue;
+            if(_.isEqual(target.pos, creep.memory.task.target.pos) && taskcode == creep.memory.task.code){
+                creepsWithTask.push(creep);
+            }
+        }
+        // Should probably check that returned array is valid
+        return creepsWithTask;
+    }
+
+    function findHarvestTarget(creep){
+        var sources = creep.room.find(FIND_SOURCES),
+        highestAvailable = {
+            id     : null,
+            value  : 0,
+            source : null
+        };
+        var nextToSource = _.filter(sources, function(source){
+            return creep.pos.isNearTo(source) && (source.energy != 0 || source.ticksToRegeneration <= 30);
+        });
+        if(nextToSource.length != 0){
+            return {source : {
+                id : nextToSource[0].id,
+                value : 0
+            }};
+        }
+        if(sources.length <= 0) {
             return NO_SOURCES_IN_ROOM;
-    }
-    /*for (var sourceid in sources){
+        }
+        /*for (var sourceid in sources){
 
         var source = sources[sourceid],
-            sourceAccess     = findAccessibleTiles(source.room,source.pos.x - 1, source.pos.y -1, source.pos.x + 1, source.pos.y + 1),
-            distanceToSource = creep.pos.getRangeTo(source),
-            creepsWithTask   = getCreepsWithTask(0, source).length;
+        sourceAccess     = findAccessibleTiles(source.room,source.pos.x - 1, source.pos.y -1, source.pos.x + 1, source.pos.y + 1),
+        distanceToSource = creep.pos.getRangeTo(source),
+        creepsWithTask   = getCreepsWithTask(0, source).length;
         /*
-            sourceAccess.available: 2
-            sourceAccess.total: 4
-            creepsWithTask: 4
-            distance: 25
+        sourceAccess.available: 2
+        sourceAccess.total: 4
+        creepsWithTask: 4
+        distance: 25
 
         */
-    /*    if(sourceAccessibility.total == 0) {
-                console.log("Totally unexpected answer when finding harvest target... Not adding this");
-                continue;
-        }
-
-        var algorithm = (2-((creepsWithTask/(sourceAccess.total*2)+1)-sourceAccess.available/sourceAccess.total))
-
-
-
-
-
-    }*/
-    for(var sourceid in sources){
-        var source = sources[sourceid];
-        if (source.energy == 0) continue;
-        //console.log(JSON.stringify(source.room.lookAtArea(source.pos.x - 1, source.pos.y - 1, source.pos.x + 1, source.pos.y + 1)));
-        var sourceAccessibility = findAccessibleTiles(source.room, source.pos.x - 1, source.pos.y -1, source.pos.x + 1, source.pos.y + 1);
-        //console.log(creep.name+": "+JSON.stringify(source.pos)+": "+JSON.stringify(sourceAccessibility));
-        if (sourceAccessibility.available > highestAvailable.value){
-            highestAvailable.id    = sourceid;
-            highestAvailable.value = sourceAccessibility.available;
-        }
+        /*    if(sourceAccessibility.total == 0) {
+        console.log("Totally unexpected answer when finding harvest target... Not adding this");
+        continue;
     }
-    highestAvailable.source = sources[highestAvailable.id];
-    if(highestAvailable.id == null) {
-            return NO_SOURCES_AVAILABLE;
+
+    var algorithm = (2-((creepsWithTask/(sourceAccess.total*2)+1)-sourceAccess.available/sourceAccess.total))
+
+
+
+
+
+}*/
+for(var sourceid in sources){
+    var source = sources[sourceid];
+    if (source.energy == 0) continue;
+    //console.log(JSON.stringify(source.room.lookAtArea(source.pos.x - 1, source.pos.y - 1, source.pos.x + 1, source.pos.y + 1)));
+    var sourceAccessibility = findAccessibleTiles(source.room, source.pos.x - 1, source.pos.y -1, source.pos.x + 1, source.pos.y + 1);
+    //console.log(creep.name+": "+JSON.stringify(source.pos)+": "+JSON.stringify(sourceAccessibility));
+    if (sourceAccessibility.available > highestAvailable.value){
+        highestAvailable.id    = sourceid;
+        highestAvailable.value = sourceAccessibility.available;
     }
-    //console.log("Highest available source at: "+highestAvailable.source.pos.x+"x, "+highestAvailable.source.pos.y+"y");
-    return highestAvailable;
+}
+highestAvailable.source = sources[highestAvailable.id];
+if(highestAvailable.id == null) {
+    return NO_SOURCES_AVAILABLE;
+}
+//console.log("Highest available source at: "+highestAvailable.source.pos.x+"x, "+highestAvailable.source.pos.y+"y");
+return highestAvailable;
 }
 
 // Find how many tiles around a structure is accessible
