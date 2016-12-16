@@ -1000,7 +1000,7 @@ function findHarvestTarget(creep){
         source : null
     };
     var nextToSource = _.filter(sources, function(source){
-        return creep.pos.isNearTo(source) && (source.energy != 0 || source.tickToRegeneration <= 30);
+        return creep.pos.isNearTo(source) && (source.energy != 0 || source.ticksToRegeneration <= 30);
     });
     if(nextToSource.length != 0){
         return {source : {
