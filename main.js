@@ -292,7 +292,7 @@ function findTask(creep){
             if(hostileCreeps == 0 && !chanceTime(33)){
                 var resourceDrops     = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
                 if(resourceDrops) {
-                    setTask(creep, PICKUP_TASK, {'target' : target});
+                    setTask(creep, PICKUP_TASK, {'target' : resourceDrops});
                     return;
                 } else {
                     console.log(creep.name+" gonna try to withdraw storage");
