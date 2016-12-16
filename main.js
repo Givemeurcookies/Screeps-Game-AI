@@ -39,8 +39,16 @@ global.dispatchEvent = function(eventName){
 global.sayHi = function(){
     event.dispatch('sayHi', "and hello again");
 }
-global.expandRoom = function(){
-    setTask(Game.creeps[0], EXPAND);
+global.expandRoom = function(roomID){
+    for(var creepid in Game.creeps){
+        let creep = Game.creeps[creepid];
+        if(creep.pos.roomName == roomID) {
+            console.log("Found a creep with correct id, expanding...");
+            setTask(creep, EXPAND);
+            return;
+        }
+    }
+    return "No creeps in the defined room is available";
 }
 // End of test functions
 
