@@ -288,6 +288,7 @@ function findTask(creep){
         var target = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
         if(target) {
             setTask(creep, PICKUP_TASK, {'target' : target});
+            return; 
         }
         //console.log(creep.name+": Trying to harvest");
         let setHarvest = setTask(creep, HARVEST_TASK);
