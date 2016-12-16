@@ -502,7 +502,12 @@ function setTask(creep, task, params){
         for(var keyid in keyPoints){
             // Can't get the pos of null
             if(creep.room.controller.my) {}
-
+            for(var sid in storage){
+                keyPaths.push(creep.room.findPath(storage[sid].pos, keyPoints[keyid].pos, {
+                    ignoreCreeps : true,
+                    swampCost    : 1
+                }));
+            }
             keyPaths.push(creep.room.findPath(closestSpawn.pos, keyPoints[keyid].pos, {
                 ignoreCreeps : true,
                 swampCost    : 1
