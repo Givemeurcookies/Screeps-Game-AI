@@ -641,6 +641,7 @@ function doTask(creep, task, params){
             console.log(creep.name+"Creep is next to source");
             var closeCreeps = creep.pos.findInRange(FIND_MY_CREEPS, 1);
             if(closeCreeps.length > 0) {
+                console.log(creep.name+" is close to another creep "+closeCreeps[0].name);
                 closeCreeps.forEach(function(closecreep){
                     if(!isCreepNextToSource(closecreep) && _.sum(closecreep.carry) != closecreep.carryCapacity) transferTarget.push(closecreep);
                 });
