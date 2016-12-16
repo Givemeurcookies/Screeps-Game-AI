@@ -285,10 +285,13 @@ function findTask(creep){
         }
 
         // Try to harvest
-        var target = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
-        if(target) {
+        var target            = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY),
+            hostileCreeps     = creep.room.find(FIND_HOSTILE_CREEPS,
+                {filter: function(creep) {return creep.owner.username != 'Pettingson'}).length;
+
+        if(target && hostileCreeps == 0 && !chanceTime(33)) {
             setTask(creep, PICKUP_TASK, {'target' : target});
-            return; 
+            return;
         }
         //console.log(creep.name+": Trying to harvest");
         let setHarvest = setTask(creep, HARVEST_TASK);
@@ -297,7 +300,10 @@ function findTask(creep){
           console.log(creep.name+" no sources in this room, so why trying to harvest?"); break;
           case NO_SOURCES_AVAILABLE:
           console.log(creep.name+" unable to harvest, no sources available");
-
+          if(target) {
+              setTask(creep, PICKUP_TASK, {'target' : target});
+              return;
+          }
           break;
         }
     }
