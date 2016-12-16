@@ -304,6 +304,7 @@ function findTask(creep){
                         }
                     });
                     if(resourceStorage.length < 0) {
+                        console.log(creep.name+" found resource storage");
                         setTask(creep, WITHDRAW_TASK, {'target':resourceStorage[0]});
                         return;
                     }
