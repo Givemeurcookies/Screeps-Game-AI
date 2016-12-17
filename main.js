@@ -420,9 +420,9 @@ function findTask(creep){
             var constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_TOWER)
-                }
+                }, maxRooms : 1
             });
-            if(!constructionsite || chanceTime(10)) constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+            if(!constructionsite || chanceTime(10)) constructionsite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {maxRooms : 1});
 
 
             if(constructionsite) {
@@ -445,7 +445,8 @@ function findTask(creep){
                 repairsite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                     filter: function(structure){
                         return (structure.hits < (structure.hitsMax/3) && structure.hits < (20000+50000*creep.room.controller.level));
-                    }
+                    },
+                    maxRooms : 1
                 });
             } else {
                 if(debug.action.repair) console.log(creep.name+" setting repair target to defined params")
