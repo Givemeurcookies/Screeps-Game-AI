@@ -11,10 +11,10 @@ var maxCreepAmount     = 10,
 
 const creepLimits = {
     normal  : {
-        minimum : 4,
-        soft    : 5,
-        hard    : 6,
-        max     : 8
+        minimum : 3,
+        soft    : 4,
+        hard    : 5,
+        max     : 6
     },
     soldier : {
         minimum : 3,
