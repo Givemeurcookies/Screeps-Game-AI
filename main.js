@@ -1,10 +1,12 @@
 "use strict";
-var x = 0;
+require('constants'),
+require('globals'),
 
-module.export.loop = function(){
-    console.log(x);
-    x++;
-};
-Creep.prototype.setTask = function(params){
+require('creep');
+//require('spawns');
 
+module.exports.loop = function(){
+    for(var id in Game.spawns) Game.spawns[id].run();
+    for(var name in Game.creeps)  Game.creeps[name].run();
+    console.log(taskcode_string[DROP]);
 };
