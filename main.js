@@ -775,7 +775,8 @@ function findTask(creep){
                 // Creep is out of resources
                 findTask(creep);
             } else {
-                //console.log(creep.name+": possible error"+upgradeAttempt);
+                //console.log(creep.name+": possible error"+upgradeAttempt)
+                doTask(creep, MOVETO);
                 return true;
             }
             break;
