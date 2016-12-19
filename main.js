@@ -113,11 +113,11 @@ for(var spawn in Game.spawns){
       var mainlinkid = null, mostStructures = 0;
 
       for (var jlinkid in links){
-          var amountOfStructures = link.pos.findInRange(FIND_MY_STRUCTURES, 7).length;
+          var amountOfStructures = link.pos.findInRange(FIND_MY_STRUCTURES, 4).length;
           if(mostStructures < amountOfStructures) {
             console.log(amountOfStructures+"&"+jlinkid);
             mostStructures = amountOfStructures;
-            mainlink = jlinkid;
+            mainlinkid = jlinkid;
           }
       }
       console.log(mainlinkid);
