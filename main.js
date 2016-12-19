@@ -125,7 +125,7 @@ for(var spawn in Game.spawns){
       }
     }
 }
-for(var linkid in )
+
 // Creep action manager
 // Loops over all creeps in the game to execute actions
 for(var name in Game.creeps){
