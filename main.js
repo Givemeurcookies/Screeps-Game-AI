@@ -105,7 +105,7 @@ for(var spawn in Game.spawns){
     mod.run(spawn);
     var links = spawn.room.find(FIND_MY_STRUCTURES, {
       filter:(structure) => {
-        return (structure.structureType == STRUCTURE_LINK && structure.energy < structure.energyCapacity);
+        return (structure.structureType == STRUCTURE_LINK);
       }
     });
     for(var linkid in links){
@@ -125,7 +125,7 @@ for(var spawn in Game.spawns){
       var mainlink = links[mainlinkid];
       console.log('Main link: '+JSON.stringify(mainlink))
       console.log('Running past this link now:'+JSON.stringify(link));
-      if(mainlinkid != linkid && mainlink.energy < (mainlink.energyCapacity/2)) {
+      if(mainlinkid != linkid && mainlink.energy < (mainlink.energyCapacity/2) && link.energy == link.energyCapacity) {
         console.log("Trying to transfer to main link"+ link.transferEnergy(mainlink));
       }
     }
