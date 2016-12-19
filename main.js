@@ -114,7 +114,9 @@ for(var spawn in Game.spawns){
 
       for (var jlinkid in links){
           var jlink = links[jlinkid];
-          var amountOfStructures = jlink.pos.findInRange(FIND_MY_STRUCTURES, 4).length;
+          var amountOfStructures = jlink.pos.findInRange(FIND_MY_STRUCTURES, 5, {filter:structure => {
+            return structure.structureType == STRUCTURE_EXTENSION
+          }}).length;
           if(mostStructures < amountOfStructures) {
             mostStructures = amountOfStructures;
             mainlinkid = jlinkid;
