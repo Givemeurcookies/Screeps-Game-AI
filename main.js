@@ -317,7 +317,7 @@ function findTask(creep){
             {filter: function(creep) {return creep.owner.username != 'Pettingson'}}).length;
 
             if(hostileCreeps == 0 && !chanceTime(33)){
-                var resourceDrops     = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+                var resourceDrops     = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
                 if(resourceDrops) {
                     setTask(creep, PICKUP_TASK, {'target' : resourceDrops});
                     return;
