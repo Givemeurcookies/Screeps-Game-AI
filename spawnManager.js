@@ -13,7 +13,7 @@ const creepLimits = {
     normal  : {
         minimum : 3,
         soft    : 4,
-        hard    : 5,
+        hard    : 6,
         max     : 7
     },
     soldier : {
