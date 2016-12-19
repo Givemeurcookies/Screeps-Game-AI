@@ -691,7 +691,7 @@ function findTask(creep){
             case HARVEST_TASK:
             var transferTarget = [];
             if(isCreepNextToSource(creep)){
-                console.log(creep.name+"Creep is next to source");
+                if(debug.creeps) console.log(creep.name+"Creep is next to source");
                 var closeCreeps = creep.pos.findInRange(FIND_MY_CREEPS, 1, {filter: (closecreep)=> {return closecreep.name != creep.name}});
                 if(closeCreeps.length > 0) {
                     if(debug.creeps) console.log(creep.name+" is close to another creep "+closeCreeps[0].name);
@@ -702,7 +702,7 @@ function findTask(creep){
                     if(debug.creeps) console.log(creep.name+" mining, but not close to another creep, trying to find link");
                     var isNextToLink = creep.pos.findInRange(FIND_MY_STRUCTURES, 1, {filter: (structure) => {return structure.structureType == STRUCTURE_LINK}});
                     if(isNextToLink.length > 0){
-                        if(debug.creeps)console.log(creep.name+" is next to link, transferring into link");
+                        if(debug.creeps) console.log(creep.name+" is next to link, transferring into link");
                         transferTarget.push(isNextToLink[0]);
                     }
                 }
