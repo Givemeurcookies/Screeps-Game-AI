@@ -298,8 +298,7 @@ function findTask(creep){
                     console.log(creep.name+" gonna try to withdraw storage");
                     var resourceStorage   = creep.pos.findInRange(FIND_MY_STRUCTURES, 9, {
                         filter: (structure) => {
-                            return ((structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_LINK) &&
-                            (structure.store[RESOURCE_ENERGY] > 0 || structure.energy > 0))
+                            return ((structure.structureType == STRUCTURE_LINK) && (structure.energy > 0))
                         }
                     });
                     if(resourceStorage.length > 0) {
