@@ -120,6 +120,7 @@ for(var spawn in Game.spawns){
           }
       }
       var mainlink = links[mainlinkid];
+      console.log('Main link: '+JSON.stringify(mainlink))
       if(mainlinkid != linkid && mainlink.energy < mainlink.energyCapacity/2) {
         link.transferEnergy[mainlink];
       }
