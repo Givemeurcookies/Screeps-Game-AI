@@ -104,7 +104,7 @@ for(var spawn in Game.spawns){
     var spawn = Game.spawns[spawn];
     mod.run(spawn);
     var links = spawn.room.find(FIND_MY_STRUCTURES, {
-      filter:(structure) => return ((structure.structureType == STRUCTURE_LINK) && structure.energy < structure.energyCapacity);
+      filter:(structure) => {return ((structure.structureType == STRUCTURE_LINK) && structure.energy < structure.energyCapacity)};
     });
     for(var linkid in links){
       var link = links[linkid];
