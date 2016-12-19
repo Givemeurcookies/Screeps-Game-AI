@@ -897,7 +897,7 @@ function findTask(creep){
                       }
                     });
                     if(links.length > 0) {
-                      Game.notify('Tested code to withdraw resources on the go when needed: '+creep.withdraw(links[0]), 10);
+                      Game.notify('Tested code to withdraw resources on the go when needed: '+creep.withdraw(links[0], RESOURCE_ENERGY), 10);
                     }
                 }
 
