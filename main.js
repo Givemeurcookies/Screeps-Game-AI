@@ -115,16 +115,14 @@ for(var spawn in Game.spawns){
       for (var jlinkid in links){
           var amountOfStructures = link.pos.findInRange(FIND_MY_STRUCTURES, 4).length;
           if(mostStructures < amountOfStructures) {
-            console.log(amountOfStructures+"&"+jlinkid);
             mostStructures = amountOfStructures;
             mainlinkid = jlinkid;
           }
       }
-      console.log(mainlinkid);
       var mainlink = links[mainlinkid];
       console.log('Main link: '+JSON.stringify(mainlink))
       if(mainlinkid != linkid && mainlink.energy > mainlink.energyCapacity/2) {
-        link.transferEnergy[mainlink];
+        console.log(link.transferEnergy[mainlink]);
       }
     }
 }
