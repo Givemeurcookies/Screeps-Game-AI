@@ -84,26 +84,46 @@ module.exports.loop = function () {
 
             // Haunt down the creep if it's draining resources
             var enemypos = new RoomPosition(enemycreep.pos.x, enemycreep.pos.y, enemycreep.pos.roomName);
-            /*console.log("Enemy exit:"+enemypos.findClosestByRange(FIND_EXIT));*/
-            /*for(var i in Game.spawns){
-            mod.hireCreep(Game.spawns[i], {
-            isSoldier: true,
-            task   : {
-            msg  : "Scouting new room",
-            code : MOVETO,
-            target : enemypos.findClosestByRange(FIND_EXIT)
-        },
-        creepBody : [TOUGH, MOVE, ATTACK, MOVE]
-    });
-}*/
+                  /*console.log("Enemy exit:"+enemypos.findClosestByRange(FIND_EXIT));*/
+                  /*for(var i in Game.spawns){
+                  mod.hireCreep(Game.spawns[i], {
+                  isSoldier: true,
+                  task   : {
+                  msg  : "Scouting new room",
+                  code : MOVETO,
+                  target : enemypos.findClosestByRange(FIND_EXIT)
+              },
+              creepBody : [TOUGH, MOVE, ATTACK, MOVE]
+          });
+      }*/
 
-}
-}
+      }
+    }
 // Spawn manager
 for(var spawn in Game.spawns){
-    mod.run(Game.spawns[spawn]);
-}
+    var spawn = Game.spawns[spawn];
+    mod.run(spawn);
+    var links = spawn.room.find(FIND_MY_STRUCTURES, {
+      filter:(structure) => return ((structure.structureType == STRUCTURE_LINK) && structure.energy < structure.energyCapacity);
+    });
+    for(var linkid in links){
+      var link = links[linkid];
+      var mainlinkid = null, mostStructures = 0;
 
+      for (var jlinkid in links){
+          var amountOfStructures = link.pos.findInRange(FIND_MY_STRUCTURES, 7).length;
+          if(mostStructures < amountOfStructures) {
+            mostStructures = amountOfStructures;
+            mainlink = jlinkid;
+          }
+      }
+      var mainlink = links[mainlinkid];
+      if(mainlinkid != linkid && mainlink.energy < mainlink.energyCapacity/2) {
+        link.transferEnergy[mainlink];
+      }
+    }
+}
+for(var linkid in )
 // Creep action manager
 // Loops over all creeps in the game to execute actions
 for(var name in Game.creeps){
