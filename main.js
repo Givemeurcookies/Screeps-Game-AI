@@ -932,7 +932,7 @@ function findTask(creep){
 
             if(withdrawAttempt == ERR_NOT_IN_RANGE){
                 doTask(creep, MOVETO);
-            } else if(withdrawAttempt == ERR_FULL){
+            } else if(withdrawAttempt == ERR_FULL || withdrawAttempt == ERR_NOT_ENOUGH_RESOURCES){
                 findTask(creep);
             } else {
                 console.log(creep.name+" withdrawing returned code:"+withdrawAttempt);
