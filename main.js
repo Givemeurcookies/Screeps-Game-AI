@@ -889,6 +889,16 @@ function findTask(creep){
                 if((creep.carry.energy/creep.carryCapacity) >= 0.40){
                     var buildOnTheGo = creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 3);
                     if(buildOnTheGo.length > 0) creep.build(buildOnTheGo[0]);
+                } else if(creep.memory.task.code == HARVEST_TASK || creep.memory.task.code == WITHDRAW_TASK){
+                    // Get creep to check for links to withdraw from
+                    var links = creep.pos.findInRange(FIND_MY_STRUCTURES, 1, {
+                      filter:(structure) => {
+                        return (structure.structureType == STRUCTURE_LINK) && (structure.energy != 0);
+                      }
+                    });
+                    if(links.length > 0) {
+                      Game.notify('Tested code to withdraw resources on the go when needed: '+creep.withdraw(links[0]), 10);
+                    }
                 }
 
                 var moveAttempt = creep.moveTo(targetGameobj, params);
