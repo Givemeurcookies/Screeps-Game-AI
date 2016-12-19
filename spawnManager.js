@@ -13,8 +13,8 @@ const creepLimits = {
     normal  : {
         minimum : 3,
         soft    : 4,
-        hard    : 6,
-        max     : 7
+        hard    : 5,
+        max     : 6
     },
     soldier : {
         minimum : 3,
@@ -29,7 +29,7 @@ var spawnManager = {
       * @param {Object} spawn Spawn to check
     **/
     run : function(spawn){
-        var creepBodies   = [[WORK, MOVE, WORK, MOVE, WORK, MOVE, WORK, MOVE, WORK, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE],[WORK, CARRY, WORK, CARRY, WORK, CARRY, MOVE, MOVE, MOVE],[WORK, MOVE, WORK, MOVE, CARRY, CARRY],[WORK, CARRY, MOVE, MOVE],[WORK,CARRY,MOVE]];
+        var creepBodies   = [[WORK, MOVE, WORK, MOVE, WORK, MOVE, WORK, MOVE, WORK, MOVE, WORK, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE],[WORK, MOVE, WORK, MOVE, WORK, MOVE, WORK, MOVE, WORK, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE],[WORK, CARRY, WORK, CARRY, WORK, CARRY, MOVE, MOVE, MOVE],[WORK, MOVE, WORK, MOVE, CARRY, CARRY],[WORK, CARRY, MOVE, MOVE],[WORK,CARRY,MOVE]];
         var soldierBodies = [[TOUGH, MOVE, TOUGH, MOVE, TOUGH, MOVE, TOUGH, MOVE, TOUGH, MOVE, MOVE, ATTACK, MOVE, RANGED_ATTACK, MOVE, RANGED_ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE],[TOUGH, MOVE, TOUGH, MOVE, RANGED_ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE],[RANGED_ATTACK, MOVE, RANGED_ATTACK, MOVE, ATTACK, MOVE],[TOUGH, MOVE, RANGED_ATTACK, MOVE, ATTACK, MOVE], [TOUGH, MOVE, ATTACK, MOVE]];
         var CreepsInRoom  = spawn.room.find(FIND_MY_CREEPS).length;
         if (spawn.room.memory.roomsaround == undefined){
