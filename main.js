@@ -346,7 +346,7 @@ function findTask(creep){
                     setTask(creep, PICKUP_TASK, {'target' : resourceDrops});
                     return;
                 } else {
-                    var resourceStorage   = creep.pos.findInRange(FIND_MY_STRUCTURES, 14, {
+                    var resourceStorage   = creep.pos.findInRange(FIND_MY_STRUCTURES, 18, {
                         filter: (structure) => {
                             return ((structure.structureType == STRUCTURE_STORAGE) && (structure.store[RESOURCE_ENERGY] > 0))
                         }
