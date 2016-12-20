@@ -739,7 +739,7 @@ function findTask(creep){
                 }
             }
             if(transferTarget.length > 0) {
-                console.log("Trying to transfer to target "+transferTarget[0].name+" return code "+creep.transfer(transferTarget[0], RESOURCE_ENERGY));
+                console.log("Trying to transfer to target "+transferTarget[0].id+" return code "+creep.transfer(transferTarget[0], RESOURCE_ENERGY));
             }
             // Check if energy capacity is full first
             if (_.sum(creep.carry) == creep.carryCapacity) {
