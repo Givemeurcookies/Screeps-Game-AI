@@ -323,14 +323,14 @@ function findTask(creep){
                     return;
                 } else {
                     console.log(creep.name+" gonna try to withdraw storage");
-                    var resourceStorage   = creep.pos.findInRange(FIND_MY_STRUCTURES, 9, {
+                    var resourceLink   = creep.pos.findInRange(FIND_MY_STRUCTURES, 9, {
                         filter: (structure) => {
                             return ((structure.structureType == STRUCTURE_LINK) && (structure.energy > 0))
                         }
                     });
-                    if(resourceStorage.length > 0) {
+                    if(resourceLink.length > 0) {
                         console.log(creep.name+" found resource storage");
-                        setTask(creep, WITHDRAW_TASK, {'target':resourceStorage[0]});
+                        setTask(creep, WITHDRAW_TASK, {'target':resourceLink[0]});
                         return;
                     }
                 }
@@ -345,6 +345,13 @@ function findTask(creep){
                 if(resourceDrops) {
                     setTask(creep, PICKUP_TASK, {'target' : resourceDrops});
                     return;
+                } else {
+                    var resourceStorage   = creep.pos.findInRange(FIND_MY_STRUCTURES, 14, {
+                        filter: (structure) => {
+                            return ((structure.structureType == STRUCTURE_STORAGE) && (structure.store[RESOURCE_ENERGY] > 0))
+                        }
+                    });
+                    setTask(creep, WITHDRAW_TASK, {'target':resourceStorage[0]});
                 }
                 break;
             }
