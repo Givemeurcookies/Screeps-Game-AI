@@ -388,30 +388,23 @@ function findTask(creep){
         if(params == undefined) params = {};
         switch(task){
             case TRANSFER_TASK:
-            var targets = creep.room.find(FIND_MY_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_TOWER) &&
-                    structure.energy < structure.energyCapacity;
-                }
-            });
-            if (targets.length > 0){
-                var target = creep.pos.findClosestByRange(targets);
+            if(params.target != undefined){
+
                 creep.memory.task.target = {
-                    id  : target.id,
-                    pos : target.pos
+                    id  : params.target.id,
+                    pos : params.target.pos
                 };
-                creep.memory.task.msg = "Move to transfer resources at"+target.pos.x +","+target.pos.y;
+                creep.memory.task.msg = "Move to transfer resources at"+params.target.pos.x +","+params.target.pos.y;
                 creep.memory.task.code = 1;
                 doTask(creep, TRANSFER_TASK);
             } else {
-                targets = creep.room.find(FIND_MY_STRUCTURES, {
+                var targets = creep.room.find(FIND_MY_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER) &&
-                        _.sum(structure.store) < structure.storeCapacity
+                        return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_TOWER) &&
+                        structure.energy < structure.energyCapacity;
                     }
                 });
                 if (targets.length > 0){
-                    if(chanceTime(75)) return -1;
                     var target = creep.pos.findClosestByRange(targets);
                     creep.memory.task.target = {
                         id  : target.id,
@@ -421,9 +414,28 @@ function findTask(creep){
                     creep.memory.task.code = 1;
                     doTask(creep, TRANSFER_TASK);
                 } else {
-                    return -1;
+                    targets = creep.room.find(FIND_MY_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER) &&
+                            _.sum(structure.store) < structure.storeCapacity
+                        }
+                    });
+                    if (targets.length > 0){
+                        if(chanceTime(75)) return -1;
+                        var target = creep.pos.findClosestByRange(targets);
+                        creep.memory.task.target = {
+                            id  : target.id,
+                            pos : target.pos
+                        };
+                        creep.memory.task.msg = "Move to transfer resources at"+target.pos.x +","+target.pos.y;
+                        creep.memory.task.code = 1;
+                        doTask(creep, TRANSFER_TASK);
+                    } else {
+                        return -1;
+                    }
                 }
             }
+
             break;
             case HARVEST_TASK:
             var harvestTarget = findHarvestTarget(creep);
@@ -668,8 +680,17 @@ function findTask(creep){
                 if (creep.carry == 0) {
                     console.log(creep.name+": Out of resources, finding new task");
                     findTask(creep);
-                } else if (targetGameobj.energy == targetGameobj.energyCapacity)
-                if(setTask(creep, TRANSFER_TASK) == -1) findTask(creep);
+                } else if (targetGameobj.energy == targetGameobj.energyCapacity){
+                    var target = creep.room.findClosestByRange(FIND_MY_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_TOWER) &&
+                            structure.energy < structure.energyCapacity && structure.pos.id != targetGameobj.pos.id;
+                        }
+                    });
+                    if(target) {
+                        if(setTask(creep, MOVETO, {'target':target.pos}) == -1) findTask(creep);
+                    } else findTask(creep);
+                }
 
                 return true;
             } else {
