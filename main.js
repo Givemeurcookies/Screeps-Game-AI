@@ -681,7 +681,7 @@ function findTask(creep){
                     console.log(creep.name+": Out of resources, finding new task");
                     findTask(creep);
                 } else if (targetGameobj.energy == targetGameobj.energyCapacity){
-                    var target = creep.room.findClosestByRange(FIND_MY_STRUCTURES, {
+                    var target = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
                         filter: (structure) => {
                             return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_TOWER) &&
                             structure.energy < structure.energyCapacity && structure.pos.id != targetGameobj.pos.id;
