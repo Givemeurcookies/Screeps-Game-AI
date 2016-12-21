@@ -918,6 +918,10 @@ function findTask(creep){
             else {
 
                 if((creep.carry.energy/creep.carryCapacity) >= 0.40){
+                    if(creep.carry.energy == creep.carryCapacity) {
+                        if(creep.memory.task.code == HARVEST_TASK || creep.memory.task.code == WITHDRAW_TASK)
+                            findTask(creep);
+                    }
                     var buildOnTheGo = creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 3);
                     if(buildOnTheGo.length > 0) creep.build(buildOnTheGo[0]);
                 } else if(creep.memory.task.code == HARVEST_TASK || creep.memory.task.code == WITHDRAW_TASK){
@@ -928,7 +932,7 @@ function findTask(creep){
                       }
                     });
                     if(links.length > 0) {
-                      Game.notify('Tested code to withdraw resources on the go when needed: '+creep.withdraw(links[0], RESOURCE_ENERGY), 10);
+                      creep.withdraw(links[0], RESOURCE_ENERGY);
                     }
                 }
 
@@ -964,7 +968,7 @@ function findTask(creep){
             }
             break;
             case WITHDRAW_TASK:
-            if(creep.carry == creep.carryCapacity) findTask(creep);
+            if(creep.carry.energy == creep.carryCapacity) findTask(creep);
             if(targetGameobj != null) {
                 creep.memory.task.target.pos = targetGameobj.pos;
                 creep.memory.task.msg  = "Moving to pickup "+targetGameobj.pos.x+"x, "+targetGameobj.pos.y+"y";
