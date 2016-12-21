@@ -922,7 +922,7 @@ function findTask(creep){
                         if(creep.memory.task.code == HARVEST_TASK || creep.memory.task.code == WITHDRAW_TASK)
                             findTask(creep);
                     }
-                    var buildOnTheGo = creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 3);
+                    var buildOnTheGo = creep.pos.findInRange(FIND_MY_CONSTRUCTION_SITES, 3);
                     if(buildOnTheGo.length > 0) creep.build(buildOnTheGo[0]);
                 } else if(creep.memory.task.code == HARVEST_TASK || creep.memory.task.code == WITHDRAW_TASK){
                     // Get creep to check for links to withdraw from
