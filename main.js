@@ -964,6 +964,7 @@ function findTask(creep){
             }
             break;
             case WITHDRAW_TASK:
+            if(creep.carry == creep.carryCapacity) findTask(creep);
             if(targetGameobj != null) {
                 creep.memory.task.target.pos = targetGameobj.pos;
                 creep.memory.task.msg  = "Moving to pickup "+targetGameobj.pos.x+"x, "+targetGameobj.pos.y+"y";
