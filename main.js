@@ -203,7 +203,7 @@ for(var name in Game.creeps){
             creep.say("Nothing");
         }
     }
-    creep.say('Merry xmas!', true);
+    if(chanceTime(20)) creep.say('Merry xmas!', true);
 }
 }
 
