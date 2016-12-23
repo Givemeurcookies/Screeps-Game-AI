@@ -203,6 +203,7 @@ for(var name in Game.creeps){
             creep.say("Nothing");
         }
     }
+    creep.say('Merry christmas!');
 }
 }
 
