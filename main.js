@@ -15,5 +15,10 @@ module.exports.loop = function(){
 }
 
 function findKey(obj, value) {
-    return Object.keys(obj).filter(x => obj[x].includes(value))[0];
+    for( var prop in this ) {
+        if( this.hasOwnProperty( prop ) ) {
+             if( this[ prop ] === value )
+                 return prop;
+        }
+    }
 }
