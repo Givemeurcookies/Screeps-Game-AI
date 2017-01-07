@@ -11,7 +11,7 @@ Creep.prototype.set = function(params){
         // Check if objects are correct
         console.log(colorText('blue', this.name+' set is passed with object'));
         target   = params.target;
-        taskCode = params.taskCode; 
+        taskCode = params.taskCode;
 
     } else if(typeof params == 'Number'){
         // Probably task code
@@ -20,12 +20,11 @@ Creep.prototype.set = function(params){
         console.log(colorText('red', this.name+' neither got object nor number when setting task'));
         return false;
     }
-
     this.memory.task.target = {
         id  : target.id,
         pos : target.pos
     };
-    this.memory.task.msg = "Performing task '"+taskcode_string[taskCode]
+    this.memory.task.msg = "Performing task '"+findKey(global, taskCode)
                            +"' at"+target.pos.x +"x,"+target.pos.y+'y';
     this.memory.task.code = taskCode;
 
@@ -157,3 +156,11 @@ Creep.prototype.performAction = function(){
 Creep.prototype.actions = {
 
 };
+function findKey(obj, value) {
+    for( var prop in obj ) {
+        if( obj.hasOwnProperty(prop) ) {
+             if( obj[prop] === value )
+                 return prop;
+        }
+    }
+}
