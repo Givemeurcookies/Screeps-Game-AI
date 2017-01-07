@@ -9,9 +9,18 @@ module.exports.loop = function(){
     Object.assign(global, Memory.constants.actions, Memory.constants.tasks);
 
     for(var id in Game.spawns) Game.spawns[id].run();
-    for(var name in Game.creeps)  Game.creeps[name].run();
+    for(var name in Game.creeps) Game.creeps[name].run();
 
-    console.log(findKey(global, 31));
+    for(var roomName in Game.rooms) {
+        var room = Game.rooms[roomName];
+        console.log(JSON.stringify('Sources: '+room.find(FIND_SOURCES));
+
+    }
+
+    for(var taskGiver in Memory.taskGivers){
+
+    }
+
 }
 
 function findKey(obj, value) {

@@ -130,7 +130,7 @@ Creep.prototype.performAction = function(){
         case ACTION_SUICIDE:            return this.suicide();                         break;
         case ACTION_TRANSFER:           return this.transfer(target, ...params);       break;
         case ACTION_UPGRADE:            return this.upgradeController(target);         break;
-        case ACTION_WITHDRAW:           return this.withdraw(target, ...params);          break;
+        case ACTION_WITHDRAW:           return this.withdraw(target, ...params);       break;
     }
 }
 Creep.prototype.actions = {
