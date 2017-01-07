@@ -10,8 +10,8 @@ module.exports.loop = function(){
 
     for(var id in Game.spawns) Game.spawns[id].run();
     for(var name in Game.creeps)  Game.creeps[name].run();
-    console.log(Object.prototype.toString.call(Memory.constants.actions));
-    console.log(findKey(Memory.constants.actions, 31));
+
+    console.log(findKey(global, 31));
 }
 
 function findKey(obj, value) {
