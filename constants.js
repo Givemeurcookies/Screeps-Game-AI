@@ -17,7 +17,7 @@ Memory.constants.actions = {
     ACTION_ATTACK_CONTROLLER  : 41,
     ACTION_RANGED_ATTACK      : 42,
     ACTION_RANGED_MASS_ATTACK : 43,
-    ACITON_HEAL               : 44,
+    ACTION_HEAL               : 44,
     ACTION_RANGED_HEAL        : 45,
     ACTION_CLAIM              : 46,
     ACTION_RESERVE_CONTROLLER : 47,
