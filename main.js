@@ -3,14 +3,14 @@ require('constants'),
 require('globals'),
 
 require('creep');
+require('spawn');
 //require('spawns');
 
 module.exports.loop = function(){
     Object.assign(global, Memory.constants.actions, Memory.constants.tasks);
     var taskGivers = [];
-    for(var id in Game.spawns) Game.spawns[id].run();
-    for(var name in Game.creeps) Game.creeps[name].run();
 
+    // Go through rooms!
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
         if(!room.memory.sources) room.memory.sources = room.find(FIND_SOURCES);
@@ -19,11 +19,31 @@ module.exports.loop = function(){
 
     for(let giverid in taskGivers){
         let giver = taskGivers[giverid];
+        // Let's keep this so we can see what giver that's requesting whatever
         console.log(JSON.stringify(giver.pos));
-        console.log(JSON.stringify(findAccessibleTiles(giver.room.name,
-                                                       giver.pos.x-1, giver.pos.y-1,
-                                                       giver.pos.x+1, giver.pos.y+1)));
+        // Returns total and available
+        var sourceAccess =  findAccessibleTiles(giver.room.name,
+                            giver.pos.x-1, giver.pos.y-1,
+                            giver.pos.x+1, giver.pos.y+1);
+
+        if(sourceAccess.available > 0){
+            // Request creep to harvest
+            let creepsInRoom = sourceAccess.room.find(FIND_MY_CREEPS);
+            if(creepsInRoom > 0){
+                // Go over creeps in the room
+                // to see if any are available
+                // and fit for task
+            } else if(true) {
+                // We set this value to true until we get a better system
+                // Request a new creep to be spawned
+
+            }
+        }
+
     }
+    // Go through spawns and creeps!
+    for(var id in Game.spawns) Game.spawns[id].run();
+    for(var name in Game.creeps) Game.creeps[name].run();
 
 }
 
