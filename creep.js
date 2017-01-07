@@ -13,7 +13,7 @@ Creep.prototype.set = function(params){
         // Probably task code
         target = this.findTarget();
     } else {
-        console.log(this.name+' neither got object nor number when setting task');
+        console.log(colorText('red', this.name+' neither got object nor number when setting task'));
         return false;
     }
 
