@@ -6,9 +6,13 @@ Creep.prototype.run = function(){
     this.action();
 }
 Creep.prototype.set = function(params){
-    var target;
-    if(typeof params == 'Object'){
+    var target, taskCode;
+    if(Object.prototype.toString.call(params) == '[object Object]'){
         // Check if objects are correct
+        console.log(colorText('blue', this.name+' set is passed with object'));
+        target   = params.target;
+        taskCode = params.taskCode; 
+
     } else if(typeof params == 'Number'){
         // Probably task code
         target = this.findTarget();
