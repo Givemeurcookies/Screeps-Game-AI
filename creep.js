@@ -50,6 +50,8 @@ Creep.prototype.updateMemory = function(){
             params : false,
             busy   : false
         };
+    } else {
+        this.memory.task.busy = this.memory.task.busy || false;
     }
 }
 Creep.prototype.damaged = function(amount){
