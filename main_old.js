@@ -1153,7 +1153,8 @@ function findAccessibleTiles(room, x1, y1, x2, y2){
                 } else if (tile[propertyid].terrain == 'plain') {
                     tiles.available++; tiles.total++;
                 } else if (tile[propertyid].terrain == 'swamp') {
-                    tiles.available += 0.5; tiles.total++;
+                    tiles.available++; tiles.total++;
+                    //tiles.available += 0.5; tiles.total++;
                 }
             }
 
