@@ -6,7 +6,8 @@ require('creep');
 //require('spawns');
 
 module.exports.loop = function(){
-    Object.assign(global, constantsAction, constantsTasks)
+    console.log(constantsAction);
+    Object.assign(global, Memory.constants.actions, Memory.constants.tasks);
 
     for(var id in Game.spawns) Game.spawns[id].run();
     for(var name in Game.creeps)  Game.creeps[name].run();

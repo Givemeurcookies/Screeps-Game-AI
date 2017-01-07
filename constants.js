@@ -1,6 +1,8 @@
 "use strict";
 // Normal actions
-var constantsAction = {
+if(!Memory.constants) Memory.constants = {};
+
+Memory.constants.actions = {
     MOVE               : 30,
     HARVEST            : 31,
     TRANSFER           : 32,
@@ -20,7 +22,7 @@ var constantsAction = {
 };
 
 // Aggressive or defensive creeps
-var constantsTasks = {
+Memory.constants.tasks = {
     ASSAULT      : 51,
     DEFEND_CREEP : 52,
     GUARD_ROOM   : 53,
