@@ -3,7 +3,7 @@ Creep.prototype.run = function(){
     this.checkStatus();
     this.updateMemory();
 
-    this.set();
+    this.action();
 }
 Creep.prototype.set = function(params){
     var target;
@@ -57,6 +57,8 @@ Creep.prototype.action = function(){
     // Error cases are handled by Importance
     // Doesn't do anything in the code, just to
     // prioritise errors
+    console.log(actionReturn);
+
     switch(actionReturn){
         // Unhandled/silent cases
         case ERR_NOT_OWNER:

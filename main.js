@@ -30,7 +30,7 @@ module.exports.loop = function(){
         if(sourceAccess.available > 0){
             // Request creep to harvest
             let creepsInRoom = giver.room.find(FIND_MY_CREEPS);
-            if(creepsInRoom > 0){
+            if(creepsInRoom.length > 0){
                 // Go over creeps in the room
                 // to see if any are available
                 // and fit for task
