@@ -19,8 +19,8 @@ module.exports.loop = function(){
 
     for(let giverid in taskGivers){
         let giver = taskGivers[giverid];
-        console.log(findAccessibleTiles(giver.pos.x-1, giver.pos.y-1,
-                                       giver.pos.x+1, giver.pos.y+1));
+        console.log(JSON.stringify(findAccessibleTiles(giver.pos.x-1, giver.pos.y-1,
+                                       giver.pos.x+1, giver.pos.y+1)));
     }
 
 }
