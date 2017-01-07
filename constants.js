@@ -28,23 +28,4 @@ Memory.constants.tasks = {
     GUARD_ROOM   : 53,
     GUARD_AREA   : 54,
     FLEE         : 55
-}
-
-global.taskcode_string = {
-    30   : 'moving',
-    31   : 'harvesting',
-    32   : 'transferring',
-    33   : 'building',
-    34   : 'repairing',
-    35   : 'upgrading',
-    36   : 'dropping',
-    37   : 'picking up',
-    38   : 'withdrawing',
-    39   : 'dismantle',
-    40   : 'claiming',
-    51   : 'attacking',
-    52   : 'defending creep',
-    53   : 'guarding room',
-    54   : 'guarding area',
-    55   : 'fleeing'
 };
