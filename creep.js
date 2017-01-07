@@ -108,6 +108,8 @@ Creep.prototype.performAction = function(){
         taskCode   = this.memory.task.code,
         params     = this.memory.task.params || null,
         paramsType = Object.prototype.toString.call(params);
+
+    if(target == undefined && taskCode != ACTION_SUICIDE) throw(new Error(this.name+' target is undefined'));
     // Return the code when action is queued
     switch(taskCode){
         case ACTION_ATTACK:             return this.attack(target);            break;
@@ -141,6 +143,9 @@ Creep.prototype.performAction = function(){
         case ACTION_UPGRADE:            return this.upgradeController(target);         break;
         case ACTION_WITHDRAW:           return this.withdraw(target, ...params);       break;
     }
+    // Code hasn't returned, assume something is wrong
+    // Start checking taskCode
+    if(taskCode == undefined) throw(new Error(this.name+' task code is undefined'));
 }
 Creep.prototype.actions = {
 
