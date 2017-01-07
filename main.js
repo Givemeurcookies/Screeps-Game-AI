@@ -41,7 +41,7 @@ module.exports.loop = function(){
                 for(var i in Game.spawns){
                     spawns.push(Game.spawns[i]);
                 }
-                console.log(giver.pos.findClosestByRange(spawns));
+                console.log(colorText('blue'+giver.pos.findClosestByRange(spawns)));
                 giver.pos.findClosestByRange(spawns).requestCreep([WORK, MOVE, CARRY, MOVE]);
             }
         }
