@@ -11,4 +11,4 @@ module.exports.loop = function(){
     console.log(taskcode_string[DROP]);
 };
 
-// Added
+// Removed
