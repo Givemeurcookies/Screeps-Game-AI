@@ -41,10 +41,11 @@ Creep.prototype.updateMemory = function(){
         this.memory.hits = this.hits;
     }
     if(!this.memory.task) {
-        console.log(colorText('red', this.name+' had invalid memory'));
+        console.log(colorText('red', this.name+' had invalid task memory'));
         this.memory.task = {
             target : false,
-            params : false
+            params : false,
+            busy   : false
         };
     }
 }
@@ -109,7 +110,9 @@ Creep.prototype.performAction = function(){
         params     = this.memory.task.params || null,
         paramsType = Object.prototype.toString.call(params);
 
-    if(target == undefined && taskCode != ACTION_SUICIDE) throw(new Error(this.name+' target is undefined'));
+    if(target == undefined && taskCode != ACTION_SUICIDE) {
+            throw(new Error(this.name+' target is undefined'));
+    }
     // Return the code when action is queued
     switch(taskCode){
         case ACTION_ATTACK:             return this.attack(target);            break;
