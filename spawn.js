@@ -2,7 +2,7 @@
 StructureSpawn.prototype.run = function(){
     if(!this.memory.spawnQueue) this.memory.spawnQueue = [];
 
-    spawnQueue = this.memory.spawnQueue;
+    var spawnQueue = this.memory.spawnQueue;
 
     console.log(colorText('green', this));
 
