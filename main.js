@@ -13,7 +13,7 @@ module.exports.loop = function(){
 
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
-        console.log(JSON.stringify('Sources: '+room.find(FIND_SOURCES));
+        console.log(JSON.stringify('Sources: '+room.find(FIND_SOURCES)));
 
     }
 
