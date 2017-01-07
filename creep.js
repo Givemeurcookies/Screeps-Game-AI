@@ -104,5 +104,5 @@ Creep.prototype.actions = {
 
 };
 StructureSpawn.prototype.run = function(){
-    console.log(colorName('green', this));
+    console.log(colorText('green', this));
 }
