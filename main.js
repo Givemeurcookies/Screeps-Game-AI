@@ -18,11 +18,12 @@ module.exports.loop = function(){
     }
 
     for(let giverid in taskGivers){
-        let giver = taskGivers[giverid];
+        // get Giver as an object now
+        let giver = Game.getObjectById(taskGivers[giverid].id);
         // Let's keep this so we can see what giver that's requesting whatever
         console.log(JSON.stringify(giver.pos));
         // Returns total and available
-        var sourceAccess =  findAccessibleTiles(giver.room.name,
+        var sourceAccess =  findAccessibleTiles(giver.room,
                             giver.pos.x-1, giver.pos.y-1,
                             giver.pos.x+1, giver.pos.y+1);
 
@@ -56,8 +57,7 @@ function findKey(obj, value) {
     }
 }
 // Find how many tiles around a structure is accessible
-function findAccessibleTiles(roomName, x1, y1, x2, y2){
-    var room = Game.rooms[roomName];
+function findAccessibleTiles(room, x1, y1, x2, y2){
     // Checking if right values are passed
     if(!room.name) throw(new Error('Get accessibleTiles, room not passed'));
     let tiles = { available: 0, total:0 };
