@@ -35,7 +35,7 @@ module.exports.loop = function(){
                 // to see if any are available
                 // and fit for task
                 var creep = giver.pos.findClosestByRange(creepsInRoom, {filter:function(creep){ return !creep.memory.task.busy}});
-                creep.set({ACTION_HARVEST});
+                creep.set({taskCode:ACTION_HARVEST, target:giver});
             } else if(true) {
                 // We set this value to true until we get a better system
                 // Request a new creep to be spawned
