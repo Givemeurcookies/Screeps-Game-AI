@@ -1,28 +1,32 @@
 "use strict";
 // Normal actions
-global.MOVE               = 30,
-global.HARVEST            = 31,
-global.TRANSFER           = 32,
-global.BUILD              = 33,
-global.REPAIR             = 34,
-global.UPGRADE            = 35,
-global.DROP               = 36,
-global.PICKUP             = 37,
-global.WITHDRAW           = 38,
-global.DISMANTLE          = 39,
-global.ATTACK             = 40,
-global.RANGED_ATTACK      = 42,
-global.RANGED_MASS_ATTACK = 43,
-global.HEAL               = 44,
-global.RANGED_HEAL        = 45;
+var constantsAction = {
+    MOVE               : 30,
+    HARVEST            : 31,
+    TRANSFER           : 32,
+    BUILD              : 33,
+    REPAIR             : 34,
+    UPGRADE            : 35,
+    DROP               : 36,
+    PICKUP             : 37,
+    WITHDRAW           : 38,
+    DISMANTLE          : 39,
+    ATTACK             : 40,
+    RANGED_ATTACK      : 42,
+    RANGED_MASS_ATTACK : 43,
+    HEAL               : 44,
+    RANGED_HEAL        : 45,
+    CLAIM              : 46
+};
 
 // Aggressive or defensive creeps
-global.CLAIM        = 40,
-global.ASSAULT      = 51,
-global.DEFEND_CREEP = 52,
-global.GUARD_ROOM   = 53,
-global.GUARD_AREA   = 54,
-global.FLEE         = 55;
+var constantsTasks = {
+    ASSAULT      : 51,
+    DEFEND_CREEP : 52,
+    GUARD_ROOM   : 53,
+    GUARD_AREA   : 54,
+    FLEE         : 55
+}
 
 global.taskcode_string = {
     30   : 'moving',
