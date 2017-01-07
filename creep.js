@@ -110,8 +110,8 @@ Creep.prototype.performAction = function(){
         params     = this.memory.task.params || null,
         paramsType = Object.prototype.toString.call(params);
 
-    if(target == undefined && taskCode != ACTION_SUICIDE) {
-            throw(new Error(this.name+' target is undefined'));
+    if((target == undefined || target == null) && taskCode != ACTION_SUICIDE) {
+            throw(new Error(this.name+' target is undefined or null'));
     }
     // Return the code when action is queued
     switch(taskCode){
