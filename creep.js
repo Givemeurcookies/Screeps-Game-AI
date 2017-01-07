@@ -64,7 +64,7 @@ Creep.prototype.damaged = function(amount){
     }
 };
 Creep.prototype.action = function(){
-    if(creep.memory.task.busy == false) return false;
+    if(this.memory.task.busy == false) return false;
     var actionReturn = this.performAction();
 
     // Error cases are handled by Importance
