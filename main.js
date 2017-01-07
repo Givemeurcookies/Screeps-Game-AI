@@ -20,7 +20,7 @@ module.exports.loop = function(){
     for(let giverid in taskGivers){
         let giver = taskGivers[giverid];
         console.log(JSON.stringify(giver.pos));
-        console.log(JSON.stringify(findAccessibleTiles(giver.room,
+        console.log(JSON.stringify(findAccessibleTiles(giver.room.name,
                                                        giver.pos.x-1, giver.pos.y-1,
                                                        giver.pos.x+1, giver.pos.y+1)));
     }
@@ -36,14 +36,15 @@ function findKey(obj, value) {
     }
 }
 // Find how many tiles around a structure is accessible
-function findAccessibleTiles(room, x1, y1, x2, y2){
+function findAccessibleTiles(roomName, x1, y1, x2, y2){
+    var room = Game.rooms[roomName];
     // Checking if right values are passed
     if(!room.name) throw(new Error('Get accessibleTiles, room not passed'));
     let tiles = { available: 0, total:0 };
     for (var x = x1, xl = x2+1; x < xl; x++){
         for (var y = y1, yl = y2+1; y < yl; y++){
             //console.log(JSON.stringify(room.lookAt(x, y)));
-            var tile = room.pos.lookAt(x, y);
+            var tile = room.lookAt(x, y);
             for (var propertyid in tile) {
                 if(tile[propertyid].type == "source"){
                     break;
