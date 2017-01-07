@@ -104,11 +104,12 @@ Creep.prototype.action = function(){
         case ERR_NO_BODYPART:          break;
         // Creep lacks the proper bodypart
         // Importance: 4
-        case OK:                       break;
+        case OK:
+        // Creep has done task successfully!
         switch(this.memory.task.code) {
             case ACTION_HARVEST: console.log('orange', 'Successfully harvested'); break;
         }
-        // Creep has done task successfully!
+        break;
     }
 
 }
