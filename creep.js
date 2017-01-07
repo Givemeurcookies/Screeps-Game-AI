@@ -41,7 +41,7 @@ Creep.prototype.updateMemory = function(){
         this.memory.hits = this.hits;
     }
     if(!this.memory.task) {
-        console.log(colorText(red, this.name+' had invalid memory'));
+        console.log(colorText('red', this.name+' had invalid memory'));
         this.memory.task = {
             target : false,
             params : false
