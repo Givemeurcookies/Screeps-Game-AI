@@ -68,7 +68,7 @@ Creep.prototype.action = function(){
     // Error cases are handled by Importance
     // Doesn't do anything in the code, just to
     // prioritise errors
-    console.log(colorText('green','Action code'+findKey(global, actionReturn)));
+    console.log(colorText('green','Action code '+findKey(global, actionReturn)));
 
     switch(actionReturn){
         // Unhandled/silent cases
@@ -93,7 +93,7 @@ Creep.prototype.action = function(){
         case ERR_FULL:                 break;
         // Creep is full
         // Importance: 2
-        case ERR_NOT_IN_RANGE:         break;
+        case ERR_NOT_IN_RANGE: this.moveTo(Game.getObjectById(this.memory.task.target.id));  break;
         // Creep isn't in range to
         // Importance: 2
         case ERR_TIRED:                break;
