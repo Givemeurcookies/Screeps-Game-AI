@@ -31,11 +31,6 @@ module.exports.loop = function(){
             // Request creep to harvest
             let creepsInRoom = giver.room.find(FIND_MY_CREEPS);
             if(creepsInRoom.length > 0){
-                if(!creep.memory.task) {
-                    creep.memory.task = {
-                        busy : false
-                    }
-                }
                 // Go over creeps in the room
                 // to see if any are available
                 // and fit for task
