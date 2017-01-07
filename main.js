@@ -13,7 +13,7 @@ module.exports.loop = function(){
 
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
-        if(!room.memory.sources) room.memory.sources = room.find(FIND_SOURCES));
+        if(!room.memory.sources) room.memory.sources = room.find(FIND_SOURCES);
         for(let sourceid in room.memory.sources) taskGivers.push(room.memory.sources[sourceid]);
     }
 
