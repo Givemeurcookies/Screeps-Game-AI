@@ -64,7 +64,7 @@ Creep.prototype.action = function(){
     // Error cases are handled by Importance
     // Doesn't do anything in the code, just to
     // prioritise errors
-    console.log(actionReturn);
+    console.log(colorText('green',actionReturn);
 
     switch(actionReturn){
         // Unhandled/silent cases
