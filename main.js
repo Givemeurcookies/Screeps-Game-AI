@@ -21,7 +21,7 @@ module.exports.loop = function(){
         // get Giver as an object now
         let giver = Game.getObjectById(taskGivers[giverid].id);
         // Let's keep this so we can see what giver that's requesting whatever
-        console.log(JSON.stringify(giver.pos));
+        console.log(colorText('purple',JSON.stringify(giver.pos)));
         // Returns total and available
         var sourceAccess =  findAccessibleTiles(giver.room,
                             giver.pos.x-1, giver.pos.y-1,
@@ -41,7 +41,7 @@ module.exports.loop = function(){
                 for(var i in Game.spawns){
                     spawns.push(Game.spawns[i]);
                 }
-                console.log(colorText('blue'+giver.pos.findClosestByRange(spawns)));
+                console.log(colorText('blue', giver.pos.findClosestByRange(spawns)));
                 giver.pos.findClosestByRange(spawns).requestCreep([WORK, MOVE, CARRY, MOVE]);
             }
         }
