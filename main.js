@@ -18,7 +18,7 @@ module.exports.loop = function(){
     }
 
     for(var taskGiver in taskGivers){
-        console.log(taskGivers[taskGiver]);
+        console.log(taskGivers[taskGiver]);
     }
 
 }
