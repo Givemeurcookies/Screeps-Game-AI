@@ -97,7 +97,7 @@ Creep.prototype.action = function(){
 
 }
 Creep.prototype.performAction = function(){
-    let target     = Game.getObjectById(creep.memory.task.target.id),
+    let target     = Game.getObjectById(this.memory.task.target.id),
         taskCode   = this.memory.task.code,
         params     = this.memory.task.params || null,
         paramsType = Object.prototype.toString.call(params);
