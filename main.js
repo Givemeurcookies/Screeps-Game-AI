@@ -43,7 +43,7 @@ function findAccessibleTiles(room, x1, y1, x2, y2){
     for (var x = x1, xl = x2+1; x < xl; x++){
         for (var y = y1, yl = y2+1; y < yl; y++){
             //console.log(JSON.stringify(room.lookAt(x, y)));
-            var tile = room.lookAt(x, y);
+            var tile = room.pos.lookAt(x, y);
             for (var propertyid in tile) {
                 if(tile[propertyid].type == "source"){
                     break;
