@@ -16,8 +16,8 @@ module.exports.loop = function(){
 
 function findKey(obj, value) {
     for( var prop in obj ) {
-        if( obj.hasOwnProperty( prop ) ) {
-             if( this[ prop ] === value )
+        if( obj.hasOwnProperty(prop) ) {
+             if( obj[prop] === value )
                  return prop;
         }
     }
