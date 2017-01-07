@@ -54,31 +54,52 @@ Creep.prototype.action = function(){
 
     var actionReturn = this.performAction();
 
+    // Error cases are handled by Importance
+    // Doesn't do anything in the code, just to
+    // prioritise errors
     switch(actionReturn){
         // Unhandled/silent cases
         case ERR_NOT_OWNER:
         case ERR_NO_PATH:
         case ERR_NOT_FOUND: break;
         // Ignore those
+        // Importance: 0
         case ERR_BUSY:      break;
-        //
+        // Creep is probably spawning
+        // Importance: 0
         case ERR_NOT_ENOUGH_ENERGY:    break;
+        // Creep doesn't have enough energy for this task
+        // Importance: 2
         case ERR_NOT_ENOUGH_RESOURCES: break;
+        // Creep doesn't have enough resources for this task
+        // Importance: 2
         case ERR_INVALID_TARGET:       break;
+        // Creep doesn't have a valid target
+        // Importance: 5
+        throw(new Error(this.name+' invalid target!'));
         case ERR_FULL:                 break;
+        // Creep is full
+        // Importance: 2
         case ERR_NOT_IN_RANGE:         break;
+        // Creep isn't in range to
+        // Importance: 2
         case ERR_TIRED:                break;
-        case ERR_NO_BODYPART:           break;
+        // Creep is tired/fatiqued
+        // Importance: 1
+        case ERR_NO_BODYPART:          break;
+        // Creep lacks the proper bodypart
+        // Importance: 4
+        case OK:                       break;
+        // Creep has done task successfully!
     }
 
 }
 Creep.prototype.performAction = function(){
     let target     = Game.getObjectById(creep.memory.task.target.id),
-        taskCode   = creep.memory.task.code,
-        params     = creep.memory.task.params || null,
+        taskCode   = this.memory.task.code,
+        params     = this.memory.task.params || null,
         paramsType = Object.prototype.toString.call(params);
     // Return the code when action is queued
-    //if()
     switch(taskCode){
         case ACTION_ATTACK:             return this.attack(target);            break;
         case ACTION_ATTACK_CONTROLLER:  return this.attackController(target);  break;
@@ -93,19 +114,23 @@ Creep.prototype.performAction = function(){
                                 +" expected array when performing "
                                 +findKey(Memory.constants.actions, taskCode)));
         break;
-        case ACTION_HARVEST:            return this.harvest(target);           break;
-        case ACTION_HEAL:               return this.heal(target);              break;
-        case ACTION_MOVE:               return this.moveTo(target, params);    break;
-        case ACTION_PICKUP:             return this.pickup(target);            break;
-        case ACTION_RANGED_ATTACK:      return this.rangedAttack(target);      break;
-        case ACTION_RANGED_HEAL:        return this.rangedHeal(target);        break;
-        case ACTION_RANGED_MASS_ATTACK: return this.rangedMassAttack();        break;
-        case ACTION_REPAIR:             return this.repair(target);            break;
-        case ACTION_SIGN:               return this.repair(target, ...params); break;
-        case ACTION_SUICIDE:            return this.suicide();                 break;
-        case ACTION_TRANSFER:           return this.transfer(target);          break;
-        case ACTION_UPGRADE:            return this.upgradeController(target); break;
-        case ACTION_WITHDRAW:           return this.withdraw(target, params);  break;
+        case ACTION_HARVEST:            return this.harvest(target);                   break;
+        case ACTION_HEAL:               return this.heal(target);                      break;
+
+        case ACTION_MOVE:               return this.moveTo(target, params);            break;
+        case ACTION_PICKUP:             return this.pickup(target);                    break;
+
+        case ACTION_RANGED_ATTACK:      return this.rangedAttack(target);              break;
+        case ACTION_RANGED_HEAL:        return this.rangedHeal(target);                break;
+        case ACTION_RANGED_MASS_ATTACK: return this.rangedMassAttack();                break;
+
+        case ACTION_REPAIR:             return this.repair(target);                    break;
+        case ACTION_RESERVE_CONTROLLER: return this.reserveController(target);         break;
+        case ACTION_SIGN:               return this.signController(target, ...params); break;
+        case ACTION_SUICIDE:            return this.suicide();                         break;
+        case ACTION_TRANSFER:           return this.transfer(target, ...params);       break;
+        case ACTION_UPGRADE:            return this.upgradeController(target);         break;
+        case ACTION_WITHDRAW:           return this.withdraw(target, ...params);          break;
     }
 }
 Creep.prototype.actions = {

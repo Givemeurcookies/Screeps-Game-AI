@@ -3,23 +3,26 @@
 if(!Memory.constants) Memory.constants = {};
 
 Memory.constants.actions = {
-    MOVE               : 30,
-    HARVEST            : 31,
-    TRANSFER           : 32,
-    BUILD              : 33,
-    REPAIR             : 34,
-    UPGRADE            : 35,
-    DROP               : 36,
-    PICKUP             : 37,
-    WITHDRAW           : 38,
-    DISMANTLE          : 39,
-    ATTACK             : 40,
-    ATTACK_CONTROLLER  : 41,
-    RANGED_ATTACK      : 42,
-    RANGED_MASS_ATTACK : 43,
-    HEAL               : 44,
-    RANGED_HEAL        : 45,
-    CLAIM              : 46
+    ACTION_MOVE               : 30,
+    ACTION_HARVEST            : 31,
+    ACTION_TRANSFER           : 32,
+    ACTION_BUILD              : 33,
+    ACTION_REPAIR             : 34,
+    ACTION_UPGRADE            : 35,
+    ACTION_DROP               : 36,
+    ACTION_PICKUP             : 37,
+    ACTION_WITHDRAW           : 38,
+    ACTION_DISMANTLE          : 39,
+    ACTION_ATTACK             : 40,
+    ACTION_ATTACK_CONTROLLER  : 41,
+    ACTION_RANGED_ATTACK      : 42,
+    ACTION_RANGED_MASS_ATTACK : 43,
+    ACITON_HEAL               : 44,
+    ACTION_RANGED_HEAL        : 45,
+    ACTION_CLAIM              : 46,
+    ACTION_RESERVE_CONTROLLER : 47,
+    ACTION_SIGN               : 48,
+    ACTION_SUICIDE            : 49
 };
 
 // Aggressive or defensive creeps
