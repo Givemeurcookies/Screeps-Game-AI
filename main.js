@@ -38,7 +38,7 @@ function findKey(obj, value) {
 // Find how many tiles around a structure is accessible
 function findAccessibleTiles(room, x1, y1, x2, y2){
     // Checking if right values are passed
-    if(!room.id) throw(new Error('Get accessibleTiles, room not passed'));
+    if(!room.name) throw(new Error('Get accessibleTiles, room not passed'));
     let tiles = { available: 0, total:0 };
     for (var x = x1, xl = x2+1; x < xl; x++){
         for (var y = y1, yl = y2+1; y < yl; y++){
