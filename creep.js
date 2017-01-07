@@ -52,7 +52,7 @@ Creep.prototype.damaged = function(amount){
 };
 Creep.prototype.action = function(){
 
-    var actionReturn = this.performAction;
+    var actionReturn = this.performAction();
 
     switch(actionReturn){
         // Unhandled/silent cases
@@ -80,24 +80,32 @@ Creep.prototype.performAction = function(){
     // Return the code when action is queued
     //if()
     switch(taskCode){
-        case MOVE:     return this.moveTo(target, params);    break;
-        case HARVEST:  return this.harvest(target);           break;
-        case TRANSFER: return this.transfer(target);          break;
-        case BUILD:    return this.build(target);             break;
-        case REPAIR:   return this.repair(target);            break;
-        case UPGRADE:  return this.upgradeController(target); break;
-        case DROP:     if(paramsType == '[object Array]')
-                            return this.drop(...params);
-                       else
-                            console.log(this.name
-                                +" expected array when "
-                                +taskcode_string[DROP]);
+        case ACTION_ATTACK:             return this.attack(target);            break;
+        case ACTION_ATTACK_CONTROLLER:  return this.attackController(target);  break;
+        case ACTION_BUILD:              return this.build(target);             break;
+        case ACTION_CLAIM:              return this.claimController(target);   break;
+        case ACTION_DISMANTLE:          return this.dismantle(target);         break;
+        case ACTION_DROP:
+            if(paramsType == '[object Array]')
+                return this.drop(...params);
+            else
+                throw(new Error(this.name
+                                +" expected array when performing "
+                                +findKey(Memory.constants.actions, taskCode)));
         break;
-        case PICKUP: return this.pickup(target); break;
-
-        case WITHDRAW: return this.withdraw(target, params);  break;
-        case DISMANTLE: break;
-        case CLAIM: break;
+        case ACTION_HARVEST:            return this.harvest(target);           break;
+        case ACTION_HEAL:               return this.heal(target);              break;
+        case ACTION_MOVE:               return this.moveTo(target, params);    break;
+        case ACTION_PICKUP:             return this.pickup(target);            break;
+        case ACTION_RANGED_ATTACK:      return this.rangedAttack(target);      break;
+        case ACTION_RANGED_HEAL:        return this.rangedHeal(target);        break;
+        case ACTION_RANGED_MASS_ATTACK: return this.rangedMassAttack();        break;
+        case ACTION_REPAIR:             return this.repair(target);            break;
+        case ACTION_SIGN:               return this.repair(target, ...params); break;
+        case ACTION_SUICIDE:            return this.suicide();                 break;
+        case ACTION_TRANSFER:           return this.transfer(target);          break;
+        case ACTION_UPGRADE:            return this.upgradeController(target); break;
+        case ACTION_WITHDRAW:           return this.withdraw(target, params);  break;
     }
 }
 Creep.prototype.actions = {

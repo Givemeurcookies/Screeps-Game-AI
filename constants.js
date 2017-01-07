@@ -14,6 +14,7 @@ Memory.constants.actions = {
     WITHDRAW           : 38,
     DISMANTLE          : 39,
     ATTACK             : 40,
+    ATTACK_CONTROLLER  : 41,
     RANGED_ATTACK      : 42,
     RANGED_MASS_ATTACK : 43,
     HEAL               : 44,
