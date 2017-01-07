@@ -37,8 +37,12 @@ module.exports.loop = function(){
             } else if(true) {
                 // We set this value to true until we get a better system
                 // Request a new creep to be spawned
-                console.log(giver.pos.findClosestByRange(Game.spawns));
-                giver.pos.findClosestByRange(Game.spawns).requestCreep([WORK, MOVE, CARRY, MOVE]);
+                var spawns = [];
+                for(var i in Game.spawns){
+                    spawns.push(Game.spawns[i]);
+                }
+                console.log(giver.pos.findClosestByRange(spawns));
+                giver.pos.findClosestByRange(spawns).requestCreep([WORK, MOVE, CARRY, MOVE]);
             }
         }
 
