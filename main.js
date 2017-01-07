@@ -9,7 +9,7 @@ require('spawn');
 module.exports.loop = function(){
     Object.assign(global, Memory.constants.actions, Memory.constants.tasks);
     var taskGivers = [];
-
+    for(var name in Game.creeps) Game.creeps[name].run();
     // Go through rooms!
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
@@ -57,7 +57,7 @@ module.exports.loop = function(){
     }
     // Go through spawns and creeps!
     for(var id in Game.spawns) Game.spawns[id].run();
-    for(var name in Game.creeps) Game.creeps[name].run();
+    //for(var name in Game.creeps) Game.creeps[name].run();
 
 }
 
