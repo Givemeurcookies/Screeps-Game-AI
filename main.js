@@ -20,7 +20,8 @@ module.exports.loop = function(){
     for(let giverid in taskGivers){
         let giver = taskGivers[giverid];
         console.log(JSON.stringify(giver.pos));
-        console.log(JSON.stringify(findAccessibleTiles(giver.pos.x-1, giver.pos.y-1,
+        console.log(JSON.stringify(findAccessibleTiles(giver.room,
+                                                       giver.pos.x-1, giver.pos.y-1,
                                                        giver.pos.x+1, giver.pos.y+1)));
     }
 
@@ -34,30 +35,11 @@ function findKey(obj, value) {
         }
     }
 }
-
-function getAccessibleTile(room, x1, y1, x2, y2){
-    var accessibleTiles = 0.0;
-    for (var x = x1, xl = x2+1; x < xl; x++){
-        for (var y = y1, yl = y2+1; y < yl; y++){
-            //console.log(JSON.stringify(room.lookAt(x, y)));
-            var tile = room.lookAt(x, y);
-            for (var propertyid in tile) {
-                if (tile[propertyid].type == "creep" || tile[propertyid].type == "source"){
-                    break;
-                } else if (tile[propertyid].terrain == 'plain') {
-                    return tile[propertyid];
-                } else if (tile[propertyid].terrain == 'swamp') {
-                    return tile[propertyid];
-                }
-            }
-
-        }
-    }
-    return false;
-}
 // Find how many tiles around a structure is accessible
 function findAccessibleTiles(room, x1, y1, x2, y2){
-    var tiles = { available: 0.0, total:0 };
+    // Checking if right values are passed
+    if(!room.id) throw(new Error('Get accessibleTiles, room not passed'));
+    let tiles = { available: 0, total:0 };
     for (var x = x1, xl = x2+1; x < xl; x++){
         for (var y = y1, yl = y2+1; y < yl; y++){
             //console.log(JSON.stringify(room.lookAt(x, y)));
