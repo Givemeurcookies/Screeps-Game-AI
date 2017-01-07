@@ -33,7 +33,7 @@ module.exports.loop = function(){
             if(creepsInRoom.length > 0){
                 if(!creep.memory.task) {
                     creep.memory.task = {
-                        creep.memory.task.busy = false;
+                        busy : false
                     }
                 }
                 // Go over creeps in the room
