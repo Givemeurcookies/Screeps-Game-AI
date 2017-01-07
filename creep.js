@@ -27,7 +27,7 @@ Creep.prototype.set = function(params){
     this.memory.task.msg = "Performing task '"+findKey(global, taskCode)
                            +"' at"+target.pos.x +"x,"+target.pos.y+'y';
     this.memory.task.code = taskCode;
-
+    this.memory.task.busy = true;
     this.action();
 };
 Creep.prototype.checkStatus = function(){
@@ -62,7 +62,7 @@ Creep.prototype.damaged = function(amount){
     }
 };
 Creep.prototype.action = function(){
-
+    if(creep.memory.task.busy == false) return false;
     var actionReturn = this.performAction();
 
     // Error cases are handled by Importance
