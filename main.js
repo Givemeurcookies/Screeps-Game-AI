@@ -128,3 +128,20 @@ global.resetSpawnQueue = function(){
         spawn.memory.spawnQueue = [];
     }
 }
+global.garbageCollect = function(){
+    // Remove all dead creeps
+    for(let i in Memory.creeps) {
+        if(!Game.creeps[i]) {
+            delete Memory.creeps[i];
+        }
+    }
+    // If spawn queue is over 5
+    for(let i in Game.spawns){
+        let spawn      = Game.spawns[i],
+            spawnQueue = spawn.memory.spawnQueue;
+        // Limit to spawn Queue to the last 10 entries
+        if(spawnQueue.length > 5){
+            spawn.memory.spawnQueue = spawnQueue.slice(0, (spawnQueue.length-5));
+        }
+    }
+}

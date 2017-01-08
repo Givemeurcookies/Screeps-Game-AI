@@ -25,18 +25,21 @@ StructureSpawn.prototype.requestCreep = function(creepBody, memory, requester){
 StructureSpawn.prototype.getAlive = function(ignoreRecache){
     // Var with all alive creeps
     if(this.memory.creeps && this.my) {
-        var returnArray = [];
+        var aliveCreeps = [];
         if(!ignoreRecache) {
             for (let i in this.memory.creeps){
                 var creep = this.memory.creeps[i];
                 for (let j in Game.creeps){
                     var globalCreep = Game.creeps[j];
-                    if(creep.name == globalCreep.name) returnArray.push(creep);
+                    if(creep.name == globalCreep.name) {
+                        aliveCreeps.push(creep);
+                        continue;
+                    }
                 }
             }
-            this.memory.creeps = returnArray;
+            this.memory.creeps = aliveCreeps;
         } else {
-            returnArray = this.memory.creeps;
+            aliveCreeps = this.memory.creeps;
         }
         return returnArray;
     } else {
