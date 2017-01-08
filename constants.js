@@ -33,3 +33,7 @@ Memory.constants.tasks = {
     GUARD_AREA   : 54,
     FLEE         : 55
 };
+
+Memory.constants.utils = {
+    FREE         : 75
+};

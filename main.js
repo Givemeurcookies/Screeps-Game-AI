@@ -7,7 +7,7 @@ require('spawn');
 //require('spawns');
 
 module.exports.loop = function(){
-    Object.assign(global, Memory.constants.actions, Memory.constants.tasks);
+    Object.assign(global, Memory.constants.actions, Memory.constants.tasks, Memory.constants.utils);
     var taskGivers = [];
     for(var name in Game.creeps) Game.creeps[name].run();
     // Go through rooms!

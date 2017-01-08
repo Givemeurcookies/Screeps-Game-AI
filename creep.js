@@ -10,6 +10,14 @@ Creep.prototype.run = function(){
 }
 Creep.prototype.set = function(params){
     var target, taskCode;
+    if(params == FREE){
+        this.memory.task = {
+            target   : null,
+            taskCode : null,
+            busy     : false
+        };
+        return;
+    }
     if(Object.prototype.toString.call(params) == '[object Object]'){
         // Check if objects are correct
         console.log(colorText('blue', this.name+' set is passed with object'));
@@ -137,6 +145,12 @@ Creep.prototype.action = function(){
                     });
                 }
             break;
+            case ACTION_TRANSFER:
+                console.log(colorText('orange', 'Successfully transferred'));
+                // Let's eventually make this per resource
+                if(_.sum(this.carry) == 0){
+                    this.set(FREE);
+                }
         }
         break;
     }
