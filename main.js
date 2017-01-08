@@ -172,9 +172,11 @@ global.killAllCreeps = function(){
         creep.set(ACTION_SUICIDE);
     }
 }
-global.killMostCreeps = function(numberToStayAlive){
-    for(var name in Game.creeps.slice(0, Game.creeps.length-numberToStayAlive)){
+global.killSomeCreeps = function(numberToKill){
+    for(var name in Game.creeps){
         var creep = Game.creeps[name];
         creep.set(ACTION_SUICIDE);
+        numberToKill--;
+        if(numberToKill <= 0) break; 
     }
 }
