@@ -46,7 +46,7 @@ Creep.prototype.set = function(params){
                 taskCode : params,
                 busy     : true
             };
-            this.memory.task.msg = "Committing suicide at "+this.pos.x+"x, "this.pos.y+"y";
+            this.memory.task.msg = "Committing suicide at "+this.pos.x+"x, "+this.pos.y+"y";
             return;
         }
     } else {
