@@ -14,8 +14,8 @@ Creep.prototype.set = function(params){
         // Check if objects are correct
         console.log(colorText('blue', this.name+' set is passed with object'));
         target   = params.target;
-        params   = params.params || [];
         taskCode = params.taskCode;
+        params   = params.params;
         if(taskCode == undefined) {
             throw new Error(this.name+' - Missing taskCode from params output on next line:\n'+JSON.stringify(params));
         }
