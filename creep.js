@@ -123,7 +123,7 @@ Creep.prototype.action = function(){
                     this.set({
                         taskCode : ACTION_TRANSFER,
                         target   : this.pos.findClosestByRange(FIND_MY_SPAWNS),
-                        busy     : true
+                        busy     : true,
                         params   : [RESOURCE_ENERGY]
                     });
                 }
