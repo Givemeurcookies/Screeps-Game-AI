@@ -18,6 +18,8 @@ Creep.prototype.set = function(params){
             busy     : false
         };
         return;
+    } else {
+        console.log(colorText('red', 'Not freeing memory!'));
     }
     if(Object.prototype.toString.call(params) == '[object Object]'){
         // Check if objects are correct
