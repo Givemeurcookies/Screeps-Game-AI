@@ -105,38 +105,48 @@ Creep.prototype.action = function(){
         // Unhandled/silent cases
         case ERR_NOT_OWNER:
         case ERR_NO_PATH:
-        case ERR_NOT_FOUND: break;
+        case ERR_NOT_FOUND:
         // Ignore those
         // Importance: 0
-        case ERR_BUSY:      break;
+        break;
+        case ERR_BUSY:
         // Creep is probably spawning
         // Importance: 0
-        case ERR_NOT_ENOUGH_ENERGY:    break;
+        break;
+        case ERR_NOT_ENOUGH_ENERGY:
         // Creep doesn't have enough energy for this task
         // Free creep from current task
         // Should probably log this as it's not supposed
         // to happen.
-        this.set(FREE);
         // Importance: 2
-        case ERR_NOT_ENOUGH_RESOURCES: break;
+        this.set(FREE);
+        break;
+        case ERR_NOT_ENOUGH_RESOURCES:
         // Creep doesn't have enough resources for this task
         // Importance: 2
-        case ERR_INVALID_TARGET:       break;
+        break;
+        case ERR_INVALID_TARGET:
         // Creep doesn't have a valid target
         // Importance: 5
         throw(new Error(this.name+' invalid target!'));
-        case ERR_FULL:                 break;
+        break;
+        case ERR_FULL:
         // Creep is full
         // Importance: 2
-        case ERR_NOT_IN_RANGE: this.moveTo(Game.getObjectById(this.memory.task.target.id));  break;
+        break;
+        case ERR_NOT_IN_RANGE:
         // Creep isn't in range to
         // Importance: 2
-        case ERR_TIRED:                break;
+        this.moveTo(Game.getObjectById(this.memory.task.target.id));
+        break;
+        case ERR_TIRED:
         // Creep is tired/fatiqued
         // Importance: 1
-        case ERR_NO_BODYPART:          break;
+        break;
+        case ERR_NO_BODYPART:
         // Creep lacks the proper bodypart
         // Importance: 4
+        break;
         case OK:
         // Creep has done task successfully!
         switch(this.memory.task.code) {
