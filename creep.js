@@ -29,7 +29,7 @@ Creep.prototype.set = function(params){
         }
 
 
-    } else if(typeof params == 'Number'){
+    } else if(typeof params == 'number'){
         // Probably task code
         //target = this.findTarget();
         if(params == FREE){
