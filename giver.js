@@ -12,6 +12,7 @@ Object.defineProperty(Room.prototype, 'givers', {
             this.memory.givers = [];
         }
         if(!_.isObject(this.memory.givers)) {
+            console.log('Not object');
             return undefined;
         }
         return this.memory.givers || [];
