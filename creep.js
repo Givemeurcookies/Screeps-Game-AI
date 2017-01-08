@@ -11,6 +11,7 @@ Creep.prototype.run = function(){
 Creep.prototype.set = function(params){
     var target, taskCode;
     if(params == FREE){
+        console.log(colorText('green', 'Freeing memory!'));
         this.memory.task = {
             target   : null,
             taskCode : null,
