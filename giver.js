@@ -7,7 +7,7 @@ Room.prototype.givers.run = function(){
 // Create givers
 Object.defineProperty(Room.prototype, 'givers', {
     get: function() {
-        // If
+        console.log('get callled');
         if(_.isUndefined(this.memory.givers)) {
             this.memory.givers = [];
         }
@@ -15,6 +15,9 @@ Object.defineProperty(Room.prototype, 'givers', {
             return undefined;
         }
         return this.memory.givers || [];
+    },
+    set: function(value){
+        console.log('set called');
     }
 });
 // Create a memory object on source prototypes
