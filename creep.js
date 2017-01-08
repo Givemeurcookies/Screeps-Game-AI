@@ -191,7 +191,7 @@ Creep.prototype.performAction = function(){
         paramsType = Object.prototype.toString.call(params);
 
     if((target == undefined || target == null) && taskCode != ACTION_SUICIDE) {
-        throw(new Error(this.name+' target is undefined or null'));
+        throw(new Error(this.name+' target is undefined or null, task code is '+findKey(global, taskCode)));
     } else {
         target = Game.getObjectById(target.id);
     }
