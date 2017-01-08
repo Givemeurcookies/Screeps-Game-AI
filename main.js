@@ -1,7 +1,7 @@
 "use strict";
 require('constants'),
 require('globals'),
-
+require('giver');
 require('creep');
 require('spawn');
 //require('spawns');
@@ -25,7 +25,7 @@ module.exports.loop = function(){
         }
         for(let sourceid in room.memory.sources) taskGivers.push(room.memory.sources[sourceid]);
     }
-    Game.rooms.givers[0] = true;
+    console.log(JSON.stringify(Game.rooms.givers));
     for(let i in Game.rooms.givers){ Game.rooms.givers[i].run();
         // get Giver as an object now
         /*
