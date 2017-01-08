@@ -2,8 +2,11 @@
 Creep.prototype.run = function(){
     this.checkStatus();
     this.updateMemory();
-
-    this.action();
+    try{
+            this.action();
+    } catch(err) {
+        console.log(err.stack);
+    }
 }
 Creep.prototype.set = function(params){
     var target, taskCode;
@@ -177,7 +180,7 @@ Creep.prototype.performAction = function(){
     }
     // Code hasn't returned, assume something is wrong
     // Start checking taskCode
-    if(taskCode == undefined) throw(new Error(this.name+' task code is undefined'));
+    if(taskCode == undefined) throw new Error(this.name+' task code is undefined');
 }
 Creep.prototype.actions = {
 
