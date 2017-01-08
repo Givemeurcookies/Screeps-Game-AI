@@ -31,8 +31,9 @@ module.exports.loop = function(){
         let creepsInRoom = giver.room.find(FIND_MY_CREEPS);
         // Let's keep this so we can see what giver that's requesting whatever
         console.log(colorText('purple',JSON.stringify(giver.pos)));
-        console.log(giver instanceof Source);
+        console.log(giver);
         if(giver instanceof Source){
+            console.log('SOURCE!');
             // Returns total and available
             var sourceAccess =  findAccessibleTiles(giver.room,
                                 giver.pos.x-1, giver.pos.y-1,
@@ -68,6 +69,7 @@ module.exports.loop = function(){
                 }
             }
         } else if(giver instanceof StructureController){
+            console.log("CONTROLLER!");
             var creep = giver.pos.findClosestByRange(creepsInRoom, {filter:function(creep){ return !creep.memory.task.busy}});
             // If any creeps is availabe, otherwise don't do anything
             if(creep) {
