@@ -151,3 +151,30 @@ global.garbageCollect = function(){
         }
     }
 }
+global.resetTaskMemory = function(){
+    console.log("Resetting task memory of all creeps");
+
+    for(var name in Game.creeps){
+        var creep = Game.creeps[name];
+        if(creep.memory.soldier == 'undefined') creep.memory.soldier = false;
+        if(creep.memory.squad == 'undefined') creep.memory.squad = false;
+        creep.memory.task = {
+            target   : false,
+            taskCode : false,
+            busy     : false
+        };
+    }
+    return("Reset task memory of all creeps");
+}
+global.killAllCreeps = function(){
+    for(var name in Game.creeps){
+        var creep = Game.creeps[name];
+        creep.set(ACTION_SUICIDE);
+    }
+}
+global.killMostCreeps = function(numberToStayAlive){
+    for(var name in Game.creeps.slice(0, Game.creeps.length-numberToStayAlive)){
+        var creep = Game.creeps[name];
+        creep.set(ACTION_SUICIDE);
+    }
+}
