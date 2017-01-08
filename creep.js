@@ -109,7 +109,7 @@ Creep.prototype.action = function(){
         switch(this.memory.task.code) {
             case ACTION_HARVEST:
                 console.log(colorText('orange', 'Successfully harvested'));
-                if(_.sum(this.carry) == creep.carryCapacity){
+                if(_.sum(this.carry) == this.carryCapacity){
                     // Storage for creep is full, let's do something
                     this.set({
                         taskCode : ACTION_TRANSFER,
