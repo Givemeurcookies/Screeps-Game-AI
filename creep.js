@@ -23,7 +23,8 @@ Creep.prototype.set = function(params){
             case ACTION_TRANSFER:
             case ACTION_DROP:
             case ACTION_WITHDRAW:
-                throw new Error(this.name+' - trying to set task, however missing params');
+                if(commandParams == undefined)
+                    throw new Error(this.name+' - trying to set task but missing required args');
             break;
         }
 
@@ -42,7 +43,8 @@ Creep.prototype.set = function(params){
     };
     this.memory.task.msg = "Performing task '"+findKey(global, taskCode)
                            +"' at"+target.pos.x +"x,"+target.pos.y+'y';
-    this.memory.task.code = taskCode;
+    this.memory.task.code   = taskCode;
+    this.memory.task.params = commandParams;
     this.memory.task.busy = true;
     this.action();
 };
