@@ -107,7 +107,17 @@ Creep.prototype.action = function(){
         case OK:
         // Creep has done task successfully!
         switch(this.memory.task.code) {
-            case ACTION_HARVEST: console.log('orange', 'Successfully harvested'); break;
+            case ACTION_HARVEST:
+                console.log(colorText('orange', 'Successfully harvested'));
+                if(_.sum(this.carry) == creep.carryCapacity){
+                    // Storage for creep is full, let's do something
+                    this.set({
+                        taskCode : ACTION_TRANSFER,
+                        target   : this.pos.findClosestByRange(FIND_MY_SPAWNS)),
+                        busy     : true
+                    });
+                }
+            break;
         }
         break;
     }
