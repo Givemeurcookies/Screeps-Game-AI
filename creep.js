@@ -176,7 +176,7 @@ Creep.prototype.action = function(){
                     this.set(FREE);
                 }
             break;
-            case SUICIDE:
+            case ACTION_SUICIDE:
                 this.say("SEPUKU", true);
             break;
         }
