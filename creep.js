@@ -185,13 +185,15 @@ Creep.prototype.action = function(){
 
 }
 Creep.prototype.performAction = function(){
-    let target     = Game.getObjectById(this.memory.task.target.id),
+    let target     = this.memory.task.target,
         taskCode   = this.memory.task.code,
         params     = this.memory.task.params || [],
         paramsType = Object.prototype.toString.call(params);
 
     if((target == undefined || target == null) && taskCode != ACTION_SUICIDE) {
-            throw(new Error(this.name+' target is undefined or null'));
+        throw(new Error(this.name+' target is undefined or null'));
+    } else {
+        target = Game.getObjectById(target.id);
     }
     // Return the code when action is queued
     switch(taskCode){
