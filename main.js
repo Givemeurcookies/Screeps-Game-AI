@@ -32,7 +32,7 @@ module.exports.loop = function(){
         // Let's keep this so we can see what giver that's requesting whatever
         console.log(colorText('purple',JSON.stringify(giver.pos)));
         console.log(JSON.stringify(giver));
-        console.log(giver == 'source');
+        console.log(giver.structureType == 'source');
         // Returns total and available
         var sourceAccess =  findAccessibleTiles(giver.room,
                             giver.pos.x-1, giver.pos.y-1,
