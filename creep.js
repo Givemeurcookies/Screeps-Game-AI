@@ -113,7 +113,7 @@ Creep.prototype.action = function(){
                     // Storage for creep is full, let's do something
                     this.set({
                         taskCode : ACTION_TRANSFER,
-                        target   : this.pos.findClosestByRange(FIND_MY_SPAWNS)),
+                        target   : this.pos.findClosestByRange(FIND_MY_SPAWNS),
                         busy     : true
                     });
                 }
