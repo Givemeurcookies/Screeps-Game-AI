@@ -129,19 +129,25 @@ global.resetSpawnQueue = function(){
     }
 }
 global.garbageCollect = function(){
+    console.log(colorText('blue', 'Collecting garbage!'));
     // Remove all dead creeps
+    var burriedCreeps = 0;
     for(let i in Memory.creeps) {
         if(!Game.creeps[i]) {
+            burriedCreeps++;
             delete Memory.creeps[i];
         }
     }
+    if(burriedCreeps > 0) console.log(colorText('green', 'We burried '+burriedCreeps+' creeps!'));
+    else console.log(colorText('orange', 'No creeps burried (up to date)'));
     // If spawn queue is over 5
     for(let i in Game.spawns){
         let spawn      = Game.spawns[i],
             spawnQueue = spawn.memory.spawnQueue;
         // Limit to spawn Queue to the last 10 entries
         if(spawnQueue.length > 5){
-            spawn.memory.spawnQueue = spawnQueue.slice(0, (spawnQueue.length-5));
+            console.log(colorText('blue', 'Slicing array to the last 5 entries'))
+            spawn.memory.spawnQueue = spawnQueue.slice((spawnQueue.length-5), spawnQueue.length);
         }
     }
 }
