@@ -13,9 +13,14 @@ StructureSpawn.prototype.run = function(){
         this.createCreep(spawnQueue[0].body, null, spawnQueue[0].memory);
     }
 };
-StructureSpawn.prototype.requestCreep = function(creepBody, memory){
+StructureSpawn.prototype.requestCreep = function(creepBody, memory, requester){
     if(!this.memory.spawnQueue) this.memory.spawnQueue = [];
-    this.memory.spawnQueue.push({'body':creepBody, 'memory':memory});
+    // If no request limit is set, then the requester
+    if(!requester.memory.requestLimit){
+        console.log(colorText('red', requester+' does not have a request limit, denied request'));
+    }
+
+    this.memory.spawnQueue.push({'reqId':requester.id, 'body':creepBody, 'memory':memory});
 };
 StructureSpawn.prototype.getAlive = function(ignoreRecache){
     // Var with all alive creeps
@@ -37,4 +42,7 @@ StructureSpawn.prototype.getAlive = function(ignoreRecache){
     } else {
         console.log(colorText('red', 'Tried getting alive creeps, but spawn got amnesia or have misunderstood'));
     }
+};
+StructureSpawn.prototype.getRequestsFrom = function(id){
+    return _.filter(this.memory.spawnQueue, function(o) { return o.id == id});
 }

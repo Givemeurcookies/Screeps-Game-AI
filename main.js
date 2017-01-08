@@ -65,7 +65,8 @@ module.exports.loop = function(){
                             target : false,
                             params : false
                         }
-                    });
+                    },
+                    giver);
                 }
             }
         } else if(giver instanceof StructureController){
@@ -119,4 +120,11 @@ function findAccessibleTiles(room, x1, y1, x2, y2){
         }
     }
     return tiles;
+}
+
+global.resetSpawnQueue = function(){
+    for(let i in Game.spawns){
+        let spawn = Game.spawns[i];
+        spawn.memory.spawnQueue = [];
+    }
 }
