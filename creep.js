@@ -10,17 +10,6 @@ Creep.prototype.run = function(){
 }
 Creep.prototype.set = function(params){
     var target, taskCode;
-    if(params == FREE){
-        console.log(colorText('green', 'Freeing memory!'));
-        this.memory.task = {
-            target   : null,
-            taskCode : null,
-            busy     : false
-        };
-        return;
-    } else {
-        console.log(colorText('red', 'Not freeing memory!'));
-    }
     if(Object.prototype.toString.call(params) == '[object Object]'){
         // Check if objects are correct
         console.log(colorText('blue', this.name+' set is passed with object'));
@@ -43,6 +32,23 @@ Creep.prototype.set = function(params){
     } else if(typeof params == 'Number'){
         // Probably task code
         //target = this.findTarget();
+        if(params == FREE){
+            console.log(colorText('green', 'Freeing memory!'));
+            this.memory.task = {
+                target   : null,
+                taskCode : null,
+                busy     : false
+            };
+            return;
+        } else if (params == ACTION_SUICIDE){
+            this.memory.task = {
+                target   : null,
+                taskCode : params,
+                busy     : true
+            };
+            this.memory.task.msg = "Committing suicide at "+this.pos.x+"x, "this.pos.y+"y";
+            return;
+        }
     } else {
         console.log(colorText('red', this.name+' neither got object nor number when setting task'));
         return false;
@@ -168,6 +174,10 @@ Creep.prototype.action = function(){
                 if(_.sum(this.carry) == 0){
                     this.set(FREE);
                 }
+            break;
+            case SUICIDE:
+                this.say("SEPUKU", true);
+            break;
         }
         break;
     }
@@ -244,4 +254,10 @@ global.resetTaskMemory = function(){
         };
     }
     return("Reset task memory of all creeps");
+}
+global.killAllCreeps = function(){
+    for(var name in Game.creeps){
+        var creep = Game.creeps[name];
+        creep.set(ACTION_SUICIDE);
+    }
 }
