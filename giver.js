@@ -17,9 +17,7 @@ Object.defineProperty(Room.prototype, 'givers', {
         }
         return this.memory.givers || [];
     },
-    set: function(value){
-        console.log('set called');
-    }
+    set: function(value){ this.memory.givers = value }
 });
 // Create a memory object on source prototypes
 Object.defineProperty(Source.prototype, 'memory', {
