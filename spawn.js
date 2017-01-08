@@ -15,6 +15,7 @@ StructureSpawn.prototype.run = function(){
 };
 StructureSpawn.prototype.requestCreep = function(creepBody, memory, requester){
     if(!this.memory.spawnQueue) this.memory.spawnQueue = [];
+    if(requester == undefined) throw new Error('Missing arguments on requestCreep');
     // If no request limit is set, then the requester
     if(!requester.memory.requestLimit){
         console.log(colorText('red', requester+' does not have a request limit, denied request'));

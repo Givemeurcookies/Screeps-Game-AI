@@ -11,6 +11,7 @@ module.exports.loop = function(){
     var taskGivers = [];
     for(var name in Game.creeps) Game.creeps[name].run();
     // Go through rooms!
+    // Scroll through givers
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
         if(!room.memory.sources) room.memory.sources = room.find(FIND_SOURCES);
@@ -25,12 +26,13 @@ module.exports.loop = function(){
         for(let sourceid in room.memory.sources) taskGivers.push(room.memory.sources[sourceid]);
     }
 
-    for(let giverid in taskGivers){
+    for(let i in Game.rooms.givers){ Game.rooms.givers[i].run();
         // get Giver as an object now
+        /*
         let giver = Game.getObjectById(taskGivers[giverid].id);
         let creepsInRoom = giver.room.find(FIND_MY_CREEPS);
         // Let's keep this so we can see what giver that's requesting whatever
-        console.log(colorText('purple','Requester: '+JSON.stringify(giver.pos)));
+        console.log(colorText('purple','Giver position: '+JSON.stringify(giver.pos)));
         if(giver instanceof Source){
             // Returns total and available
             var sourceAccess =  findAccessibleTiles(giver.room,
@@ -74,7 +76,7 @@ module.exports.loop = function(){
                 console.log(colorText('orange', 'Found creep :: '+creep.name+' trying to set task to upgrade'));
                 creep.set({taskCode:ACTION_UPGRADE, target:giver});
             }
-        }
+        }*/
 
 
     }
