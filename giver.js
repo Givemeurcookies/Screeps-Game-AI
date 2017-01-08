@@ -4,7 +4,19 @@ Room.prototype.givers = {};
 Room.prototype.givers.run = function(){
     console.log("Hello from a giver!");
 };
-
+// Create givers
+Object.defineProperty(Room.prototype, 'givers', {
+    get: function() {
+        // If
+        if(_.isUndefined(this.memory.givers)) {
+            this.memory.givers = [];
+        }
+        if(!_.isObject(this.memory.givers)) {
+            return undefined;
+        }
+        return this.memory.givers || [];
+    }
+});
 // Create a memory object on source prototypes
 Object.defineProperty(Source.prototype, 'memory', {
     get: function() {
