@@ -126,7 +126,7 @@ Creep.prototype.action = function(){
 Creep.prototype.performAction = function(){
     let target     = Game.getObjectById(this.memory.task.target.id),
         taskCode   = this.memory.task.code,
-        params     = this.memory.task.params || null,
+        params     = this.memory.task.params || [],
         paramsType = Object.prototype.toString.call(params);
 
     if((target == undefined || target == null) && taskCode != ACTION_SUICIDE) {
