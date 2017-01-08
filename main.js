@@ -146,7 +146,7 @@ global.garbageCollect = function(){
             spawnQueue = spawn.memory.spawnQueue;
         // Limit to spawn Queue to the last 10 entries
         if(spawnQueue.length > 5){
-            console.log(colorText('blue', 'Slicing array to the last 5 entries'))
+            console.log(colorText('blue', 'Slicing spawnQueue of '+spawn.name+' to the last 5 entries'))
             spawn.memory.spawnQueue = spawnQueue.slice((spawnQueue.length-5), spawnQueue.length);
         }
     }
