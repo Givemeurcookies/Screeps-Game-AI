@@ -36,14 +36,14 @@ Creep.prototype.set = function(params){
             console.log(colorText('green', 'Freeing memory!'));
             this.memory.task = {
                 target   : null,
-                taskCode : null,
+                code : null,
                 busy     : false
             };
             return;
         } else if (params == ACTION_SUICIDE){
             this.memory.task = {
                 target   : null,
-                taskCode : params,
+                code : params,
                 busy     : true
             };
             this.memory.task.msg = "Committing suicide at "+this.pos.x+"x, "+this.pos.y+"y";
