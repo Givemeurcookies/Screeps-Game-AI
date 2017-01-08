@@ -6,7 +6,7 @@ var Giver = {
         room : function(){}
 };
 // Create givers
-Object.defineProperty(Game.prototype, 'givers', {
+/*Object.defineProperty(Game.prototype, 'givers', {
     get: function() {
         console.log('get callled');
         if(_.isUndefined(Memory.givers)) {
@@ -19,7 +19,7 @@ Object.defineProperty(Game.prototype, 'givers', {
         return Memory.givers || [];
     },
     set: function(value){ this.memory.givers = value; }
-});
+});*/
 // Create a memory object on source prototypes
 Object.defineProperty(Source.prototype, 'memory', {
     get: function() {

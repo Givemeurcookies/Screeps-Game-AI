@@ -27,7 +27,7 @@ module.exports.loop = function(){
     }
     for(let i in Game.rooms){
         var room = Game.rooms[i];
-        console.log(JSON.stringify(Game.givers));
+        console.log(Game);
         //if(room.givers )
         //for(let j in room.givers) room.givers[i].run();
         // get Giver as an object now
