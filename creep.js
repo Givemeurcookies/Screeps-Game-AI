@@ -11,7 +11,16 @@ Creep.prototype.set = function(params){
         // Check if objects are correct
         console.log(colorText('blue', this.name+' set is passed with object'));
         target   = params.target;
+        params   = params.params || [];
         taskCode = params.taskCode;
+
+        switch(params.taskCode){
+            case ACTION_TRANSFER:
+            case ACTION_DROP:
+            case ACTION_WITHDRAW:
+                throw new Error(this.name+'- trying to set task, however missing params');
+            break;
+        }
 
     } else if(typeof params == 'Number'){
         // Probably task code
@@ -115,6 +124,7 @@ Creep.prototype.action = function(){
                         taskCode : ACTION_TRANSFER,
                         target   : this.pos.findClosestByRange(FIND_MY_SPAWNS),
                         busy     : true
+                        params   : [RESOURCE_ENERGY]
                     });
                 }
             break;
@@ -179,4 +189,19 @@ function findKey(obj, value) {
                  return prop;
         }
     }
+}
+global.resetTaskMemory = function(){
+    console.log("Resetting task memory of all creeps");
+
+    for(var name in Game.creeps){
+        var creep = Game.creeps[name];
+        if(creep.memory.soldier == 'undefined') creep.memory.soldier = false;
+        if(creep.memory.squad == 'undefined') creep.memory.squad = false;
+        creep.memory.task = {
+            target   : false,
+            taskCode : false,
+            busy     : false
+        };
+    }
+    return("Reset task memory of all creeps");
 }
