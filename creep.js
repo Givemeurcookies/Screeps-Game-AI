@@ -171,7 +171,7 @@ Creep.prototype.action = function(){
             break;
             case ACTION_TRANSFER:
             case ACTION_UPGRADE:
-                console.log(colorText('orange', 'Successfully 'findKey(global, this.memory.task.code)));
+                console.log(colorText('orange', 'Successfully '+findKey(global, this.memory.task.code)));
                 // Let's eventually make this per resource
                 if(_.sum(this.carry) == 0){
                     this.set(FREE);
