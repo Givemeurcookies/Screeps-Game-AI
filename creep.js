@@ -3,9 +3,9 @@ Creep.prototype.run = function(){
     this.checkStatus();
     this.updateMemory();
     try{
-            this.action();
+        this.action();
     } catch(err) {
-        console.log(err.stack);
+        console.log('When trying to run prototype for creep, encountered error:\n'+err.stack);
     }
 }
 Creep.prototype.set = function(params){
