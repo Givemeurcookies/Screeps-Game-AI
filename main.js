@@ -71,7 +71,7 @@ module.exports.loop = function(){
             var creep = giver.pos.findClosestByRange(creepsInRoom, {filter:function(creep){ return !creep.memory.task.busy}});
             // If any creeps is availabe, otherwise don't do anything
             if(creep) {
-                console.log(colorText('orange', 'Found creep :: '+creep.name+' trying to set task from giver'));
+                console.log(colorText('orange', 'Found creep :: '+creep.name+' trying to set task to upgrade'));
                 creep.set({taskCode:ACTION_UPGRADE, target:giver});
             }
         }
