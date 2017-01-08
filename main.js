@@ -31,8 +31,7 @@ module.exports.loop = function(){
         let creepsInRoom = giver.room.find(FIND_MY_CREEPS);
         // Let's keep this so we can see what giver that's requesting whatever
         console.log(colorText('purple',JSON.stringify(giver.pos)));
-        console.log(typeof giver);
-        console.log(giver.structureType == 'source');
+        console.log(giver instanceof Source);
         // Returns total and available
         var sourceAccess =  findAccessibleTiles(giver.room,
                             giver.pos.x-1, giver.pos.y-1,
