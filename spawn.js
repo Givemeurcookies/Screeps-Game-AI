@@ -9,7 +9,7 @@ StructureSpawn.prototype.run = function(){
 
     console.log(colorText('green', 'Creep alive at this spawn: '+this.getAlive().length));
 
-    if(spawnQueue.length > 0 && this.memory.maxCreeps < this.getAlive().length){
+    if(spawnQueue.length > 0 && this.memory.maxCreeps > this.getAlive().length){
         this.createCreep(spawnQueue[0].body, null, spawnQueue[0].memory);
     }
 };
