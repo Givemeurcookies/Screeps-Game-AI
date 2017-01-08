@@ -110,6 +110,10 @@ Creep.prototype.action = function(){
         // Importance: 0
         case ERR_NOT_ENOUGH_ENERGY:    break;
         // Creep doesn't have enough energy for this task
+        // Free creep from current task
+        // Should probably log this as it's not supposed
+        // to happen.
+        this.set(FREE);
         // Importance: 2
         case ERR_NOT_ENOUGH_RESOURCES: break;
         // Creep doesn't have enough resources for this task
