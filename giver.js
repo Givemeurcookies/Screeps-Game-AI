@@ -3,7 +3,7 @@ var Giver = {
         run : function(){
             console.log('Giver run running!');
         },
-        room : function
+        room : function(){}
 };
 // Create givers
 Object.defineProperty(Game.prototype, 'givers', {
