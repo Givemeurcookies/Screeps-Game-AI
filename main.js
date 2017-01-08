@@ -30,10 +30,8 @@ module.exports.loop = function(){
         let giver = Game.getObjectById(taskGivers[giverid].id);
         let creepsInRoom = giver.room.find(FIND_MY_CREEPS);
         // Let's keep this so we can see what giver that's requesting whatever
-        console.log(colorText('purple',JSON.stringify(giver.pos)));
-        console.log(giver);
+        console.log(colorText('purple','Requester: '+JSON.stringify(giver.pos)));
         if(giver instanceof Source){
-            console.log('SOURCE!');
             // Returns total and available
             var sourceAccess =  findAccessibleTiles(giver.room,
                                 giver.pos.x-1, giver.pos.y-1,
@@ -58,7 +56,7 @@ module.exports.loop = function(){
                     for(var i in Game.spawns){
                         spawns.push(Game.spawns[i]);
                     }
-                    console.log(colorText('blue', giver.pos.findClosestByRange(spawns)));
+                    //console.log(colorText('blue', giver.pos.findClosestByRange(spawns)));
                     giver.pos.findClosestByRange(spawns).requestCreep([WORK, MOVE, CARRY, MOVE], {
                         task:{
                             busy   : false,
@@ -70,7 +68,6 @@ module.exports.loop = function(){
                 }
             }
         } else if(giver instanceof StructureController){
-            console.log("CONTROLLER!");
             var creep = giver.pos.findClosestByRange(creepsInRoom, {filter:function(creep){ return !creep.memory.task.busy}});
             // If any creeps is availabe, otherwise don't do anything
             if(creep) {
@@ -129,7 +126,7 @@ global.resetSpawnQueue = function(){
     }
 }
 global.garbageCollect = function(){
-    console.log(colorText('blue', 'Collecting garbage!'));
+    console.log(colorText('orange', 'Collecting garbage!'));
     // Remove all dead creeps
     var burriedCreeps = 0;
     for(let i in Memory.creeps) {
@@ -146,10 +143,11 @@ global.garbageCollect = function(){
             spawnQueue = spawn.memory.spawnQueue;
         // Limit to spawn Queue to the last 10 entries
         if(spawnQueue.length > 5){
-            console.log(colorText('blue', 'Slicing spawnQueue of '+spawn.name+' to the last 5 entries'))
+            console.log(colorText('orange', 'Slicing spawnQueue of '+spawn.name+' to the last 5 entries (removing '+(spawnQueue.length-5)+' entries)'));
             spawn.memory.spawnQueue = spawnQueue.slice((spawnQueue.length-5), spawnQueue.length);
         }
     }
+    return console.log(colorText('purple', 'Done garbage collecting!'));
 }
 global.resetTaskMemory = function(){
     console.log("Resetting task memory of all creeps");
@@ -173,10 +171,11 @@ global.killAllCreeps = function(){
     }
 }
 global.killSomeCreeps = function(numberToKill){
+    if(numberToKill == undefined) return 'No number passed in argument';
     for(var name in Game.creeps){
         var creep = Game.creeps[name];
         creep.set(ACTION_SUICIDE);
         numberToKill--;
-        if(numberToKill <= 0) break; 
+        if(numberToKill <= 0) break;
     }
 }
