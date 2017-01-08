@@ -25,7 +25,7 @@ module.exports.loop = function(){
         }
         for(let sourceid in room.memory.sources) taskGivers.push(room.memory.sources[sourceid]);
     }
-
+    Game.rooms.givers['hello!'] = true;
     for(let i in Game.rooms.givers){ Game.rooms.givers[i].run();
         // get Giver as an object now
         /*
