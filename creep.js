@@ -16,19 +16,21 @@ Creep.prototype.set = function(params){
         target   = params.target;
         params   = params.params || [];
         taskCode = params.taskCode;
-
+        if(taskCode == undefined) {
+            throw new Error(this.name+' - Missing taskCode from params output on next line:\n'+JSON.stringify(params));
+        }
         switch(params.taskCode){
             case ACTION_TRANSFER:
             case ACTION_DROP:
             case ACTION_WITHDRAW:
-                throw new Error(this.name+'- trying to set task, however missing params');
+                throw new Error(this.name+' - trying to set task, however missing params');
             break;
         }
 
 
     } else if(typeof params == 'Number'){
         // Probably task code
-        target = this.findTarget();
+        //target = this.findTarget();
     } else {
         console.log(colorText('red', this.name+' neither got object nor number when setting task'));
         return false;
