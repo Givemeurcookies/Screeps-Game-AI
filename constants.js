@@ -22,7 +22,8 @@ Memory.constants.actions = {
     ACTION_CLAIM              : 46,
     ACTION_RESERVE_CONTROLLER : 47,
     ACTION_SIGN               : 48,
-    ACTION_SUICIDE            : 49
+    ACTION_SUICIDE            : 49,
+    FREE                      : 75
 };
 
 // Aggressive or defensive creeps
