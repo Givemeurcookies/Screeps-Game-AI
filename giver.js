@@ -5,21 +5,22 @@ var Giver = {
         },
         room : function(){}
 };
+Game.givers = Memory.givers;
 // Create givers
-/*Object.defineProperty(Game.prototype, 'givers', {
+Object.defineProperty(Memory.prototype, 'givers', {
     get: function() {
         console.log('get callled');
-        if(_.isUndefined(Memory.givers)) {
-            Memory.givers = [];
+        if(_.isUndefined(this.givers)) {
+            this.givers = [];
         }
         if(!_.isObject(Memory.givers)) {
             console.log('Not object');
             return undefined;
         }
-        return Memory.givers || [];
+        return this.givers || [];
     },
     set: function(value){ this.memory.givers = value; }
-});*/
+});
 // Create a memory object on source prototypes
 Object.defineProperty(Source.prototype, 'memory', {
     get: function() {
