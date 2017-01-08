@@ -25,6 +25,7 @@ Creep.prototype.set = function(params){
             break;
         }
 
+
     } else if(typeof params == 'Number'){
         // Probably task code
         target = this.findTarget();
@@ -32,6 +33,7 @@ Creep.prototype.set = function(params){
         console.log(colorText('red', this.name+' neither got object nor number when setting task'));
         return false;
     }
+    console.log(colorText('orange',taskCode));
     this.memory.task.target = {
         id  : target.id,
         pos : target.pos
