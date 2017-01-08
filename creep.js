@@ -191,7 +191,7 @@ Creep.prototype.performAction = function(){
         params     = this.memory.task.params || [],
         paramsType = Object.prototype.toString.call(params);
 
-    if((target == undefined || target == null)) {
+    if((target == undefined || target == null) && taskCode != ACTION_SUICIDE) {
         throw(new Error(this.name+' target is undefined or null, task code is '+findKey(global, taskCode)));
     } else {
         if(taskCode != ACTION_SUICIDE)
