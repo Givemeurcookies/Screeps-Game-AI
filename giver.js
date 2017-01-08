@@ -1,8 +1,8 @@
 // Define a givers property on the Game.rooms object
-Room.prototype.givers = {};
-
-Room.prototype.givers.run = function(){
-    console.log("Hello from a giver!");
+var Giver = {
+        run : function(){
+            console.log('Giver run running!');
+        }
 };
 // Create givers
 Object.defineProperty(Room.prototype, 'givers', {
