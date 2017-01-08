@@ -13,11 +13,11 @@ Creep.prototype.set = function(params){
     if(Object.prototype.toString.call(params) == '[object Object]'){
         // Check if objects are correct
         console.log(colorText('blue', this.name+' set is passed with object'));
-        target   = params.target;
-        taskCode = params.taskCode;
-        params   = params.params;
+        target        = params.target;
+        taskCode      = params.taskCode;
+        commandParams = params.params;
         if(taskCode == undefined) {
-            throw new Error(this.name+' - Missing taskCode from params output on next line:\n'+JSON.stringify(params));
+            throw new Error(this.name+' - Missing taskCode from passed params output on next line:\n'+JSON.stringify(params));
         }
         switch(params.taskCode){
             case ACTION_TRANSFER:
