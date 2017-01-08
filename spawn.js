@@ -41,7 +41,7 @@ StructureSpawn.prototype.getAlive = function(ignoreRecache){
         } else {
             aliveCreeps = this.memory.creeps;
         }
-        return returnArray;
+        return aliveCreeps;
     } else {
         console.log(colorText('red', 'Tried getting alive creeps, but spawn got amnesia or have misunderstood'));
     }
