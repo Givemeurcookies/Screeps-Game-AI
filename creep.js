@@ -50,7 +50,8 @@ Creep.prototype.set = function(params){
             return;
         }
     } else {
-        console.log(colorText('red', this.name+' neither got object nor number when setting task'));
+        console.log(colorText('red', this.name+' neither got object nor number when setting task, type is...\n'+
+                    typeof params));
         return false;
     }
     console.log(colorText('orange',taskCode));
