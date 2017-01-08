@@ -14,14 +14,24 @@ module.exports.loop = function(){
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
         if(!room.memory.sources) room.memory.sources = room.find(FIND_SOURCES);
+        if(room.controller){
+            if(room.controller.my){
+                taskGivers.push(room.controller);
+            }
+            else {
+
+            }
+        }
         for(let sourceid in room.memory.sources) taskGivers.push(room.memory.sources[sourceid]);
     }
 
     for(let giverid in taskGivers){
         // get Giver as an object now
         let giver = Game.getObjectById(taskGivers[giverid].id);
+        let creepsInRoom = giver.room.find(FIND_MY_CREEPS);
         // Let's keep this so we can see what giver that's requesting whatever
         console.log(colorText('purple',JSON.stringify(giver.pos)));
+        console.log(giver);
         // Returns total and available
         var sourceAccess =  findAccessibleTiles(giver.room,
                             giver.pos.x-1, giver.pos.y-1,
@@ -29,7 +39,6 @@ module.exports.loop = function(){
 
         if(sourceAccess.available > 0){
             // Request creep to harvest
-            let creepsInRoom = giver.room.find(FIND_MY_CREEPS);
             if(creepsInRoom.length > 0){
                 // Go over creeps in the room
                 // to see if any are available
