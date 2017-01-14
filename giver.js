@@ -1,13 +1,24 @@
 // Define a givers property on the Game.rooms object
-var Giver = {
-        run : function(){
-            console.log('Giver run running!');
-        },
-        room : function(){}
+var Giver = function(object){
+    
+}
+var TaskGivers = {
+    run : function(){
+    }
+    get : function(){
+        console.log('get callled');
+        if(_.isUndefined(this.givers)) {
+            this.givers = [];
+        }
+        if(!_.isObject(Memory.givers)) {
+            console.log('Not object');
+            return undefined;
+        }
+        return this.givers || [];
+    }
 };
-Game.givers = Memory.givers;
 // Create givers
-Object.defineProperty(Memory.prototype, 'givers', {
+Object.defineProperty(Giver.prototype, 'givers', {
     get: function() {
         console.log('get callled');
         if(_.isUndefined(this.givers)) {
