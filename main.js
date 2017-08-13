@@ -1,5 +1,4 @@
 "use strict";
-<<<<<<< HEAD
 var amountOfCreeps;
 var mod    = require('spawnManager'),
 event  = require('EventHandler'),
@@ -608,35 +607,50 @@ function findTask(creep){
             }
 
 
-=======
-require('constants'),
-require('globals'),
-require('giver');
-require('creep');
-require('spawn');
-//require('spawns');
 
-module.exports.loop = function(){
-    Object.assign(global, Memory.constants.actions, Memory.constants.tasks);
-    var taskGivers = [];
-    for(var name in Game.creeps) Game.creeps[name].run();
-    // Go through rooms!
-    // Scroll through givers
-    for(var roomName in Game.rooms) {
-        var room = Game.rooms[roomName];
-        if(!room.memory.sources) room.memory.sources = room.find(FIND_SOURCES);
-        if(room.controller){
-            if(room.controller.my){
-                taskGivers.push(room.controller);
+            return 1;
+            break;
+            case ATTACK_TASK:
+            if (!params.targets) var targets = creep.room.find(FIND_HOSTILE_CREEPS, {filter: function(creep) {return creep.owner.username != 'Pettingson'}});
+            if(targets.length != 0){
+                var closestTarget = creep.pos.findClosestByPath(targets);
+                console.log(creep.name+" attacking:"+closestTarget);
+                creep.memory.task.target =  {
+                    id  : closestTarget.id,
+                    pos : closestTarget.pos
+                };
+                creep.memory.task.msg  = "Moving to attack "+closestTarget.pos.x+"x, "+closestTarget.pos.y+"y";
+                creep.memory.task.code = ATTACK_TASK;
+                doTask(creep, ATTACK_TASK);
+            } else {
+                return -1;
             }
-            else {
->>>>>>> refactor
+            break;
+            case WITHDRAW_TASK:
+            creep.memory.task.target = {
+                id  : params.target.id,
+                pos : params.target.pos
+            }
+            creep.memory.task.msg = "Moving to withdraw at "+params.target.pos.x+"x, "+params.target.pos.y+"y";
+            creep.memory.task.code = WITHDRAW_TASK;
+            doTask(creep, WITHDRAW_TASK)
+            break;
+            case MOVETO:
+            console.log(creep.name+" params "+JSON.stringify(params));
+            creep.memory.task.target = {
+                id  : params.target.id,
+                pos : params.target.pos
+            };
+            creep.memory.task.msg = "Moving towards target at "+params.target.pos.x+"x, "+params.target.pos.y+"y";
+            creep.memory.task.code = MOVETO;
+            if(params.callback) creep.memory.task.callback = params.callback;
+            doTask(creep, MOVETO);
+            break;
 
-            }
+            default:
+            console.log(creep.name+" - type error (setTask): "+task);
         }
-        for(let sourceid in room.memory.sources) taskGivers.push(room.memory.sources[sourceid]);
     }
-<<<<<<< HEAD
     function doTask(creep, task, params){
         var targetGameobj = Game.getObjectById(creep.memory.task.target.id);
         if((creep.carry.energy/creep.carryCapacity) != 1) {
@@ -895,56 +909,9 @@ module.exports.loop = function(){
                 if(attackAttempt == -7) {
                     // Creep is dead or target is invalid
                     findTask(creep);
-=======
-    for(let i in Game.rooms){
-        var room = Game.rooms[i];
-        console.log(Game);
-        //if(room.givers )
-        //for(let j in room.givers) room.givers[i].run();
-        // get Giver as an object now
-        /*
-        let giver = Game.getObjectById(taskGivers[giverid].id);
-        let creepsInRoom = giver.room.find(FIND_MY_CREEPS);
-        // Let's keep this so we can see what giver that's requesting whatever
-        console.log(colorText('purple','Giver position: '+JSON.stringify(giver.pos)));
-        if(giver instanceof Source){
-            // Returns total and available
-            var sourceAccess =  findAccessibleTiles(giver.room,
-                                giver.pos.x-1, giver.pos.y-1,
-                                giver.pos.x+1, giver.pos.y+1);
-
-            if(sourceAccess.available > 0){
-                // Request creep to harvest
-                if(creepsInRoom.length > 0){
-                    // Go over creeps in the room
-                    // to see if any are available
-                    // and fit for task
-                    var creep = giver.pos.findClosestByRange(creepsInRoom, {filter:function(creep){ return !creep.memory.task.busy}});
-                    // If any creeps is availabe, otherwise don't do anything
-                    if(creep) {
-                        console.log(colorText('orange', 'Found creep :: '+creep.name+'Trying to set task from giver'));
-                        creep.set({taskCode:ACTION_HARVEST, target:giver});
-                    }
-                } else if(true) {
-                    // We set this value to true until we get a better system
-                    // Request a new creep to be spawned
-                    var spawns = [];
-                    for(var i in Game.spawns){
-                        spawns.push(Game.spawns[i]);
-                    }
-                    //console.log(colorText('blue', giver.pos.findClosestByRange(spawns)));
-                    giver.pos.findClosestByRange(spawns).requestCreep([WORK, MOVE, CARRY, MOVE], {
-                        task:{
-                            busy   : false,
-                            target : false,
-                            params : false
-                        }
-                    },
-                    giver);
->>>>>>> refactor
                 }
+
             }
-<<<<<<< HEAD
             break;
             case MOVETO:
             //console.log(creep.name+": (MOVETO) "+JSON.stringify(creep.memory.task.target));
@@ -974,19 +941,20 @@ module.exports.loop = function(){
                 if(moveAttempt != 0 && moveAttempt != -11){
                     console.log(creep.name+": Got error when trying to move"+moveAttempt);
                 }
-=======
-        } else if(giver instanceof StructureController){
-            var creep = giver.pos.findClosestByRange(creepsInRoom, {filter:function(creep){ return !creep.memory.task.busy}});
-            // If any creeps is availabe, otherwise don't do anything
-            if(creep) {
-                console.log(colorText('orange', 'Found creep :: '+creep.name+' trying to set task to upgrade'));
-                creep.set({taskCode:ACTION_UPGRADE, target:giver});
->>>>>>> refactor
             }
-        }*/
 
+            break;
+            default:
+            console.log(creep.name+" - type error (doTask):"+task);
+            creep.say("Type");
+            break;
+            case PICKUP_TASK:
+            if(targetGameobj != null) {
+                creep.memory.task.target.pos = targetGameobj.pos;
+                creep.memory.task.msg  = "Moving to pickup "+targetGameobj.pos.x+"x, "+targetGameobj.pos.y+"y";
+            } else console.log(creep.name+" Uhh, error when trying to do pickup task, target is null");
+            var pickupAttempt = creep.pickup(targetGameobj);
 
-<<<<<<< HEAD
             if(pickupAttempt == ERR_NOT_IN_RANGE){
                 doTask(creep, MOVETO);
             } else if(pickupAttempt == ERR_FULL){
@@ -1027,28 +995,225 @@ module.exports.loop = function(){
     }
     function isCreepNextToSource(creep){
         if(creep.pos.findInRange(FIND_SOURCES, 1).length > 0) return true; else return false;
-=======
->>>>>>> refactor
     }
-    // Go through spawns and creeps!
-    for(var id in Game.spawns) Game.spawns[id].run();
-    //for(var name in Game.creeps) Game.creeps[name].run();
+    function ScoutMove(creep, task, params){
+        var roomCache = creep.room;
+        var targetGameobj = Game.getObjectById(creep.memory.task.target.id),
+        hostileCreeps = roomCache.find(FIND_HOSTILE_CREEPS);
+        if (typeof Memory.rooms[creep.room.name] == "undefined"){
+            // Find neccessary information
+            var sources  = roomCache.find(FIND_SOURCES),
+            minerals = roomCache.find(FIND_MINERALS),
+            hostileStructures = roomCache.find(FIND_HOSTILE_STRUCTURES);
+            // Prepare information about room
+            if(hostileCreeps.length && hostileStructures.length){
+                // We have spotted enemies in this room
+                var hostileSoldiers = _.filter(hostileCreeps, function(hostileCreep){
+                    return hostileCreep.getActiveBodyparts(ATTACK) != 0;
+                }),
+                hostileTowers   = _.filter(hostileStructures, function(structure){
+                    return structure.structureType == STRUCTURE_TOWER;
+                });
+                var hostileInformation = {
+                    isHostile   : true,
+                    defenseless : !(_.sum(hostileSoldiers) == 0 && _.sum(hostileTowers) == 0),
+                    // If hostiles got controller in this room
+                    controller  : false,
+                    towers : hostileTowers,
+                    creeps : hostileSoldiers
+                };
+            } else {
+                var hostileInformation = {
+                    isHostile : false
+                };
+            }
+            // Fill information about room
+            Memory.roomsMeta[creep.room.name] = {
+                // Use to check if room is outdated
+                tick        :    Game.time,
+                sources     :    roomCache.find(FIND_SOURCES).pos,
+                hostile : hostileInformation,
+                controller : {
+                    level        : roomCache.controller.level,
+                    process      : roomCache.controller.process,
+                    processTotal : roomCache.controller.processTotal,
+                    reserved     : roomCache.controller.reservation,
+                    safeMode     : {
+                        ticksLeft : roomCache.controller.safeMode,
+                        available : roomCache.controller.safeModeAvailable,
+                        cooldown  : roomCache.controller.safeModeCooldown
+                    }
+                }
+            }
+        }
+        var Targetpos = new RoomPosition(creep.memory.task.target.pos.x, creep.memory.task.target.pos.y, creep.memory.task.target.pos.roomName);
+        var hostilesInRange = creep.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
+        var rangedAttackAttempt;
+        if(hostilesInRange.length > 1) {
+            var hostilesRange = {
+                one   : 0,
+                two   : 0,
+                three : 0
+            };
+            hostilesInRange.forEach(function(creepFoe){
+                if(creep.pos.inRangeTo(creepFoe, 2)) hostilesRange.two++;
+                if(creep.pos.inRangeTo(creepFoe, 1)) hostilesRange.one++;
+            });
+            hostilesRange.three  = hostilesInRange-hostilesRange.two-hostilesRange.one;
+            hostilesRange.two   -= hostilesRange.one;
+            if(hostilesRange.one > 0 || hostilesRange.two >= 3 || (hostilesRange.two == 2 && hostilesRange.three >= 2)){
+                rangedAttackAttempt = creep.rangedMassAttack(hostilesInRange);
+            } else rangedAttackAttempt = creep.rangedAttack(hostilesInRange[0]);
 
-}
+            console.log("Detected more than 1 within circle of attack, attack result:"+rangedAttackAttempt);
+        } else if (hostilesInRange.length == 1){
+            console.log("Trying to attack creep from afar"+creep.rangedAttack(hostilesInRange[0]));
+        }
+        var moveAttempt = creep.moveTo(Targetpos, {
+            reusePath : 5
+        });
+        if(moveAttempt == -2) {
+            // Can't find path to
+            var creepPos = creep.pos;
+            var returnedArea = creep.room.lookForAtArea(LOOK_STRUCTURES,
+                creep.pos.y-1, creep.pos.x-1, creep.pos.y+1, creep.pos.x+1, true);
 
-function findKey(obj, value) {
-    for( var prop in obj ) {
-        if( obj.hasOwnProperty(prop) ) {
-             if( obj[prop] === value )
-                 return prop;
+                returnedArea.forEach(structure => creep.attack(structure.structure));
+                //console.log(creep.attack());
+            } else if (moveAttempt == OK && creep.pos == Targetpos){
+                console.log("Target pos and creep pos is the same");
+
+            }
+            console.log(creep.name+"Is going to move to..."+moveAttempt);
+            if (creep.pos.isNearTo(targetGameobj)) {
+                creep.pos.findClosestByRange(FIND_MY_SPAWNS).recycleCreep(creep);
+            }
+        }
+
+        function weightRoom(){
+
+        }
+        /*
+
+        ##--##
+        #----#
+        ##--#
+
+        ######--####
+        #####----###
+        ##--##--####
+        #----###############
+        ##--##--############
+        #####----###########
+        ##--##--############
+        #----###############
+        ##--##--##########
+        #####----###########
+        ##--##--##########
+        #----##############
+        */
+
+        // creep, pos
+        function createHoneycomb(creep, pos){
+            var modifier = {x:0, y:0};
+            for (var i = 0, l = 12; i < l; i++){
+                if(i == 1) modifier.x = 1;
+                else if(i > 1 && i < 6) {
+                    modifier.y = 1;
+                    modifier.x = (i-3);
+                } else if(i > 5 && i < 10){
+                    modifier.y = 2;
+                    modifier.x = (i-7);
+                } else if (i > 9 && i < 13){
+                    modifier.y = 3;
+                    modifier.x = (i-10);
+                }
+                //console.log("Modifier:"+modifier.x+"x, "+modifier.y+"y");
+                creep.room.createConstructionSite(pos.x+modifier.x, pos.y+modifier.y, STRUCTURE_EXTENSION);
+            }
+        }
+        function getCreepsNearby(pos, range){
+
+        }
+        function getCreepsWithTask(taskcode, target){
+            var creepsWithTask = [];
+            for(var name in Game.creeps){
+                var creep = Game.creeps[name];
+                if(creep.memory.task.target == null) continue;
+                if(_.isEqual(target.pos, creep.memory.task.target.pos) && taskcode == creep.memory.task.code){
+                    creepsWithTask.push(creep);
+                }
+            }
+            // Should probably check that returned array is valid
+            return creepsWithTask;
+        }
+
+        function findHarvestTarget(creep){
+            var sources = creep.room.find(FIND_SOURCES),
+            highestAvailable = {
+                id     : null,
+                value  : 0,
+                source : null
+            };
+            var nextToSource = _.filter(sources, function(source){
+                return creep.pos.isNearTo(source) && (source.energy != 0 || source.ticksToRegeneration <= 30);
+            });
+            if(nextToSource.length != 0){
+                return {source : {
+                    id : nextToSource[0].id,
+                    value : 0
+                }};
+            }
+            if(sources.length <= 0) {
+                return NO_SOURCES_IN_ROOM;
+            }
+            /*for (var sourceid in sources){
+
+            var source = sources[sourceid],
+            sourceAccess     = findAccessibleTiles(source.room,source.pos.x - 1, source.pos.y -1, source.pos.x + 1, source.pos.y + 1),
+            distanceToSource = creep.pos.getRangeTo(source),
+            creepsWithTask   = getCreepsWithTask(0, source).length;
+            /*
+            sourceAccess.available: 2
+            sourceAccess.total: 4
+            creepsWithTask: 4
+            distance: 25
+
+            */
+            /*    if(sourceAccessibility.total == 0) {
+            console.log("Totally unexpected answer when finding harvest target... Not adding this");
+            continue;
+        }
+
+        var algorithm = (2-((creepsWithTask/(sourceAccess.total*2)+1)-sourceAccess.available/sourceAccess.total))
+
+
+
+
+
+    }*/
+    for(var sourceid in sources){
+        var source = sources[sourceid];
+        if (source.energy == 0) continue;
+        //console.log(JSON.stringify(source.room.lookAtArea(source.pos.x - 1, source.pos.y - 1, source.pos.x + 1, source.pos.y + 1)));
+        var sourceAccessibility = findAccessibleTiles(source.room, source.pos.x - 1, source.pos.y -1, source.pos.x + 1, source.pos.y + 1);
+        //console.log(creep.name+": "+JSON.stringify(source.pos)+": "+JSON.stringify(sourceAccessibility));
+        if (sourceAccessibility.available > highestAvailable.value){
+            highestAvailable.id    = sourceid;
+            highestAvailable.value = sourceAccessibility.available;
         }
     }
+    highestAvailable.source = sources[highestAvailable.id];
+    if(highestAvailable.id == null) {
+        return NO_SOURCES_AVAILABLE;
+    }
+    //console.log("Highest available source at: "+highestAvailable.source.pos.x+"x, "+highestAvailable.source.pos.y+"y");
+    return highestAvailable;
 }
+
 // Find how many tiles around a structure is accessible
 function findAccessibleTiles(room, x1, y1, x2, y2){
-    // Checking if right values are passed
-    if(!room.name) throw(new Error('Get accessibleTiles, room not passed'));
-    let tiles = { available: 0, total:0 };
+    var tiles = { available: 0.0, total:0 };
     for (var x = x1, xl = x2+1; x < xl; x++){
         for (var y = y1, yl = y2+1; y < yl; y++){
             //console.log(JSON.stringify(room.lookAt(x, y)));
@@ -1061,8 +1226,7 @@ function findAccessibleTiles(room, x1, y1, x2, y2){
                 } else if (tile[propertyid].terrain == 'plain') {
                     tiles.available++; tiles.total++;
                 } else if (tile[propertyid].terrain == 'swamp') {
-                    tiles.available++; tiles.total++;
-                    //tiles.available += 0.5; tiles.total++;
+                    tiles.available += 0.5; tiles.total++;
                 }
             }
 
@@ -1070,64 +1234,48 @@ function findAccessibleTiles(room, x1, y1, x2, y2){
     }
     return tiles;
 }
+function getAccessibleTile(room, x1, y1, x2, y2){
+    var accessibleTiles = 0.0;
+    for (var x = x1, xl = x2+1; x < xl; x++){
+        for (var y = y1, yl = y2+1; y < yl; y++){
+            //console.log(JSON.stringify(room.lookAt(x, y)));
+            var tile = room.lookAt(x, y);
+            for (var propertyid in tile) {
+                if (tile[propertyid].type == "creep" || tile[propertyid].type == "source"){
+                    break;
+                } else if (tile[propertyid].terrain == 'plain') {
+                    return tile[propertyid];
+                } else if (tile[propertyid].terrain == 'swamp') {
+                    return tile[propertyid];
+                }
+            }
 
-global.resetSpawnQueue = function(){
-    for(let i in Game.spawns){
-        let spawn = Game.spawns[i];
-        spawn.memory.spawnQueue = [];
-    }
-}
-global.garbageCollect = function(){
-    console.log(colorText('orange', 'Collecting garbage!'));
-    // Remove all dead creeps
-    var burriedCreeps = 0;
-    for(let i in Memory.creeps) {
-        if(!Game.creeps[i]) {
-            burriedCreeps++;
-            delete Memory.creeps[i];
         }
     }
-    if(burriedCreeps > 0) console.log(colorText('green', 'We burried '+burriedCreeps+' creeps!'));
-    else console.log(colorText('orange', 'No creeps burried (up to date)'));
-    // If spawn queue is over 5
-    for(let i in Game.spawns){
-        let spawn      = Game.spawns[i],
-            spawnQueue = spawn.memory.spawnQueue;
-        // Limit to spawn Queue to the last 10 entries
-        if(spawnQueue.length > 5){
-            console.log(colorText('orange', 'Slicing spawnQueue of '+spawn.name+' to the last 5 entries (removing '+(spawnQueue.length-5)+' entries)'));
-            spawn.memory.spawnQueue = spawnQueue.slice((spawnQueue.length-5), spawnQueue.length);
-        }
-    }
-    return console.log(colorText('purple', 'Done garbage collecting!'));
+    return false;
 }
-global.resetTaskMemory = function(){
-    console.log("Resetting task memory of all creeps");
+function getRoomCreeps(){
+    var creepsPerSpawnArray = {};
+    // Populate array
+    for(var i in Game.spawns) {
+        var spawn = Game.spawns[i];
+        creepsPerSpawnArray[i] = spawn.room.find(FIND_MY_CREEPS).length;
+    }
+    return JSON.stringify(creepsPerSpawnArray);
+}
+function getTerrainAtPosition(x, y){
+    for(var i in Game.spawns) {
+        console.log("Get terrain at pos called: "+JSON.stringify(Game.spawns[i].room));
+        return JSON.stringify(Game.spawns[i].room.lookAt(x,y));
+    }
+}
+function calculateSpawnImportance(){
 
-    for(var name in Game.creeps){
-        var creep = Game.creeps[name];
-        if(creep.memory.soldier == 'undefined') creep.memory.soldier = false;
-        if(creep.memory.squad == 'undefined') creep.memory.squad = false;
-        creep.memory.task = {
-            target   : false,
-            taskCode : false,
-            busy     : false
-        };
-    }
-    return("Reset task memory of all creeps");
 }
-global.killAllCreeps = function(){
-    for(var name in Game.creeps){
-        var creep = Game.creeps[name];
-        creep.set(ACTION_SUICIDE);
-    }
-}
-global.killSomeCreeps = function(numberToKill){
-    if(numberToKill == undefined) return 'No number passed in argument';
-    for(var name in Game.creeps){
-        var creep = Game.creeps[name];
-        creep.set(ACTION_SUICIDE);
-        numberToKill--;
-        if(numberToKill <= 0) break;
+
+global.createScoutUnit = function(){
+    for(var i in Game.creeps){
+        scout(Game.creeps[i]);
+        return;
     }
 }
